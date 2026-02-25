@@ -1,0 +1,53 @@
+{
+    "ERRORS": {
+        "REQUIRED": "Dieses Feld darf nicht leer sein",
+        "EMAIL": "Dieses Feld muss eine gültige E-Mail-Adresse enthalten",
+        "MINLENGTH": "Dieses Feld muss mindestens {{ requiredLength }} Zeichen lang sein",
+        "MAXLENGTH": "Dieses Feld darf maximal {{ requiredLength }} Zeichen lang sein",
+        "MIN": "Der Wert muss mindestens {{ min }} sein",
+        "MAX": "Der Wert darf maximal {{ max }} sein",
+        "PATTERN": "Das Format ist ungültig",
+        "EQUALS_TO": "Der Wert muss gleich wie im Feld {{ expected }} sein",
+        "CHOICE": "Der von Ihnen gewählte Wert ist ungültig. Gültige Werte sind: {allowedValues}",
+        "PASSWORD_STRENGTH": "Ungültiges Passwort",
+        "DEFAULT": "Eingabe ungültig"
+    },
+    "AUTH": {
+        "HEADING": "Anmeldung",
+        "LINK_NO_ACCOUNT": "Du hast noch keinen Account",
+        "LINK_PASSWORD_FORGOTTEN": "Passwort vergessen",
+        "SUBMIT_BUTTON": "anmelden"
+    },
+    "SIGNUP": {
+        "HEADING": "Registrierung",
+        "LINK_EXISTING_ACCOUNT": "Du hast bereits einen Account",
+        "SUBMIT_BUTTON": "registrieren"
+    },
+    "FORGOT_PASSWORD": {
+        "HEADING": "Passwort vergessen",
+        "SUBMIT_BUTTON": "anfordern"
+    },
+    "RESET_PASSWORD": {
+        "HEADING": "Passwort zurücksetzen",
+        "SUBMIT_BUTTON": "Passwort zurücksetzen",
+        "INAVLID_RESET_TOKEN": "Der Token ist ungültig oder wurde bereits verwendet. Bitte pr�fen Sie, ob Sie den gesamten Link kopiert haben."
+    },
+    "FORM": {
+        "EMAIL": "E-Mail-Adresse",
+        "PASSWORD": "Passwort",
+        "NAME": "Name",
+        "PASSWORD_CONFIRM": "Passwort Wiederholen",
+        "PLEASE_SELECT": "Bitte wählen",
+        "ROLE": "Rolle"
+    },
+    "NAV": {
+        "HEADING": "Todo App",
+        "TODOS": "Todos",
+        "ACCOUNT": {
+            "HEADING": "Konto",
+            "LOGIN": "Anmelden",
+            "SIGNUP": "Registrieren",
+            "LOGOUT": "Abmelden"
+        }
+    }
+}
