@@ -1,0 +1,26 @@
+<div ngbAccordion [closeOthers]="true">
+    @for (item of items; track item.id) {
+        <div ngbAccordionItem [attr.data-id]="item.id">
+            <h2 ngbAccordionHeader>
+                <button ngbAccordionButton class="accordion-button">
+                    <ng-container 
+                        *ngIf="headerTemplate" 
+                        [ngTemplateOutlet]="headerTemplate"
+                        [ngTemplateOutletContext]="{ $implicit: item }"
+                    ></ng-container>
+                    <ng-container *ngIf="!headerTemplate">{{ item.id }}</ng-container> 
+                </button>
+            </h2>
+            <div ngbAccordionCollapse>
+                <div class="accordion-body">
+                    <ng-container 
+                        *ngIf="bodyTemplate"
+                        [ngTemplateOutlet]="bodyTemplate"
+                        [ngTemplateOutletContext]="{ $implicit: item }"
+                    ></ng-container>
+                    <ng-container *ngIf="!bodyTemplate">Kein Body-Inhalt definiert.</ng-container> 
+                </div>
+            </div>
+        </div>
+    }
+</div>
