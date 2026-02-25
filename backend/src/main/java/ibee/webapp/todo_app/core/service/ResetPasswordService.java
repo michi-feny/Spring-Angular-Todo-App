@@ -15,7 +15,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import ibee.webapp.todo_app.core.event.PasswordResetTokenCreatedEvent;
 import java.time.Instant;
 import java.util.Optional;
 
@@ -28,6 +28,7 @@ public class ResetPasswordService {
     private final ResetTokenRepository resetTokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenGeneratorService tokenGeneratorService;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public void forgotPassword(ForgotPasswordRequest request) {
@@ -47,7 +48,7 @@ public class ResetPasswordService {
 
         resetTokenRepository.save(resetToken);
 
-        //send reset password email!
+        eventPublisher.publishEvent(new PasswordResetTokenCreatedEvent(request.email(), resetToken.getToken()));
     }
 
     @Transactional
