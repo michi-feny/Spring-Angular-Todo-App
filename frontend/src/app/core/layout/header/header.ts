@@ -6,12 +6,13 @@ import { selectIsAuthenticated } from '../../../features/auth/store/auth.selecto
 import { map, Observable, take } from 'rxjs';
 import { AuthState } from '../../../features/auth/store/auth.models';
 import { loadTokenFromStorage, logout } from '../../../features/auth/store/auth.actions';
+import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-header', 
-  imports: [NavDropdown, CommonModule, TranslateModule],
+  imports: [NavDropdown, RouterLink, CommonModule, TranslateModule],
   templateUrl: './header.html',
   styleUrl: './header.css',
 })

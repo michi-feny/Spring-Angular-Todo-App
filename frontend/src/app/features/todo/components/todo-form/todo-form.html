@@ -1,0 +1,26 @@
+<form [formGroup]="todoForm">
+
+    <app-form-control  *ngIf="todo !== null"
+        [control]="id"
+        [type]="InputTypesEnum.Hidden"
+    />
+
+    <app-form-control
+        [control]="title"
+        label="Titel"
+        [type]="InputTypesEnum.Text"
+    />
+
+    <app-form-control
+        [control]="description"
+        label="Beschreibung"
+        [type]="InputTypesEnum.Textarea"
+    />
+
+    <app-form-control *ngIf="todo !== null"
+        [control]="isDone"
+        label="Status"
+        [type]="InputTypesEnum.Select"
+        [options]="isDoneOptions"
+    />
+</form>

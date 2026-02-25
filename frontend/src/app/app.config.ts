@@ -1,12 +1,13 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
-
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideState, provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { authFeatureKey, authReducer } from './features/auth/store/auth.reducer';
 import { AuthEffects } from './features/auth/store/auth.effects';
+import { todoFeatureKey, todoReducer } from './features/todo/store/todos.reducer';
+import { TodoEffects } from './features/todo/store/todos.effects';
 import { tokenInterceptor } from './shared/interceptors/token.interceptor';
 import { fleshMessageFeatureKey, fleshMessageReducer } from './store/fleshMessage/fleshMessage.reducer';
 import { FleshMessageEffects } from './store/fleshMessage/fleshMessage.effects';
@@ -22,8 +23,9 @@ export const appConfig: ApplicationConfig = {
         provideHttpClient(withInterceptors([tokenInterceptor, refreshInterceptor])),
         provideStore(),
         provideState(authFeatureKey, authReducer),
+        provideState(todoFeatureKey, todoReducer),
         provideState(fleshMessageFeatureKey, fleshMessageReducer),
-        provideEffects([AuthEffects, FleshMessageEffects]),
+        provideEffects([AuthEffects, TodoEffects, FleshMessageEffects]),
         provideTranslateService({
             loader: provideTranslateHttpLoader({
                 prefix: '/assets/i18n/',
