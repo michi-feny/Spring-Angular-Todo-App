@@ -15,14 +15,14 @@ import ibee.webapp.todo_app.core.service.person.related.PersonRelatedServiceImpl
 @Transactional
 public class PersonEmailService
         extends PersonRelatedServiceImpl<
-                PersonEmailAdress,
+                PersonEmailAddress,
                 PersonEmailAddressId> {
 
-    private final PersonEmailMapper mapper;
+    private final PersonEmailAddressMapper mapper;
 
     public PersonEmailService(
             PersonEmailAdressRepository repository,
-            PersonEmailMapper mapper) {
+            PersonEmailAddressMapper mapper) {
 
         super(repository);
 
@@ -47,13 +47,13 @@ public class PersonEmailService
                 .map(mapper::toInfo);
     }
 
-    public PersonEmailAdress save(
+    public PersonEmailAddress save(
             PersonEmailForm form) {
 
         return save(mapper.toEntity(form));
     }
 
-    public PersonEmailAdress update(
+    public PersonEmailAddress update(
             PersonEmailForm form) {
 
         return save(mapper.toEntity(form));

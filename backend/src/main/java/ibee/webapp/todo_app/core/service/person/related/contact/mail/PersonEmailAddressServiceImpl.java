@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ibee.webapp.todo_app.core.entity.person.contactData.emailAddress.PersonEmailAddressId;
-import ibee.webapp.todo_app.core.entity.person.contactData.emailAddress.PersonEmailAdress;
+import ibee.webapp.todo_app.core.entity.person.contactData.emailAddress.PersonEmailAddress;
 import ibee.webapp.todo_app.core.repository.person.personRelated.contact.mail.PersonMailAddressRepository;
 import ibee.webapp.todo_app.core.service.baseService.person.PersonRelatedServiceImpl;
 
@@ -14,7 +14,7 @@ import ibee.webapp.todo_app.core.service.baseService.person.PersonRelatedService
 @Transactional
 public class PersonEmailAddressServiceImpl
         extends PersonRelatedServiceImpl<
-                PersonEmailAdress,
+                PersonEmailAddress,
                 PersonEmailAddressId>
         implements PersonEmailAddressService {
 
@@ -29,7 +29,7 @@ public class PersonEmailAddressServiceImpl
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<PersonEmailAdress> 
+    public Optional<PersonEmailAddress> 
         findWithDetailsById(PersonEmailAddressId id
     ) {
         return repository.findWithDetailsById(id);

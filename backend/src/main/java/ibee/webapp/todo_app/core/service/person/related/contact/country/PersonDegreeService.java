@@ -18,7 +18,7 @@ import ibee.webapp.todo_app.mapper.person.skill.PersonDegreeMapper;
 public class PersonDegreeService
         extends PersonRelatedServiceImpl<
                 PersonDegree,
-                PersonDegreeUiId> {
+                PersonDegreeDtoId> {
 
     private final PersonDegreeMapper mapper;
 
@@ -43,7 +43,7 @@ public class PersonDegreeService
 
     @Transactional(readOnly = true)
     public Optional<PersonDegreeInfo> findInfoById(
-            PersonDegreeUiId id) {
+            PersonDegreeDtoId id) {
 
         return findWithDetailsById(id)
                 .map(mapper::toInfo);

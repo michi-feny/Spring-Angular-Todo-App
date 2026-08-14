@@ -3,14 +3,14 @@ package ibee.webapp.todo_app.core.dto.person;
 
 import java.util.List;
 
-import ibee.webapp.todo_app.core.dto.person.referenceIds.contact.PersonAddressUiId;
-import ibee.webapp.todo_app.core.dto.person.referenceIds.contact.PersonCountryUiId;
-import ibee.webapp.todo_app.core.dto.person.referenceIds.contact.PersonEmailUiId;
-import ibee.webapp.todo_app.core.dto.person.referenceIds.contact.PersonPhoneUiId;
-import ibee.webapp.todo_app.core.dto.person.referenceIds.skill.hard.PersonAdditionalUiId;
-import ibee.webapp.todo_app.core.dto.person.referenceIds.skill.hard.PersonDegreeUiId;
-import ibee.webapp.todo_app.core.dto.person.referenceIds.skill.hard.PersonProfessionUiId;
-import ibee.webapp.todo_app.core.dto.person.referenceIds.skill.soft.PersonSoftSkillUiId;
+import ibee.webapp.todo_app.core.dto.person.referenceIds.contact.PersonAddressDtoId;
+import ibee.webapp.todo_app.core.dto.person.referenceIds.contact.PersonCountryDtoId;
+import ibee.webapp.todo_app.core.dto.person.referenceIds.contact.PersonEmailAddressDtoId;
+import ibee.webapp.todo_app.core.dto.person.referenceIds.contact.PersonPhoneNumberDtoId;
+import ibee.webapp.todo_app.core.dto.person.referenceIds.skill.hard.PersonAdditionalHardSkillDtoId;
+import ibee.webapp.todo_app.core.dto.person.referenceIds.skill.hard.PersonDegreeDtoId;
+import ibee.webapp.todo_app.core.dto.person.referenceIds.skill.hard.PersonProfessionDtoId;
+import ibee.webapp.todo_app.core.dto.person.referenceIds.skill.soft.PersonSoftSkillDtoId;
 /*
 * This is the initial response for the Person screen.
 * The important point is:
@@ -23,21 +23,21 @@ public record PersonOverview(
 
         PersonData person,
 
-        List<PersonAddressUiId> addresses,
+        List<PersonAddressDtoId> addresses,
 
-        List<PersonPhoneUiId> phones,
+        List<PersonPhoneNumberDtoId> phones,
 
-        List<PersonEmailUiId> emails,
+        List<PersonEmailAddressDtoId> emails,
 
-        List<PersonCountryUiId> nationalities,
+        List<PersonCountryDtoId> nationalities,
 
-        List<PersonDegreeUiId> degrees,
+        List<PersonDegreeDtoId> degrees,
 
-        List<PersonProfessionUiId> professions,
+        List<PersonProfessionDtoId> professions,
 
-        List<PersonAdditionalUiId> additionalSkills,
+        List<PersonAdditionalHardSkillDtoId> additionalSkills,
 
-        List<PersonSoftSkillUiId> softSkills
+        List<PersonSoftSkillDtoId> softSkills
 
 ) {
 }

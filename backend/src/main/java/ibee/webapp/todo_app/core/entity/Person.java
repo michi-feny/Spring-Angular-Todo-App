@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import ibee.webapp.todo_app.core.entity.person.contactData.address.PersonAddress;
-import ibee.webapp.todo_app.core.entity.person.contactData.emailAddress.PersonEmailAdress;
+import ibee.webapp.todo_app.core.entity.person.contactData.emailAddress.PersonEmailAddress;
 import ibee.webapp.todo_app.core.entity.person.contactData.nationality.PersonCountry;
 import ibee.webapp.todo_app.core.entity.person.contactData.phoneNumber.PersonPhoneNumber;
 import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.additionlHardSkill.PersonAdditionalHardSkill;
@@ -89,7 +89,7 @@ public class Person {
         orphanRemoval = true
     )
     @Builder.Default
-    private List<PersonEmailAdress> emails = new ArrayList<>();
+    private List<PersonEmailAddress> emails = new ArrayList<>();
 
     
      @OneToMany(

@@ -1,16 +1,16 @@
 package ibee.webapp.todo_app.core.dto.person.contact.address;
 
-import ibee.webapp.todo_app.core.dto.address.CreateAddressDto;
-import ibee.webapp.todo_app.core.dto.person.referenceIds.contact.PersonAddressUiId;
+import ibee.webapp.todo_app.core.dto.AddressDto;
+import ibee.webapp.todo_app.core.dto.person.referenceIds.contact.PersonAddressDtoId;
 import jakarta.validation.constraints.NotNull;
 
 public record PersonAddressDto(
 
     @NotNull
-    PersonAddressUiId id,
+    PersonAddressDtoId id,
 
     @NotNull
-    CreateAddressDto address,
+    AddressDto address,
 
     @NotNull
     Boolean mainAddress

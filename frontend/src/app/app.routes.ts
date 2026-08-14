@@ -5,7 +5,7 @@ import { List as TodoList } from './features/todo/components/list/list';
 import { authGuard } from './core/guard/auth.guard';
 import { ForgotPassword } from './features/auth/forgot-password/forgot-password';
 import { ResetPasswordFlow } from './features/auth/reset-password-flow/reset-password-flow';
-import { UserMainActionTab } from './features/user-main-action-tab/user-main-action-tab';
+import { UserMainActionTab } from './features/main-tab/user-main-action-tab/user-main-action-tab';
 
 export const routes: Routes = [
     {

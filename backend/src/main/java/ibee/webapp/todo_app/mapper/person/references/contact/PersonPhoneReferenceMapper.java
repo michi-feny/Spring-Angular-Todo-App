@@ -1,18 +1,14 @@
 package ibee.webapp.todo_app.mapper.person.references.contact;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import ibee.webapp.todo_app.config.MapStructConfig;
-import ibee.webapp.todo_app.core.dto.person.referenceIds.contact.PersonPhoneUiId;
+import ibee.webapp.todo_app.core.dto.person.referenceIds.contact.PersonPhoneNumberDtoId;
 import ibee.webapp.todo_app.core.entity.person.contactData.phoneNumber.PersonPhoneNumberId;
+import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
 
 @Mapper(config = MapStructConfig.class)
-public interface PersonPhoneReferenceMapper {
+public interface PersonPhoneReferenceMapper 
+    extends BaseMapper<PersonPhoneNumberDtoId, PersonPhoneNumberId> {
 
-    @Mapping(
-        target = "phoneNumberId",
-        source = "phoneNumberId"
-    )
-    PersonPhoneUiId toModel(PersonPhoneNumberId id);
 }

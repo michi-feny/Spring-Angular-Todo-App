@@ -1,11 +1,11 @@
 import { CountryDto } from './country.dto';
-import { PersonAddressDto } from './person-address.dto';
-import { PersonPhoneNumberDto } from './person-phone-number.dto';
-import { PersonEmailAddressDto } from './person-email-address.dto';
-import { PersonDegreeDto } from './person-degree.dto';
-import { PersonProfessionQualificationDto } from './person-profession-qualification.dto';
+import { PersonAddressDto } from './related/contact/address/person-address.dto';
+import { PersonPhoneNumberDto } from './related/contact/phone/person-phone-number.dto';
+import { PersonEmailAddressDto } from './related/contact/mail/person-email-address.dto';
+import { PersonDegreeDto } from './related/contact/skills/hard/person-degree.dto';
+import { PersonProfessionQualificationDto } from './related/contact/skills/hard/person-profession-qualification.dto';
 import { PersonEducationSkillDto } from './person-education-skill.dto';
-import { PersonAdditionalHardSkillDto } from './person-additional-hard-skill.dto';
+import { PersonAdditionalHardSkillDto } from './related/contact/skills/hard/person-additional-hard-skill.dto';
 
 
 export interface PersonDto {
