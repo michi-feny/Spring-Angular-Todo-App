@@ -20,7 +20,7 @@ export class Header {
     public readonly isLoggedIn$: Observable<boolean>
     public readonly dropdownOptions$: Observable<LinkOption[]>;
     private store = inject(Store<AuthState>);
-    private translate = inject(TranslateService);
+    //private translate = inject(TranslateService);
 
     constructor() {
         this.store.dispatch(loadTokenFromStorage());
@@ -36,6 +36,7 @@ export class Header {
                         name: 'NAV.ACCOUNT.LOGOUT', 
                         action: () => this.store.dispatch(logout()) 
                     });
+                   // options.push(name:'fff', href: "todos")
                 } else {
                     options.push({ name: 'NAV.ACCOUNT.LOGIN', href: "auth/login" });
                     options.push({ name: 'NAV.ACCOUNT.SIGNUP', href: "auth/signup" });

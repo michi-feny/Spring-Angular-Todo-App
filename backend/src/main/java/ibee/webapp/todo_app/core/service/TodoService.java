@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
@@ -52,7 +53,7 @@ public class TodoService {
 
     @Transactional
     public Todo update(UpdateTodo dto, Long userId) {
-        Todo todo = findById(dto.id(), userId);
+        Todo todoToUpdate = findById(dto.id(), userId);
 
         todoToUpdate.setTitle(dto.title());
         todoToUpdate.setDescription(dto.description());

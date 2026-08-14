@@ -22,6 +22,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular/animations": "^20.3.12",
     "@angular/common": "^20.3.0",
     "@angular/compiler": "^20.3.0",
     "@angular/core": "^20.3.0",
@@ -37,6 +38,7 @@
     "@ngx-translate/http-loader": "^17.0.0",
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.6",
+    "ngx-bootstrap": "^20.0.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
@@ -46,6 +48,7 @@
     "@angular/compiler-cli": "^20.3.0",
     "@angular/localize": "^20.3.0",
     "@types/jasmine": "~5.1.0",
+    "baseline-browser-mapping": "^2.11.11",
     "jasmine-core": "~5.9.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",

@@ -13,6 +13,12 @@
                         <a class="nav-link" routerLink="todos">{{ 'NAV.TODOS' | translate }}</a>
                     </li>
                     <ngbd-dropdown-navbar [name]="'NAV.ACCOUNT.HEADING' | translate" [options]="(dropdownOptions$ | async) ?? []" class="ms-auto"/>
+                    <li class="nav-item">
+                        <a class="nav-link" routerLink="user-main-action-tab">
+                        User Actions
+                    </a>
+                    </li>
+                
                 </ul>
             </div>
         </div>

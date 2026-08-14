@@ -28,6 +28,17 @@ public class User {
     @Column(nullable = false)
     private String roles = "ROLE_USER";
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+        name = "person_id",
+        unique = true,
+        foreignKey = @ForeignKey(
+            name = "fk_user_person"
+        )
+    )
+    private Person person;
+
+
     public User(String name, String email, String password, String roles) {
         this.name = Objects.requireNonNull(name, "Name can't be null");;
         this.email = Objects.requireNonNull(email, "E-Mail can't be null");;
