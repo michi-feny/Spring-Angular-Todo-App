@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.stereotype.Repository;
 
+import ibee.webapp.todo_app.core.dto.person.PersonOverview;
 import ibee.webapp.todo_app.core.entity.Person;
 import ibee.webapp.todo_app.core.repository.baseRepo.MyBaseCrudRepo;
 
@@ -61,4 +62,6 @@ public interface PersonRepository extends MyBaseCrudRepo<Person, Long>{
 
     })
     Optional<Person> findWithDetailsById(Long id);
+
+
 }

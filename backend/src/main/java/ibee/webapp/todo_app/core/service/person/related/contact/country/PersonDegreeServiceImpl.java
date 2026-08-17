@@ -1,5 +1,6 @@
-package ibee.webapp.todo_app.core.service.person.related.skill.hardSkill.degree;
+package ibee.webapp.todo_app.core.service.person.related.contact.country;
 
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,16 +13,27 @@ import ibee.webapp.todo_app.core.service.person.related.PersonRelatedServiceImpl
 @Service
 @Transactional
 public class PersonDegreeServiceImpl
-        extends PersonRelatedServiceImpl<PersonDegree, PersonDegreeId> {
+        extends PersonRelatedServiceImpl<
+                PersonDegree,
+                PersonDegreeId> {
 
-    public PersonDegreeServiceImpl(PersonDegreeRepository repository) {
+
+    public PersonDegreeServiceImpl(
+            PersonDegreeRepository repository) {
+
         super(repository);
+
     }
 
-  /* * @Override
+    @Override
     @Transactional(readOnly = true)
     public Optional<PersonDegree> findWithDetailsById(PersonDegreeId id) {
         return personRelatedRepository.findWithDetailsById(id);
     }
-        */
+
+    
+
+   
+
+   
 }

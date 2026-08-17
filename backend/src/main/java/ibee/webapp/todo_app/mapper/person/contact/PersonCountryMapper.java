@@ -36,7 +36,7 @@ public interface PersonCountryMapper
     @Mapping(target = "country", source = "country")
     @Mapping(target = "mainCountry", source = "mainCountry") 
     PersonCountry toEntity(PersonCountryDto dto);
-
+/* 
     @Override
     default List<PersonCountryDto> toDtoList(List<PersonCountry> entities) {
         if (entities == null) {
@@ -76,4 +76,5 @@ public interface PersonCountryMapper
         if (dtos == null) return null;
         return dtos.stream().map(this::toUiId).toList();
     }
+*/
 }

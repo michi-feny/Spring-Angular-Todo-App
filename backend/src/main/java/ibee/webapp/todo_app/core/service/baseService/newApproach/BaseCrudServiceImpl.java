@@ -8,7 +8,7 @@ import java.util.Optional;
 
 
 @Transactional
-public class BaseCrudServiceImpl<ENTITY, ID>
+public abstract class BaseCrudServiceImpl<ENTITY, ID>
         implements BaseCrudService<ENTITY, ID> {
 
     protected final MyBaseCrudRepo<ENTITY, ID> repository;

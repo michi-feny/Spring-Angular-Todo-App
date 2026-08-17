@@ -13,9 +13,9 @@ public interface BaseMapper<DTO, ENTITY> {
 
     ENTITY toEntity(DTO dto);
 
-    List<DTO> toDtoList(List<ENTITY> entities);
+    List<DTO> toDtoList(Iterable<ENTITY> entities);
 
-    List<ENTITY> toEntityList(List<DTO> dtos);
+    List<ENTITY> toEntityList(Iterable<DTO> dtos);
 
    
 }

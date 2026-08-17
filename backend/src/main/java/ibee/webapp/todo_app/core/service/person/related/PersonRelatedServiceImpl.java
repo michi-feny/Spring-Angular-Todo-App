@@ -17,7 +17,7 @@ public abstract class PersonRelatedServiceImpl<
         extends BaseCrudServiceImpl<ENTITY, ID>
         implements PersonRelatedService<ENTITY, ID> {
 
-    protected final PersonRelatedRepository<ENTITY, ID>
+   protected final PersonRelatedRepository<ENTITY, ID>
             personRelatedRepository;
 
     protected PersonRelatedServiceImpl(

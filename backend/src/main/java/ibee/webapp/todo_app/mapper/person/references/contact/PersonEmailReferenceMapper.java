@@ -13,7 +13,8 @@ import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
 @Mapper(config = MapStructConfig.class)
 public interface PersonEmailReferenceMapper 
     extends BaseMapper<PersonEmailAddressDtoId, PersonEmailAddressId> {
-    
+  
+        
   @Override
     @Mapping(target = "personId", source = "personId")
     @Mapping(target = "emailAddressId", source = "emailAddressId")
@@ -23,12 +24,12 @@ public interface PersonEmailReferenceMapper
     @Mapping(target = "personId", source = "personId")
     @Mapping(target = "emailAddressId", source = "emailAddressId")
     PersonEmailAddressId toEntity(PersonEmailAddressDtoId dto);
-
+/*
     @Override
     List<PersonEmailAddressDtoId> toDtoList(List<PersonEmailAddressId> entities);
 
     @Override
     List<PersonEmailAddressId> toEntityList(List<PersonEmailAddressDtoId> dtos);
 
-    
+   */  
 }

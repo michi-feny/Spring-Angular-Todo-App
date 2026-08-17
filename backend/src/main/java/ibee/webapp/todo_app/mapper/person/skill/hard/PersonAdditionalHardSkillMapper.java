@@ -1,4 +1,4 @@
-package ibee.webapp.todo_app.mapper.person.skill;
+package ibee.webapp.todo_app.mapper.person.skill.hard;
 
 import java.util.List;
 
@@ -7,9 +7,7 @@ import org.mapstruct.Mapping;
 
 import ibee.webapp.todo_app.config.MapStructConfig;
 import ibee.webapp.todo_app.core.dto.person.skills.hard.PersonAdditionalHardSkillDto;
-import ibee.webapp.todo_app.core.dto.person.referenceIds.skill.hard.PersonAdditionalHardSkillDtoId;
 import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.additionlHardSkill.PersonAdditionalHardSkill;
-import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.additionlHardSkill.PersonAdditionalHardSkillId;
 import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
 import ibee.webapp.todo_app.mapper.skills.hard.AdditionalHardSkillMapper;
 
@@ -37,7 +35,7 @@ public interface PersonAdditionalHardSkillMapper
     PersonAdditionalHardSkill toEntity(PersonAdditionalHardSkillDto dto);
 
     // Null-safe list wrappers delegating to element methods
-    @Override
+ /*   @Override
     default List<PersonAdditionalHardSkillDto> toDtoList(List<PersonAdditionalHardSkill> entities) {
         if (entities == null) return null;
         return entities.stream().map(this::toDto).toList();
@@ -57,4 +55,6 @@ public interface PersonAdditionalHardSkillMapper
     @Mapping(target = "additionalHardSkillId", source = "additionalHardSkillId")
     @Mapping(target = "personId", source = "personId")
     PersonAdditionalHardSkillId toIdEntity(PersonAdditionalHardSkillDtoId id);
+
+*/ 
 }

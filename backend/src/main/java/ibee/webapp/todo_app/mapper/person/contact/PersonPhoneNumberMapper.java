@@ -38,14 +38,19 @@ public interface PersonPhoneNumberMapper
     @Mapping(target = "phoneNumber", source = "phoneNumber")
     @Mapping(target = "mainPhone", source = "mainPhone")
     PersonPhoneNumber toEntity(PersonPhoneNumberDto dto);
-
+/* 
     @Override
     default List<PersonPhoneNumberDto> toDtoList(List<PersonPhoneNumber> entities) {
         if (entities == null) return null;
         return entities.stream().map(this::toDto).toList(); 
     }
-
-    @Override
+//no explicit Override Needed, cause my BaseMapper already has a default implementation for this method
+    // @Override
+    // default List<PersonPhoneNumber> toEntityList(List<PersonPhoneNumberDto> dtos) {
+    //     if (dtos == null) return null;
+    //     return dtos.stream().map(this::toEntity).toList();
+    // }
+ /*   @Override
     default List<PersonPhoneNumber> toEntityList(List<PersonPhoneNumberDto> dtos) {
         if (dtos == null) return null;
         return dtos.stream().map(this::toEntity).toList();
@@ -55,8 +60,10 @@ public interface PersonPhoneNumberMapper
     @Mapping(target = "personId", source = "id.personId")
     @Mapping(target = "phoneNumberId", source = "id.phoneNumberId")
     PersonPhoneNumberDtoId toUiId(PersonPhoneNumber entity);
-
-    @Mapping(target = "personId", source = "id.personId")
+*/
+   /* 
+   //also not needed, cause ic an use my RefMapper direct!!!
+   @Mapping(target = "personId", source = "id.personId")
     @Mapping(target = "phoneNumberId", source = "id.phoneNumberId")
     PersonPhoneNumberDtoId toUiId(PersonPhoneNumberDto dto);
 
@@ -69,7 +76,7 @@ public interface PersonPhoneNumberMapper
         if (dtos == null) return null;
         return dtos.stream().map(this::toUiId).toList();
     }
-
+*/
 
 
 }

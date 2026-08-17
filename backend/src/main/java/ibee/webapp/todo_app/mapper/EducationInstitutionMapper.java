@@ -6,8 +6,12 @@ package ibee.webapp.todo_app.mapper;
 import org.mapstruct.Mapper;
 
 import ibee.webapp.todo_app.config.MapStructConfig;
+import org.mapstruct.Mapping;
+
 import ibee.webapp.todo_app.core.dto.EducationInstitutionDto;
+import ibee.webapp.todo_app.core.dto.person.skills.hard.PersonDegreeDto;
 import ibee.webapp.todo_app.core.entity.EducationInstitution;
+import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.degree.PersonDegree;
 import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
 
 @Mapper(
@@ -18,4 +22,6 @@ import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
 )
 public interface EducationInstitutionMapper
         extends BaseMapper<EducationInstitutionDto, EducationInstitution> {
+
+    
 }

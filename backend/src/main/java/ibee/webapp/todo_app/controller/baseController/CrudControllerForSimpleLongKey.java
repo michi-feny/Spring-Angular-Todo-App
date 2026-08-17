@@ -16,16 +16,15 @@ import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class CrudControllerForSimpleLongKey<DTO,ENTITY> {
+public abstract class CrudControllerForSimpleLongKey<DTO,ENTITY, ID> {
 
-    private final CrudServiceForSimpleLongKey<ENTITY> service;
-    protected final BaseMapper<DTO, ENTITY> mapper;
+    private final CrudServiceForSimpleLongKey<DTO, ENTITY, ID> service;
+    
 
     protected CrudControllerForSimpleLongKey(
-        CrudServiceForSimpleLongKey<ENTITY> service,
-        BaseMapper<DTO, ENTITY> mapper) {
+        CrudServiceForSimpleLongKey<DTO, ENTITY, ID> service
+        ) {
         this.service = service;
-        this.mapper = mapper;
     }
 
     @GetMapping("/all")
@@ -34,21 +33,20 @@ public abstract class CrudControllerForSimpleLongKey<DTO,ENTITY> {
      * @param userDetails
      * @return
      */
-    public ResponseEntity<List<DTO>> getAll(
+    public ResponseEntity<List<ENTITY>> getAll(
             @NotNull @AuthenticationPrincipal AuthenticatedUser userDetails){
         return ResponseEntity.ok(
-                mapper.toDtoList(
+                
                         service.getAll()
-                )
+               
         );
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DTO> getById(
+    public ResponseEntity<ENTITY> getById(
         @AuthenticationPrincipal AuthenticatedUser userDetails,
-        @NotNull @PathVariable Long id) {
+        @NotNull @PathVariable ID id) {
             return service.getById(id)
-                .map(mapper::toDto)
                 .map(ResponseEntity::ok)
                 .orElseGet(() ->
                         ResponseEntity.notFound().build());
@@ -58,56 +56,55 @@ public abstract class CrudControllerForSimpleLongKey<DTO,ENTITY> {
     public ResponseEntity<DTO> create(
         @NotNull @AuthenticationPrincipal AuthenticatedUser userDetails,
         @NotNull @Valid @RequestBody DTO dto ){
-            ENTITY created =
-                service.create(
-                        mapper.toEntity(dto)
-                );
+            DTO created =
+                service.createFromDto(dto);
+                
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(
-                        mapper.toDto(created)
+                        created
                 );
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DTO> update(
+    public ResponseEntity<DTO> updateFromDto(
         @AuthenticationPrincipal AuthenticatedUser userDetails,
-        @NotNull @PathVariable Long id,
+        @NotNull @PathVariable ID id,
         @NotNull  @Valid @RequestBody DTO dto) {
         if (!service.existsById(id)) {
 
             return ResponseEntity.notFound().build();
         }
 
-        ENTITY updated =
-                service.update(
+        DTO updated =
+                service.updateFromDto(
                         id,
-                        mapper.toEntity(dto)
+                        dto
                 );
 
         return ResponseEntity.ok(
-                mapper.toDto(updated)
+                updated
         );
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<DTO> partialUpdate(
         
-        @NotNull @PathVariable Long id, 
+        @NotNull @PathVariable ID id, 
         @NotNull @Valid @RequestBody DTO updates) {
-        return service.getById(id)
-                .map(entity -> {
+        return service.getDtoById(id)
+                .map(update -> {
                     // Apply partial updates to entity here
-                    service.update(id, entity);
-                    return new ResponseEntity<>(entity, HttpStatus.OK);
+                    var updatedDto = service.updateFromDto(id, updates);
+                    return new ResponseEntity<>(updatedDto, HttpStatus.OK);
                 })
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@NotNull @PathVariable Long id) {
+    public ResponseEntity<Void> delete(@NotNull @PathVariable ID id) {
         if (!service.existsById(id)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

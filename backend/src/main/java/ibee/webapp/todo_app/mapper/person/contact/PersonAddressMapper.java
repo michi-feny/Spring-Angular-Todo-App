@@ -36,7 +36,7 @@ public interface PersonAddressMapper
     @Mapping(target = "address", source = "address")
     @Mapping(target = "mainAddress", source = "mainAddress")
     PersonAddress toEntity(PersonAddressDto dto);
-
+/* 
     @Override
     default List<PersonAddressDto> toDtoList(List<PersonAddress> entities) {
         if (entities == null) return null;
@@ -68,5 +68,5 @@ public interface PersonAddressMapper
     }
     
     
-
+*/
 }

@@ -7,12 +7,23 @@ import jakarta.transaction.Transactional;
 
 
 @Transactional
-public interface CrudServiceForSimpleLongKey<T, ID> {
+public interface CrudServiceForSimpleLongKey<DTO, ENTITY, ID> {
 
-    List<T> getAll();
-    Optional<T> getById(ID id);
+    List<ENTITY> getAll();
+
+    Optional<ENTITY> getById(ID id);
+
+    Optional<DTO> getDtoById(ID id);
+
     boolean existsById(ID id);
-    T create(T entity);
-    T update(ID id, T entity);
+
+    DTO createFromDto(DTO dto);
+
+    DTO updateFromDto(ID id, DTO dto);
+
+    ENTITY create(ENTITY entity);
+
+    ENTITY update(ID id, ENTITY dto);
+
     void delete(ID id);
 }

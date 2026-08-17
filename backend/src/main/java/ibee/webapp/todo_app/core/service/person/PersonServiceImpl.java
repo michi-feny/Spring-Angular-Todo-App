@@ -11,9 +11,6 @@ import ibee.webapp.todo_app.core.entity.Person;
 import ibee.webapp.todo_app.core.repository.person.PersonRepository;
 import ibee.webapp.todo_app.core.service.baseService.newApproach.BaseCrudServiceImpl;
 import ibee.webapp.todo_app.core.service.person.related.contact.address.PersonAddressService;
-import ibee.webapp.todo_app.core.service.person.related.contact.country.PersonCountryService;
-import ibee.webapp.todo_app.core.service.person.related.skill.hardSkill.degree.PersonDegreeService;
-import ibee.webapp.todo_app.core.service.person.related.skill.softSkill.PersonSoftSkillService;
 import ibee.webapp.todo_app.mapper.person.PersonMapper;
 
 @Service
@@ -28,9 +25,9 @@ public class PersonServiceImpl
 
     private final PersonAddressService addressService;
     private final PersonPhoneService phoneService;
-    private final PersonEmailService emailService;
+    private final PersonPhoneNumberDtoService emailService;
     private final PersonCountryService countryService;
-    private final PersonDegreeService degreeService;
+    private final PersonDegreeServiceImpl degreeService;
     private final PersonProfessionService professionService;
     private final PersonAdditionalSkillService additionalSkillService;
     private final PersonSoftSkillService softSkillService;
@@ -41,9 +38,9 @@ public class PersonServiceImpl
 
             PersonAddressService addressService,
             PersonPhoneService phoneService,
-            PersonEmailService emailService,
+            PersonPhoneNumberDtoService emailService,
             PersonCountryService countryService,
-            PersonDegreeService degreeService,
+            PersonDegreeServiceImpl degreeService,
             PersonProfessionService professionService,
             PersonAdditionalSkillService additionalSkillService,
             PersonSoftSkillService softSkillService) {

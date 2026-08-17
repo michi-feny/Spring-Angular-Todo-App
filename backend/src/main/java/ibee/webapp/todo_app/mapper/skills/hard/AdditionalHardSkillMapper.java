@@ -39,6 +39,7 @@ public interface AdditionalHardSkillMapper
     @Mapping(target = "skillType", ignore = true)
     AdditionalHardSkill toEntity(AdditionalHardSkillDto dto);
 
+    /* 
     @Override
     default List<AdditionalHardSkillDto> toDtoList(List<AdditionalHardSkill> entities) {
         if (entities == null) return null;
@@ -50,6 +51,6 @@ public interface AdditionalHardSkillMapper
         if (dtos == null) return null;
         return dtos.stream().map(this::toEntity).toList();
     }
-
+*/
 
 }

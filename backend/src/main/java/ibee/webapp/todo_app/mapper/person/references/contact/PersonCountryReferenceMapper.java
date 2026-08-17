@@ -23,11 +23,13 @@ public interface PersonCountryReferenceMapper
     @Mapping(target = "countryId", source = "countryId")
     @Override
     PersonCountryId toEntity(PersonCountryDtoId dto);
-
+/* 
     @Override
     List<PersonCountryDtoId> toDtoList(List<PersonCountryId> entities);
 
     @Override
     List<PersonCountryId> toEntityList(List<PersonCountryDtoId> dtos);
+
+*/
    
 }

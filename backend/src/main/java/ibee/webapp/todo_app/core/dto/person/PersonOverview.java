@@ -9,7 +9,7 @@ import ibee.webapp.todo_app.core.dto.person.referenceIds.contact.PersonEmailAddr
 import ibee.webapp.todo_app.core.dto.person.referenceIds.contact.PersonPhoneNumberDtoId;
 import ibee.webapp.todo_app.core.dto.person.referenceIds.skill.hard.PersonAdditionalHardSkillDtoId;
 import ibee.webapp.todo_app.core.dto.person.referenceIds.skill.hard.PersonDegreeDtoId;
-import ibee.webapp.todo_app.core.dto.person.referenceIds.skill.hard.PersonProfessionDtoId;
+import ibee.webapp.todo_app.core.dto.person.referenceIds.skill.hard.PersonProfessionQualificationDtoId;
 import ibee.webapp.todo_app.core.dto.person.referenceIds.skill.soft.PersonSoftSkillDtoId;
 /*
 * This is the initial response for the Person screen.
@@ -33,7 +33,7 @@ public record PersonOverview(
 
         List<PersonDegreeDtoId> degrees,
 
-        List<PersonProfessionDtoId> professions,
+        List<PersonProfessionQualificationDtoId> professions,
 
         List<PersonAdditionalHardSkillDtoId> additionalSkills,
 

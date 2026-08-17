@@ -39,6 +39,7 @@ public interface PersonEmailAddressMapper extends BaseMapper<PersonEmailAddressD
     @Mapping(target = "mainEmail", source = "mainEmail")
     PersonEmailAddress toEntity(PersonEmailAddressDto dto);
 
+    /* 
     @Override
     default List<PersonEmailAddressDto> toDtoList(List<PersonEmailAddress> entities) {
         if (entities == null) {
@@ -85,4 +86,5 @@ public interface PersonEmailAddressMapper extends BaseMapper<PersonEmailAddressD
             .map(this::toUiId)
             .toList();
     }
+*/
 }

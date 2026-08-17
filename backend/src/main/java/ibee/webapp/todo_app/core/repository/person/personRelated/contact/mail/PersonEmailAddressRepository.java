@@ -10,7 +10,7 @@ import ibee.webapp.todo_app.core.entity.person.contactData.emailAddress.PersonEm
 import ibee.webapp.todo_app.core.repository.baseRepo.person.PersonRelatedRepository;
 
 @Repository
-public interface PersonMailAddressRepository 
+public interface PersonEmailAddressRepository 
     extends PersonRelatedRepository
         <PersonEmailAddress, PersonEmailAddressId>{
 
