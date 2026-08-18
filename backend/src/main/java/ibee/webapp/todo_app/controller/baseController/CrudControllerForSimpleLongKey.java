@@ -8,13 +8,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import ibee.webapp.todo_app.core.service.baseService.oldApproach.CrudServiceForSimpleLongKey;
-import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
 import ibee.webapp.todo_app.security.AuthenticatedUser;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
-import java.util.Optional;
 
 public abstract class CrudControllerForSimpleLongKey<DTO,ENTITY, ID> {
 

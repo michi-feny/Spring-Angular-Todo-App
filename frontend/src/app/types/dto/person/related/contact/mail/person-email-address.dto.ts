@@ -1,4 +1,4 @@
-import { EmailAddressDto } from '../../../email-address.dto';
+import { EmailAddressDto } from '../../../../email-address.dto';
 
 
 export interface PersonEmailAddressDto {

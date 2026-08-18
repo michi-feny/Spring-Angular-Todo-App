@@ -3,14 +3,16 @@ package ibee.webapp.todo_app.core.repository.person;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-import ibee.webapp.todo_app.core.dto.person.PersonOverview;
 import ibee.webapp.todo_app.core.entity.Person;
 import ibee.webapp.todo_app.core.repository.baseRepo.MyBaseCrudRepo;
 
 @Repository
-public interface PersonRepository extends MyBaseCrudRepo<Person, Long>{
+public interface PersonRepository 
+    extends MyBaseCrudRepo<Person, Long>,
+    JpaSpecificationExecutor<Person>{
 
     @EntityGraph(attributePaths = {
 

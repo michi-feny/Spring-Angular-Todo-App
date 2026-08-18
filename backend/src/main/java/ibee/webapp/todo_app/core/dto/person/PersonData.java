@@ -6,12 +6,13 @@ import jakarta.validation.constraints.Positive;
 /*
  * Used by the initially open Person Overview.
 */
+
 public record PersonData(
 
         @Positive
         Long id,
 
-        short socialRecordNumber,
+        Short socialRecordNumber,
 
         String firstName,
 

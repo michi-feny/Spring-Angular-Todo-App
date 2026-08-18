@@ -3,7 +3,7 @@ package ibee.webapp.todo_app.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ibee.webapp.todo_app.controller.baseController.hateosCrud.AbstractHateoasCrudController;
+import ibee.webapp.todo_app.controller.baseController.hateosCrud.oldApproach.AbstractHateoasCrudController;
 import ibee.webapp.todo_app.core.dto.person.PersonData;
 import ibee.webapp.todo_app.core.service.person.PersonDtoService;
 import ibee.webapp.todo_app.infrastructure.i18n.TranslationService;

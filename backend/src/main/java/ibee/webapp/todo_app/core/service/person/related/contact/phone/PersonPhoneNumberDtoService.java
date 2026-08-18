@@ -11,7 +11,7 @@ import ibee.webapp.todo_app.core.entity.person.contactData.phoneNumber.PersonPho
 import ibee.webapp.todo_app.core.service.person.related.AbstractPersonRelatedDtoService;
 import ibee.webapp.todo_app.core.service.person.related.PersonRelatedService;
 import ibee.webapp.todo_app.mapper.person.contact.PersonPhoneNumberMapper;
-import ibee.webapp.todo_app.mapper.person.references.contact.PersonPhoneReferenceMapper;
+import ibee.webapp.todo_app.mapper.person.references.contact.PersonPhoneNumberReferenceMapper;
 
 
 @Service
@@ -25,7 +25,7 @@ public class PersonPhoneNumberDtoService
     public PersonPhoneNumberDtoService(
             PersonRelatedService<PersonPhoneNumber, PersonPhoneNumberId> personEntityService,
             PersonPhoneNumberMapper mapper,
-            PersonPhoneReferenceMapper idReferenceMapper) {
+            PersonPhoneNumberReferenceMapper idReferenceMapper) {
         super(personEntityService, mapper, idReferenceMapper);
     }
 

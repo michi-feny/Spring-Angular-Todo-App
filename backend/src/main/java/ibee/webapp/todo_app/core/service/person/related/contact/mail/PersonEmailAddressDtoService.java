@@ -9,7 +9,7 @@ import ibee.webapp.todo_app.core.entity.person.contactData.emailAddress.PersonEm
 import ibee.webapp.todo_app.core.service.person.related.AbstractPersonRelatedDtoService;
 import ibee.webapp.todo_app.core.service.person.related.PersonRelatedService;
 import ibee.webapp.todo_app.mapper.person.contact.PersonEmailAddressMapper;
-import ibee.webapp.todo_app.mapper.person.references.contact.PersonEmailReferenceMapper;
+import ibee.webapp.todo_app.mapper.person.references.contact.PersonEmailAddressReferenceMapper;
 
 @Service
 public class PersonEmailAddressDtoService
@@ -22,7 +22,7 @@ public class PersonEmailAddressDtoService
     public PersonEmailAddressDtoService(
             PersonRelatedService<PersonEmailAddress, PersonEmailAddressId> personEntityService,
             PersonEmailAddressMapper mapper,
-            PersonEmailReferenceMapper idReferenceMapper) {
+            PersonEmailAddressReferenceMapper idReferenceMapper) {
         super(personEntityService, mapper, idReferenceMapper);
     }
 

@@ -14,6 +14,9 @@ public record ApiSuccessResponse<T> (
     public ApiSuccessResponse(T data, List<Link> links) {
         this(data, null, links);
     }
+    public ApiSuccessResponse(T data, String msg) {
+        this(data, msg, null);
+    }
 
     public ApiSuccessResponse(String message, List<Link> links) {
         this(null, message, links);

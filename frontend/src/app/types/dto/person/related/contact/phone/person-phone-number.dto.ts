@@ -1,4 +1,4 @@
-import { PhoneNumberDto } from '../../../phone-number.dto';
+import { PhoneNumberDto } from '../../../../phone-number.dto';
 
 
 export interface PersonPhoneNumberDto {
