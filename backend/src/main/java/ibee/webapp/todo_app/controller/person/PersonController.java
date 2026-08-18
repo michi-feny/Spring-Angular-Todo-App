@@ -18,7 +18,37 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+/*
+Because your PersonController is annotated with @RequestMapping("/api/v1/persons") and 
+extends AbstractSpringHateoasCrudController<PersonData, Long>, 
+it automatically inherits several fully implemented standard CRUD endpoints.  
+Here are all the possible endpoint routes that are automatically exposed by the base controller, 
+mapped specifically to your PersonData entity:Inherited Standard CRUD Endpoints
+GET All PersonsEndpoint: 
 
+GET /api/v1/persons  
+Purpose: Fetches a list of all available persons.  
+Returns: ResponseEntity<ApiSuccessResponse<CollectionModel<EntityModel<PersonData>>>>.  
+
+GET Person by IDEndpoint: GET /api/v1/persons/{id}  
+Purpose: Fetches a single person matching the provided ID path variable.  
+Returns: ResponseEntity<ApiSuccessResponse<EntityModel<PersonData>>>.  
+
+CREATE PersonEndpoint: 
+POST /api/v1/persons  
+Purpose: Creates a new person. It expects a valid PersonData JSON object in the request body.  
+Returns: ResponseEntity<ApiSuccessResponse<EntityModel<PersonData>>> with an HTTP status of 201 CREATED.  
+
+UPDATE PersonEndpoint: 
+PUT /api/v1/persons/{id}  
+Purpose: Fully updates an existing person by their ID. It expects a valid PersonData JSON object in the request body.  
+Returns: ResponseEntity<ApiSuccessResponse<EntityModel<PersonData>>>.  
+
+DELETE PersonEndpoint: 
+DELETE /api/v1/persons/{id}  
+Purpose: Deletes the person matching the provided ID.  
+Returns: ResponseEntity<ApiSuccessResponse<Void>> with an HTTP status of 200 OK.  
+*/
 @RestController
 @RequestMapping("/api/v1/persons")
 public class PersonController extends AbstractSpringHateoasCrudController<PersonData, Long> {

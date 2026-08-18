@@ -49,9 +49,9 @@ public abstract class AbstractSpringHateoasCrudController<DTO, ID> {
             @AuthenticationPrincipal AuthenticatedUser userDetails) {
         
         List<DTO> list = service.findAll();
+       // Correct Spring HATEOAS: Use the assembler to wrap the list and generate collection links
         CollectionModel<EntityModel<DTO>> collectionModel = assembler.toCollectionModel(list);
         String message = translationService.translate("crud.loadedAll", getEntityName());
-
         // Note: ApiSuccessResponse now takes CollectionModel instead of a raw List
         return buildResponse(collectionModel, message);
     }

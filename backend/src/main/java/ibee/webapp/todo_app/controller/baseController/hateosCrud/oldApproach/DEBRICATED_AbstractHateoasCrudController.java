@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-public abstract class AbstractHateoasCrudController<DTO, ID> {
+public abstract class DEBRICATED_AbstractHateoasCrudController<DTO, ID> {
 
     protected final CrudDtoService<DTO, ID> service;
     protected final TranslationService translationService;
     protected final String basePath;
     protected final String entityKey; // Z.B. "entity.person" für die Übersetzung
 
-    protected AbstractHateoasCrudController(
+    protected DEBRICATED_AbstractHateoasCrudController(
             CrudDtoService<DTO, ID> service,
             TranslationService translationService,
             String basePath,
