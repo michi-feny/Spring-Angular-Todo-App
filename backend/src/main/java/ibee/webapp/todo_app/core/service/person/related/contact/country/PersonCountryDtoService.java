@@ -5,31 +5,31 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-import ibee.webapp.todo_app.core.dto.person.referenceIds.skill.hard.PersonDegreeDtoId;
-import ibee.webapp.todo_app.core.dto.person.skills.hard.PersonDegreeDto;
-import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.degree.PersonDegree;
-import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.degree.PersonDegreeId;
+import ibee.webapp.todo_app.core.dto.person.contact.country.PersonCountryDto;
+import ibee.webapp.todo_app.core.dto.person.referenceIds.contact.PersonCountryDtoId;
+import ibee.webapp.todo_app.core.entity.person.contactData.nationality.PersonCountry;
+import ibee.webapp.todo_app.core.entity.person.contactData.nationality.PersonCountryId;
 import ibee.webapp.todo_app.core.service.person.related.AbstractPersonRelatedDtoService;
 import ibee.webapp.todo_app.core.service.person.related.PersonRelatedService;
-import ibee.webapp.todo_app.mapper.person.references.skill.hard.PersonDegreeReferenceMapper;
-import ibee.webapp.todo_app.mapper.person.skill.hard.PersonDegreeMapper;
+import ibee.webapp.todo_app.mapper.person.contact.PersonCountryMapper;
+import ibee.webapp.todo_app.mapper.person.references.contact.PersonCountryReferenceMapper;
 
 @Service
-public class PersonDegreeDtoService
+public class PersonCountryDtoService
         extends AbstractPersonRelatedDtoService<
-            PersonDegreeDto,
-            PersonDegree,
-            PersonDegreeId,
-            PersonDegreeDtoId> {
+            PersonCountryDto,
+            PersonCountry,
+            PersonCountryId,
+            PersonCountryDtoId> {
 
-    private final PersonRelatedService<PersonDegree, PersonDegreeId> personEntityService;
-    private final PersonDegreeMapper mapper;
-    private final PersonDegreeReferenceMapper idMapper;
+    private final PersonRelatedService<PersonCountry, PersonCountryId> personEntityService;
+    private final PersonCountryMapper mapper;
+    private final PersonCountryReferenceMapper idMapper;
 
-    public PersonDegreeDtoService(
-            PersonRelatedService<PersonDegree, PersonDegreeId> personEntityService,
-            PersonDegreeMapper mapper,
-            PersonDegreeReferenceMapper idMapper){
+    public PersonCountryDtoService(
+            PersonRelatedService<PersonCountry, PersonCountryId> personEntityService,
+            PersonCountryMapper mapper,
+            PersonCountryReferenceMapper idMapper){
         super(personEntityService, mapper, idMapper);
         this.personEntityService = personEntityService;
         this.mapper = mapper;

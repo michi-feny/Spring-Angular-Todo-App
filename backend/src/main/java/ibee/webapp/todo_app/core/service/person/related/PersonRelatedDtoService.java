@@ -18,5 +18,5 @@ public interface PersonRelatedDtoService<
     Optional<DTO> findWithDetailsById(ID id);
 
     // optional: expose entity service when necessary
-    PersonRelatedService<ENTITY, ID> getEntityService();
+    //PersonRelatedService<ENTITY, ID> getEntityService();
 }

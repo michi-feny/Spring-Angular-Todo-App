@@ -1,124 +1,74 @@
 package ibee.webapp.todo_app.core.service.person;
 
+
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ibee.webapp.todo_app.core.dto.person.PersonData;
-import ibee.webapp.todo_app.core.dto.person.PersonOverview;
 import ibee.webapp.todo_app.core.entity.Person;
 import ibee.webapp.todo_app.core.repository.person.PersonRepository;
+import ibee.webapp.todo_app.core.repository.person.PersonSpecification;
 import ibee.webapp.todo_app.core.service.baseService.newApproach.BaseCrudServiceImpl;
-import ibee.webapp.todo_app.core.service.person.related.contact.address.PersonAddressService;
-import ibee.webapp.todo_app.mapper.person.PersonMapper;
 
 @Service
 @Transactional
-public class PersonServiceImpl
-        extends BaseCrudServiceImpl<Person, Long>
+public class PersonServiceImpl 
+        extends BaseCrudServiceImpl<Person, Long> 
         implements PersonService {
 
     private final PersonRepository personRepository;
 
-    private final PersonMapper personMapper;
-
-    private final PersonAddressService addressService;
-    private final PersonPhoneService phoneService;
-    private final PersonPhoneNumberDtoService emailService;
-    private final PersonCountryService countryService;
-    private final PersonDegreeServiceImpl degreeService;
-    private final PersonProfessionService professionService;
-    private final PersonAdditionalSkillService additionalSkillService;
-    private final PersonSoftSkillService softSkillService;
-
-    public PersonServiceImpl(
-            PersonRepository personRepository,
-            PersonMapper personMapper,
-
-            PersonAddressService addressService,
-            PersonPhoneService phoneService,
-            PersonPhoneNumberDtoService emailService,
-            PersonCountryService countryService,
-            PersonDegreeServiceImpl degreeService,
-            PersonProfessionService professionService,
-            PersonAdditionalSkillService additionalSkillService,
-            PersonSoftSkillService softSkillService) {
-
-        super(personRepository);
-
-        this.personRepository = personRepository;
-        this.personMapper = personMapper;
-
-        this.addressService = addressService;
-        this.phoneService = phoneService;
-        this.emailService = emailService;
-        this.countryService = countryService;
-        this.degreeService = degreeService;
-        this.professionService = professionService;
-        this.additionalSkillService = additionalSkillService;
-        this.softSkillService = softSkillService;
+    public PersonServiceImpl(PersonRepository repository) {
+        super(repository);
+        this.personRepository = repository;
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public Optional<PersonData> findDataById(Long id) {
-
-        return personRepository
-                .findById(id)
-                .map(personMapper::toData);
-    }
-
-    @Override
+   @Override
     @Transactional(readOnly = true)
     public Optional<Person> findWithDetailsById(Long id) {
-
         return personRepository.findWithDetailsById(id);
     }
+    // --- a) Einzelsuchen (Entity-Ebene) ---
 
     @Override
-    public Person save(PersonForm form) {
-
-        Person person =
-                personMapper.toEntity(form);
-
-        return personRepository.save(person);
+    @Transactional(readOnly = true)
+    public List<Person> findByFirstName(String firstName) {
+        return personRepository.findAll(PersonSpecification.filterBy(firstName, null, null, null));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<PersonOverview> findOverviewById(
-            Long personId) {
-
-        return personRepository
-                .findById(personId)
-                .map(person -> new PersonOverview(
-
-                        personMapper.toData(person),
-
-                        addressService
-                                .findIdsByPersonId(personId),
-
-                        phoneService
-                                .findIdsByPersonId(personId),
-
-                        emailService
-                                .findIdsByPersonId(personId),
-
-                        countryService
-                                .findIdsByPersonId(personId),
-
-                        degreeService
-                                .findIdsByPersonId(personId),
-
-                        professionService
-                                .findIdsByPersonId(personId),
-
-                        additionalSkillService
-                                .findIdsByPersonId(personId),
-
-                        softSkillService
-                                .findIdsByPersonId(personId)
-                ));
+    public List<Person> findByLastName(String lastName) {
+        return personRepository.findAll(PersonSpecification.filterBy(null, lastName, null, null));
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Person> findByBirthDate(LocalDate birthDate) {
+        return personRepository.findAll(PersonSpecification.filterBy(null, null, birthDate, null));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Person> findBySocialRecordNumber(Short socialRecordNumber) {
+        return personRepository.findAll(PersonSpecification.filterBy(null, null, null, socialRecordNumber));
+    }
+
+    // --- b) Kombinierte Suche (Entity-Ebene mit automatischer Null-Prüfung) ---
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Person> findByFilter(String firstName, String lastName, LocalDate birthDate, Short socialRecordNumber) {
+        return personRepository.findAll(PersonSpecification.filterBy(firstName, lastName, birthDate, socialRecordNumber));
+    }
+
+    @Override
+    public Optional<Person> findDataById(Long id) {
+        return personRepository.findById(id);
+    }
+
+    
 }
