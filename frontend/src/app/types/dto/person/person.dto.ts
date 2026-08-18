@@ -7,6 +7,8 @@ import { PersonProfessionQualificationDto } from './related/skill/hard/person-pr
 //import { PersonEducationSkillDto } from './person-education-skill.dto';
 //import { PersonEducationSkillDto } from './related/contact/skills/hard/person-education-skill.dto';
 import { PersonAdditionalHardSkillDto } from './related/skill/hard/person-additional-hard-skill.dto';
+import { PersonSoftSkillDto } from './related/skill/soft/person-soft-skill-dto';
+import { PersonCountryDto } from './related/contact/country/person-country-dto';
 
 
 export interface PersonDto {
@@ -21,9 +23,8 @@ export interface PersonDto {
 
     birthDate: string;
 
-
-    nationality?: CountryDto;
-
+    //contact
+    nationality?: PersonCountryDto[];
 
     addresses: PersonAddressDto[];
 
@@ -31,14 +32,18 @@ export interface PersonDto {
 
     emails: PersonEmailAddressDto[];
 
-    degrees: PersonDegreeDto[];
+    //SKILL
+        //SOFT SKILL
+        softSKills: PersonSoftSkillDto[];
 
-    professions: PersonProfessionQualificationDto[];
+        //HARD SKILL
 
-    //educationSkills: PersonEducationSkillDto[];
+        degrees: PersonDegreeDto[];
 
-    additionalSkills: PersonAdditionalHardSkillDto[];
+        professions: PersonProfessionQualificationDto[];
 
-    softSKills: SoftSkillDto[];
+        additionalSkills: PersonAdditionalHardSkillDto[];
+
+    
 
 }

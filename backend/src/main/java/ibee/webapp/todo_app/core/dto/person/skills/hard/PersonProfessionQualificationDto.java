@@ -18,9 +18,6 @@ public record PersonProfessionQualificationDto(
     String name,
 
     @NotNull
-    String description,
-
-    @NotNull
     EducationInstitutionDto educationInstitution,
 
     @NotNull

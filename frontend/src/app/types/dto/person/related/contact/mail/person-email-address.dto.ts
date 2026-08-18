@@ -1,9 +1,10 @@
 import { EmailAddressDto } from '../../../../email-address.dto';
+import { PersonEmailAddressDtoId } from '../../reference/contact/person-email-address-dto-id';
 
 
 export interface PersonEmailAddressDto {
 
-    id?: number;
+    id?: PersonEmailAddressDtoId;
 
     email: EmailAddressDto;
 

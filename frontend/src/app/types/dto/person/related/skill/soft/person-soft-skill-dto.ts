@@ -3,5 +3,5 @@ import { PersonSoftSkillDtoId } from "../../reference/skill/person-soft-skill-dt
 
 export interface PersonSoftSkillDto {
     id: PersonSoftSkillDtoId; 
-    skill: SoftSkillDto;
+    softSkill: SoftSkillDto;
 }

@@ -9,4 +9,6 @@ export interface DegreeDto extends HardSkillDto {
 
     postName: boolean;
 
+    type: 'DEGREE';
+
 }
