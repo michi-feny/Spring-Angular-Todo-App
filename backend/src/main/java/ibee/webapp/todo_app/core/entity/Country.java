@@ -1,55 +1,47 @@
 package ibee.webapp.todo_app.core.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.Immutable;
+import org.hibernate.annotations.ParamDef;
+import jakarta.persistence.*;
+import lombok.*;
 
-/**
- * Country
- */
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Immutable
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "country")
 public class Country {
+
+    public Country(String code) {
+        this.code = code;
+    }
+    
+    @PreRemove
+    private void preventDeletion() {
+        throw new IllegalStateException("WARNUNG: Ein Land darf niemals aus der Datenbank gelöscht werden!");
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(
-        length = 2, 
-        nullable = false)
-    @NotBlank(message = "{country.code.required}")
-    @Size(max = 2, message = "{country.code.maxSize}")
-    @Pattern(
-        regexp = "^[A-Za-z]{2}$",
-        message = "{country.code.invalid}"
-    )
-    private String code;   // ISO 3166-1 Alpha-2 (AT, DE, CH, US, ...)
+    @Column(length = 2, nullable = false, unique = true)
+    private String code;
 
-    @NotBlank(message = "{country.name.required}")
-    @Size(max = 100, message = "{country.name.maxSize}")
-    @Column(nullable = false, unique = true, length = 100)
-    private String name;   // Österreich, Deutschland, ...
+    @OneToMany(mappedBy = "country", fetch = FetchType.EAGER)
+    private List<CountryTranslation> translations = new ArrayList<>();
 
-    @Size(max = 5, message = "{country.language.maxSize}")
-    @Pattern(
-        regexp = "^[A-Za-z]{2,3}(-[A-Za-z]{2})?$",
-        message = "{country.language.invalid}"
-    )
-    @Column(length = 5)
-    private String language; // de, en, fr, it, ...
-
-    // Getter und Setter
+    public CountryTranslation getActiveTranslation(String languageCode) {
+        if (translations == null || translations.isEmpty()) return null;
+        
+        return translations.stream()
+                .filter(t -> t.getLanguageCode().equalsIgnoreCase(languageCode))
+                .findFirst()
+                .orElse(translations.get(0)); // Fallback
+    }
 }

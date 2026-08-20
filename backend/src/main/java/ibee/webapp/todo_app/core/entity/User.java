@@ -28,6 +28,7 @@ public class User {
     @Column(nullable = false)
     private String roles = "ROLE_USER";
 
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "person_id",
