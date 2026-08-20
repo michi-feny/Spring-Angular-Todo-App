@@ -1,8 +1,6 @@
 package ibee.webapp.todo_app.dbSeeder;
 
 
-package ibee.webapp.todo_app.config; // bzw. seeder/bootstrap
-
 import ibee.webapp.todo_app.core.entity.Country;
 import ibee.webapp.todo_app.core.entity.CountryTranslation;
 import ibee.webapp.todo_app.core.repository.CountryRepository;
@@ -36,75 +34,81 @@ public class DatabaseSeeder implements CommandLineRunner {
     @Transactional
     public void run(String... args) throws Exception {
         
-        // 1. Hole alle existierenden Länder
+        // 1. Lade alle existierenden Länder
         Map<String, Country> existingCountries = countryRepository.findAll().stream()
                 .collect(Collectors.toMap(Country::getCode, c -> c));
 
-        // 2. Hole alle existierenden Übersetzungen als Set (z.B. "AT-de", "AT-en")
-        Set<String> existingTranslationKeys = translationRepository.findAll().stream()
-                .map(t -> t.getCountry().getCode() + "-" + t.getLanguageCode())
+        // 2. Finde heraus, welche Sprach-Codes (z.B. "de", "en") BEREITS in der DB sind
+        Set<String> languagesInDb = translationRepository.findAll().stream()
+                .map(CountryTranslation::getLanguageCode)
                 .collect(Collectors.toSet());
 
-        // 3. Zielsprachen aus Properties-Dateien dynamisch auslesen
+        // 3. Finde heraus, welche Sprachen aus den Properties-Dateien gelesen werden (Soll-Zustand)
         Set<Locale> targetLocales = detectImplementedLocales();
-        System.out.println("Detected implemented languages: " + targetLocales);
+        
+        // 4. Bilde das Delta: Welche Sprachen GIBT ES NOCH NICHT in der DB? (z.B. nur "es")
+        Set<Locale> missingLocales = targetLocales.stream()
+                .filter(locale -> !languagesInDb.contains(locale.getLanguage()))
+                .collect(Collectors.toSet());
+
+        System.out.println("Ziel-Sprachen: " + targetLocales.stream().map(Locale::getLanguage).toList());
+        System.out.println("Fehlende Sprachen in DB: " + missingLocales.stream().map(Locale::getLanguage).toList());
 
         List<Country> newCountries = new ArrayList<>();
         List<CountryTranslation> newTranslations = new ArrayList<>();
         
-        // 4. ISO-Länder durchgehen
+        // 5. ISO-Länder durchgehen
         String[] isoCountries = Locale.getISOCountries();
         
         for (String code : isoCountries) {
-            
-            // a) Prüfen: Existiert das Land schon?
             Country country = existingCountries.get(code);
+
             if (country == null) {
+                // FALL A: Ein komplett neues Land
                 country = new Country(code); 
                 newCountries.add(country);
-                existingCountries.put(code, country); // Direkt in die Map packen, falls unten benötigt
-            }
-
-            // b) Prüfen: Existieren alle benötigten Übersetzungen für dieses Land?
-            for (Locale targetLocale : targetLocales) {
-                String langCode = targetLocale.getLanguage();
-                String translationKey = code + "-" + langCode; // z.B. "AT-es"
-
-                // Wenn diese spezifische Sprache für dieses Land fehlt -> anlegen!
-                if (!existingTranslationKeys.contains(translationKey)) {
-                    Locale countryLocale = Locale.of("", code);
-                    String localizedName = countryLocale.getDisplayCountry(targetLocale);
-                    
-                    if (localizedName == null || localizedName.isEmpty()) {
-                        localizedName = code; 
+                
+                // Für ein neues Land brauchen wir ALLE Ziel-Sprachen
+                for (Locale locale : targetLocales) {
+                    newTranslations.add(createTranslation(country, code, locale));
+                }
+            } else {
+                // FALL B: Land existiert bereits
+                // Nur ausführen, wenn wir tatsächlich eine NEUE Sprache gefunden haben
+                if (!missingLocales.isEmpty()) {
+                    for (Locale missingLocale : missingLocales) {
+                        newTranslations.add(createTranslation(country, code, missingLocale));
                     }
-
-                    CountryTranslation translation = new CountryTranslation(null, langCode, localizedName, country);
-                    newTranslations.add(translation);
                 }
             }
         }
         
-        // 5. Speichern
-        if (!newCountries.isEmpty()) {
-            countryRepository.saveAll(newCountries);
-            System.out.println("Integrated " + newCountries.size() + " NEW countries.");
+        // 6. Speichern
+        if (!newCountries.isEmpty()) countryRepository.saveAll(newCountries);
+        if (!newTranslations.isEmpty()) translationRepository.saveAll(newTranslations);
+
+        if (!newCountries.isEmpty() || !newTranslations.isEmpty()) {
+            System.out.println("Erfolgreich " + newCountries.size() + " Länder und " + newTranslations.size() + " Übersetzungen hinzugefügt.");
+        } else {
+            System.out.println("Alle Länder und Sprachen sind bereits auf dem neuesten Stand.");
+        }
+    }
+
+    // Hilfsmethode, um den Code oben lesbarer zu machen
+    private CountryTranslation createTranslation(Country country, String code, Locale targetLocale) {
+        Locale countryLocale = Locale.of("", code);
+        String localizedName = countryLocale.getDisplayCountry(targetLocale);
+        
+        if (localizedName == null || localizedName.isEmpty()) {
+            localizedName = code; 
         }
         
-        if (!newTranslations.isEmpty()) {
-            translationRepository.saveAll(newTranslations);
-            System.out.println("Integrated " + newTranslations.size() + " NEW translations.");
-        } 
-        
-        if (newCountries.isEmpty() && newTranslations.isEmpty()) {
-            System.out.println("All ISO countries and translations are already up to date.");
-        }
+        return new CountryTranslation(null, targetLocale.getLanguage(), localizedName, country);
     }
 
     private Set<Locale> detectImplementedLocales() throws Exception {
         Set<Locale> locales = new HashSet<>();
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        
         Resource[] resources = resolver.getResources("classpath*:messages*.properties");
         
         for (Resource resource : resources) {
@@ -114,7 +118,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                     locales.add(Locale.ENGLISH); 
                 } else if (filename.startsWith("messages_") && filename.endsWith(".properties")) {
                     String langCode = filename.substring(9, filename.length() - 11);
-                    locales.add(Locale.of(langCode)); // Modernes Locale.of() genutzt
+                    locales.add(Locale.of(langCode));
                 }
             }
         }
