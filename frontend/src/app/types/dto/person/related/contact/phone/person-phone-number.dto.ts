@@ -8,6 +8,6 @@ export interface PersonPhoneNumberDto {
 
     phoneNumber: PhoneNumberDto;
 
-    mainNumber: boolean;
+    mainPhoneNumber: boolean;
 
 }

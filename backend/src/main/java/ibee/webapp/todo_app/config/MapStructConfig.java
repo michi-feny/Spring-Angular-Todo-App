@@ -9,7 +9,7 @@ import org.mapstruct.ReportingPolicy;
         componentModel = 
             MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = 
-            ReportingPolicy.ERROR //IGNORE TODO: READ WHAT OPTION IS BEST APPROACH
+            ReportingPolicy.WARN //IGNORE TODO: READ WHAT OPTION IS BEST APPROACH
 )
 public interface MapStructConfig {
 

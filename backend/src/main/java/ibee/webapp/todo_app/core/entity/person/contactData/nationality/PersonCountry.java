@@ -42,8 +42,8 @@ public class PersonCountry
     private Person person;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @MapsId("personCountryId")
-    @JoinColumn(name = "person_country_id", nullable = false)
+    @MapsId("countryId")
+    @JoinColumn(name = "country_id", nullable = false)
     private Country country;
 
     @Column(nullable = false)

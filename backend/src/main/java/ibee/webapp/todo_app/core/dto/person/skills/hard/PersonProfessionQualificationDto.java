@@ -11,7 +11,7 @@ import jakarta.validation.constraints.PastOrPresent;
 
 public record PersonProfessionQualificationDto(
 
-    @Deprecated
+    
     PersonProfessionQualificationDtoId id,
 
     @NotBlank

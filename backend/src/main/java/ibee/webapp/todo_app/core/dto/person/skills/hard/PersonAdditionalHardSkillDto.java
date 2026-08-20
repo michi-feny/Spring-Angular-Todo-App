@@ -10,7 +10,7 @@ public record PersonAdditionalHardSkillDto(
     PersonAdditionalHardSkillDtoId id,
 
     @NotNull
-    AdditionalHardSkillDto personAdditionalHardSkillDtoId
+    AdditionalHardSkillDto personAdditionalHardSkillDto
 
     //String category :: for later us if needed
     

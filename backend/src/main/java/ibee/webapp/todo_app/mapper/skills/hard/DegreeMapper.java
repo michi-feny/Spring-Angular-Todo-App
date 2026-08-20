@@ -19,6 +19,6 @@ public interface DegreeMapper extends BaseMapper<DegreeDto, Degree> {
     @Mapping(target = "skillType", expression = "java(SkillType.DEGREE)")
     DegreeDto toDto(Degree entity);
 
-    @Mapping(target = "skillType", ignore = true)
+    
     Degree toEntity(DegreeDto dto);
 }

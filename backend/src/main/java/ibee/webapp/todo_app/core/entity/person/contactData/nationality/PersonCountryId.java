@@ -16,6 +16,6 @@ public class PersonCountryId implements Serializable {
     @Column(name = "person_id")
     private Long personId;
 
-    @Column(name = "person_country_id")
-    private Long personCountryId;
+    @Column(name = "country_id")
+    private Long countryId;
 }

@@ -22,17 +22,14 @@ public interface PersonAddressMapper
     extends BaseMapper<PersonAddressDto, PersonAddress> {
 
     @Override
-    @Mapping(target = "id.personId", source = "id.personId")
-    @Mapping(target = "id.addressId", source = "id.addressId")
+    @Mapping(target = "id", source = "id")
     @Mapping(target = "address", source = "address")
     @Mapping(target = "mainAddress", source = "mainAddress")
     PersonAddressDto toDto(PersonAddress entity);
 
     @Override
-    @Mapping(target = "id.personId", source = "id.personId")
-    @Mapping(target = "id.addressId", source = "id.addressId")
+    @Mapping(target = "id", source = "id")
     @Mapping(target = "person.id", source = "id.personId")
-    @Mapping(target = "address.id", source = "id.addressId")
     @Mapping(target = "address", source = "address")
     @Mapping(target = "mainAddress", source = "mainAddress")
     PersonAddress toEntity(PersonAddressDto dto);

@@ -63,7 +63,7 @@ public class PersonDegree
             name = "fk_person_degree_education_institution"
         )
     )
-    private EducationInstitution institution;
+    private EducationInstitution educationInstitution;
 
     /*
         start date of this degree

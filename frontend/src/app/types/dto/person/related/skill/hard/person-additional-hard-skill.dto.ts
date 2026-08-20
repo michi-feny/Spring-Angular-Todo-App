@@ -6,7 +6,7 @@ export interface PersonAdditionalHardSkillDto {
 
     id?: PersonAdditionalHardSkillDtoId;
 
-    hardSkill: AdditionalHardSkillDto;
+    personAdditionalHardSkillDto: AdditionalHardSkillDto;
 
     
 

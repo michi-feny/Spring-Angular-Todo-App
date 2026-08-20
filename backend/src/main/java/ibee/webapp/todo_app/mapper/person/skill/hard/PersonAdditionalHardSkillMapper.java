@@ -9,29 +9,30 @@ import ibee.webapp.todo_app.config.MapStructConfig;
 import ibee.webapp.todo_app.core.dto.person.skills.hard.PersonAdditionalHardSkillDto;
 import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.additionlHardSkill.PersonAdditionalHardSkill;
 import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
+import ibee.webapp.todo_app.mapper.person.references.skill.hard.PersonAdditionalHardSkillReferenceMapper;
 import ibee.webapp.todo_app.mapper.skills.hard.AdditionalHardSkillMapper;
 
 @Mapper(
     config = MapStructConfig.class,
-    uses = { AdditionalHardSkillMapper.class }
+    uses = { 
+        AdditionalHardSkillMapper.class,
+        PersonAdditionalHardSkillReferenceMapper.class
+     }
 )
 public interface PersonAdditionalHardSkillMapper
     extends BaseMapper<PersonAdditionalHardSkillDto, PersonAdditionalHardSkill> {
 
     // DTO <- Entity
     @Override
-    @Mapping(target = "id.additionalHardSkillId", source = "id.additionalHardSkillId")
-    @Mapping(target = "id.personId", source = "id.personId")
-    @Mapping(target = "personAdditionalHardSkillDtoId", source = "additionalHardSkill")
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "personAdditionalHardSkillDto", source = "additionalHardSkill")
     PersonAdditionalHardSkillDto toDto(PersonAdditionalHardSkill entity);
 
     // Entity <- DTO
     @Override
-    @Mapping(target = "id.personId", source = "id.personId")
-    @Mapping(target = "id.additionalHardSkillId", source = "id.additionalHardSkillId")
+    @Mapping(target = "id", source = "id")
     @Mapping(target = "person.id", source = "id.personId")
-    @Mapping(target = "additionalHardSkill.id", source = "id.additionalHardSkillId")
-    @Mapping(target = "additionalHardSkill", source = "personAdditionalHardSkillDtoId")
+    @Mapping(target = "additionalHardSkill", source = "personAdditionalHardSkillDto")
     PersonAdditionalHardSkill toEntity(PersonAdditionalHardSkillDto dto);
 
     // Null-safe list wrappers delegating to element methods

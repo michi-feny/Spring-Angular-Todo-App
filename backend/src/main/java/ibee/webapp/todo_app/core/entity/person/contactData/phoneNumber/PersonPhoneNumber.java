@@ -42,6 +42,6 @@ public class PersonPhoneNumber
     private PhoneNumber phoneNumber;
 
     @Column(nullable = false)
-    private boolean mainNumber;
+    private boolean mainPhoneNumber;
 
 }

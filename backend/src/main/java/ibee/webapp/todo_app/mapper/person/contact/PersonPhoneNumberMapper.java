@@ -3,6 +3,7 @@ package ibee.webapp.todo_app.mapper.person.contact;
 import ibee.webapp.todo_app.core.entity.person.contactData.phoneNumber.PersonPhoneNumber;
 import ibee.webapp.todo_app.mapper.PhoneNumberMapper;
 import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
+import ibee.webapp.todo_app.mapper.person.references.contact.PersonPhoneNumberReferenceMapper;
 import ibee.webapp.todo_app.core.dto.person.contact.phone.PersonPhoneNumberDto;
 import ibee.webapp.todo_app.config.MapStructConfig;
 import ibee.webapp.todo_app.core.dto.person.referenceIds.contact.PersonPhoneNumberDtoId;
@@ -16,7 +17,8 @@ import org.mapstruct.Mapping;
     config = MapStructConfig.class,
 
     uses = {
-        PhoneNumberMapper.class
+        PhoneNumberMapper.class,
+        PersonPhoneNumberReferenceMapper.class
     }
 )
 public interface PersonPhoneNumberMapper 
@@ -24,19 +26,16 @@ public interface PersonPhoneNumberMapper
         PersonPhoneNumberDto, PersonPhoneNumber> {
 
     @Override
-    @Mapping(target = "id.personId", source = "id.personId")
-    @Mapping(target = "id.phoneNumberId", source = "id.phoneNumberId")
-    @Mapping(target = "phoneNumber", source = "phoneNumber")
-    @Mapping(target = "mainPhone", source = "mainPhone")
+    @Mapping(target = "id", source = "id")
+    @Mapping(target="phoneNumber", source="phoneNumber")
+    @Mapping(target = "mainPhoneNumber", source = "mainPhoneNumber")
     PersonPhoneNumberDto toDto(PersonPhoneNumber entity);
 
     @Override
-    @Mapping(target = "id.personId", source = "id.personId")
-    @Mapping(target = "id.phoneNumberId", source = "id.phoneNumberId")
+    @Mapping(target = "id", source = "id")
     @Mapping(target = "person.id", source = "id.personId")
-    @Mapping(target = "phoneNumber.id", source = "phoneNumberId")       
     @Mapping(target = "phoneNumber", source = "phoneNumber")
-    @Mapping(target = "mainPhone", source = "mainPhone")
+    @Mapping(target = "mainPhoneNumber", source = "mainPhoneNumber")
     PersonPhoneNumber toEntity(PersonPhoneNumberDto dto);
 /* 
     @Override

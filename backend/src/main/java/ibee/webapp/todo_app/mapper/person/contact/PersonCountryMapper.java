@@ -1,6 +1,5 @@
 package ibee.webapp.todo_app.mapper.person.contact;
 
-import java.util.List;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -8,31 +7,29 @@ import org.mapstruct.Mapping;
 import ibee.webapp.todo_app.config.MapStructConfig;
 import ibee.webapp.todo_app.mapper.CountryMapper;
 import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
+import ibee.webapp.todo_app.mapper.person.references.contact.PersonCountryReferenceMapper;
 import ibee.webapp.todo_app.core.dto.person.contact.country.PersonCountryDto;
-import ibee.webapp.todo_app.core.dto.person.referenceIds.contact.PersonCountryDtoId;
 import ibee.webapp.todo_app.core.entity.person.contactData.nationality.PersonCountry;
 
 @Mapper(
     config = MapStructConfig.class,
     uses = { 
-            CountryMapper.class
+            CountryMapper.class,
+            PersonCountryReferenceMapper.class
      }
 )
 public interface PersonCountryMapper 
     extends BaseMapper<PersonCountryDto, PersonCountry> {
 
     @Override
-    @Mapping(target = "id.personId", source = "id.personId")
-    @Mapping(target = "id.countryId", source = "id.countryId")
+    @Mapping(target = "id", source = "id")
     @Mapping(target = "country", source = "country")
     @Mapping(target = "mainCountry", source = "mainCountry") // map referential object
     PersonCountryDto toDto(PersonCountry entity);
 
     @Override
-    @Mapping(target = "id.personId", source = "id.personId")
-    @Mapping(target = "id.countryId", source = "id.countryId")
+    @Mapping(target = "id", source = "id")
     @Mapping(target = "person.id", source = "id.personId")
-    @Mapping(target = "country.id", source = "id.countryId")
     @Mapping(target = "country", source = "country")
     @Mapping(target = "mainCountry", source = "mainCountry") 
     PersonCountry toEntity(PersonCountryDto dto);

@@ -18,6 +18,6 @@ public interface ProfessionQualificationMapper extends BaseMapper<ProfessionQual
     @Mapping(target = "skillType", expression = "java(SkillType.PROFESSION_QUALIFICATION)")
     ProfessionQualificationDto toDto(ProfessionQualification entity);
 
-    @Mapping(target = "skillType", ignore = true)
+    
     ProfessionQualification toEntity(ProfessionQualificationDto dto);
 }

@@ -6,7 +6,7 @@ export interface PersonEmailAddressDto {
 
     id?: PersonEmailAddressDtoId;
 
-    email: EmailAddressDto;
+    emailAddress: EmailAddressDto;
 
     mainEmail: boolean;
 

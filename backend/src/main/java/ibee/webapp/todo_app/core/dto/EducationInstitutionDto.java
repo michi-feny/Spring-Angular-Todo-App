@@ -17,7 +17,7 @@ public record EducationInstitutionDto(
     String name,
 
     @NotNull
-    AddressDto instituteAddress
+    AddressDto address
 
     
 ) {

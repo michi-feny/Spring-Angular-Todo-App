@@ -12,7 +12,7 @@ public record PersonPhoneNumberDto(
     PhoneNumberDto phoneNumber,
 
     @NotNull
-    Boolean mainNumber
+    Boolean mainPhoneNumber
 ) {
 
 }

@@ -35,8 +35,6 @@ public interface AdditionalHardSkillMapper
     //category dosnt get Mapped jet, cause it is not use jet 
     // in the entity:
     // @Mapping(target = "category", source = "category")
-    @Mapping(target = "skillType", expression = "java(SkillType.ADDITIONAL_HARD_SKILL)")
-    @Mapping(target = "skillType", ignore = true)
     AdditionalHardSkill toEntity(AdditionalHardSkillDto dto);
 
     /* 

@@ -16,7 +16,7 @@ public record PhoneNumberDto(
     String countryCode,
 
     @Size(max = 54)
-    String fullnumber
+    String fullNumber
 
     // TODO: add international CountryCode
 ) {

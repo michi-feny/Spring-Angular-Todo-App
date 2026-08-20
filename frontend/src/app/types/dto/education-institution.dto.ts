@@ -7,6 +7,6 @@ export interface EducationInstitutionDto {
 
     name: string;
 
-    instituteAddress: AddressDto;
+    address: AddressDto;
 
 }

@@ -4,13 +4,10 @@ package ibee.webapp.todo_app.mapper.person.contact;
 
 import ibee.webapp.todo_app.config.MapStructConfig;
 import ibee.webapp.todo_app.core.dto.person.contact.mail.PersonEmailAddressDto;
-import ibee.webapp.todo_app.core.dto.person.referenceIds.contact.PersonEmailAddressDtoId;
 import ibee.webapp.todo_app.core.entity.person.contactData.emailAddress.PersonEmailAddress;
 import ibee.webapp.todo_app.mapper.EmailAddressMapper;
 import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
-
-
-import java.util.List;
+import ibee.webapp.todo_app.mapper.person.references.contact.PersonEmailAddressReferenceMapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -19,22 +16,40 @@ import org.mapstruct.Mapping;
 
 @Mapper(
     config = MapStructConfig.class,
-    uses = {  EmailAddressMapper.class }
+    uses = {  
+        EmailAddressMapper.class,
+        PersonEmailAddressReferenceMapper.class
+    }
 )
 public interface PersonEmailAddressMapper extends BaseMapper<PersonEmailAddressDto, PersonEmailAddress> {
 
     @Override
-    @Mapping(target = "id.personId", source = "id.personId")
-    @Mapping(target = "id.emailAddressId", source = "id.emailAddressId")
+    @Mapping(target = "id", source = "id")
     @Mapping(target = "emailAddress", source = "emailAddress")
     @Mapping(target = "mainEmail", source = "mainEmail")
     PersonEmailAddressDto toDto(PersonEmailAddress entity);
 
+/*
+private Long personId;
+PersonEmailAddress id
+    @Column(name = "email_address_id")
+    private Long emailAddressId;
+    private Long personId;
+*/
+
+/*
+PersonEmailAddressDto id
+
+    Long emailAddressId,
+
+    @NotNull
+    @Positive
+    Long personId
+*/
+
     @Override
-    @Mapping(target = "id.personId", source = "id.personId")
-    @Mapping(target = "id.emailAddressId", source = "id.emailAddressId")
+    @Mapping(target = "id", source = "id")
     @Mapping(target = "person.id", source = "id.personId")
-    @Mapping(target = "emailAddress.id", source = "emailAddressId")
     @Mapping(target = "emailAddress", source = "emailAddress")
     @Mapping(target = "mainEmail", source = "mainEmail")
     PersonEmailAddress toEntity(PersonEmailAddressDto dto);
