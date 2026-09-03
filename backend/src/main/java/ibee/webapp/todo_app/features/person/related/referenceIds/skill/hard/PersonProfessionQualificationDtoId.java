@@ -7,11 +7,11 @@ import jakarta.validation.constraints.Positive;
 public record PersonProfessionQualificationDtoId(
     @NotNull
     @Positive
-    Long professionQualificationId,
+    Long personId,  
 
     @NotNull
     @Positive
-    Long personId,  
+    Long professionQualificationId,
 
     @NotNull
     @Positive

@@ -7,11 +7,13 @@ import jakarta.validation.constraints.Positive;
 public record PersonAdditionalHardSkillDtoId(
     @NotNull
     @Positive
-    Long additionalHardSkillId,
-
+    Long personId,
+    
     @NotNull
     @Positive
-    Long personId
+    Long additionalHardSkillId
+
+    
 ) implements StringToDtoIdConvertable
 {
 

@@ -7,11 +7,13 @@ import jakarta.validation.constraints.Positive;
 public record PersonCountryDtoId(
     @NotNull
     @Positive
-    Long countryId,
+    Long personId,
 
     @NotNull
     @Positive
-    Long personId
+    Long countryId
+
+    
 ) implements StringToDtoIdConvertable
 {
 
