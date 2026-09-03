@@ -7,14 +7,17 @@ import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.professionQualifi
 import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.professionQualification.PersonProfessionQualificationId;
 import ibee.webapp.todo_app.core.repository.person.personRelated.skill.hardSkill.PersonProfessionQualificationRepository;
 import ibee.webapp.todo_app.core.service.person.related.PersonRelatedServiceImpl;
+import ibee.webapp.todo_app.mapper.person.skill.hard.PersonProfessionQualificationMapper;
 
 @Service
 @Transactional
 public class PersonProfessionQualificationServiceImpl
         extends PersonRelatedServiceImpl<PersonProfessionQualification, PersonProfessionQualificationId> {
 
-    public PersonProfessionQualificationServiceImpl(PersonProfessionQualificationRepository repository) {
-        super(repository);
+    public PersonProfessionQualificationServiceImpl(
+        PersonProfessionQualificationRepository repository,
+        PersonProfessionQualificationMapper mapper) {
+        super(repository, mapper);
     }
 
 }

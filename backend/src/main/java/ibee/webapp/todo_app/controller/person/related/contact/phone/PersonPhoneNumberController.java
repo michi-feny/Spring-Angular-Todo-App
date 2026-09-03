@@ -2,10 +2,11 @@ package ibee.webapp.todo_app.controller.person.related.contact.phone;
 
 import ibee.webapp.todo_app.controller.person.related.AbstractSpringPersonRelatedHateoasController;
 import ibee.webapp.todo_app.core.dto.person.contact.phone.PersonPhoneNumberDto;
-import ibee.webapp.todo_app.core.dto.person.referenceIds.contact.PersonPhoneNumberDtoId;
 import ibee.webapp.todo_app.core.entity.person.contactData.phoneNumber.PersonPhoneNumber;
 import ibee.webapp.todo_app.core.entity.person.contactData.phoneNumber.PersonPhoneNumberId;
 import ibee.webapp.todo_app.core.service.person.related.PersonRelatedDtoService;
+import ibee.webapp.todo_app.core.service.person.related.contact.phone.PersonPhoneNumberDtoService;
+import ibee.webapp.todo_app.features.person.related.referenceIds.contact.PersonPhoneNumberDtoId;
 import ibee.webapp.todo_app.infrastructure.i18n.TranslationService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,11 +57,13 @@ public class PersonPhoneNumberController extends AbstractSpringPersonRelatedHate
         PersonPhoneNumberId,
         PersonPhoneNumberDtoId> {
 
+    @SuppressWarnings("unchecked")
     public PersonPhoneNumberController(
-            PersonRelatedDtoService<PersonPhoneNumberDto, PersonPhoneNumber, PersonPhoneNumberId, PersonPhoneNumberDtoId> service,
+            PersonPhoneNumberDtoService service,
             TranslationService translationService,
             PersonPhoneNumberModelAssembler assembler) {
         
-        super(service, translationService, assembler, "entity.personPhoneNumber");
+        super(
+            (PersonRelatedDtoService<PersonPhoneNumberDto, PersonPhoneNumber, PersonPhoneNumberId, PersonPhoneNumberDtoId>)service, translationService, assembler, "entity.personPhoneNumber");
     }
 }

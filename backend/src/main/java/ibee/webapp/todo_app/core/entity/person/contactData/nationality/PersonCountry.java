@@ -3,6 +3,7 @@ package ibee.webapp.todo_app.core.entity.person.contactData.nationality;
 import ibee.webapp.todo_app.core.entity.Country;
 import ibee.webapp.todo_app.core.entity.Person;
 import ibee.webapp.todo_app.core.entity.person.PersonRelatedEntity;
+import ibee.webapp.todo_app.validation.idHandle.ValidId;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -29,8 +30,9 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PersonCountry 
-    implements PersonRelatedEntity{
+    implements PersonRelatedEntity<PersonCountryId>{
 
+   // @ValidId
     @EmbeddedId
     private PersonCountryId id;
 

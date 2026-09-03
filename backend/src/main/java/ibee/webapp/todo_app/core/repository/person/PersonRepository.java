@@ -7,11 +7,11 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import ibee.webapp.todo_app.core.entity.Person;
-import ibee.webapp.todo_app.core.repository.baseRepo.MyBaseCrudRepo;
+import ibee.webapp.todo_app.core.repository.baseRepo.MyFacadeBaseCrudRepository;
 
 @Repository
 public interface PersonRepository 
-    extends MyBaseCrudRepo<Person, Long>,
+    extends MyFacadeBaseCrudRepository<Person, Long>,
     JpaSpecificationExecutor<Person>{
 
     @EntityGraph(attributePaths = {

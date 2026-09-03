@@ -4,21 +4,29 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
 
+import ibee.webapp.todo_app.core.repository.baseRepo.IdentifiableEntity;
 import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public abstract class AbstractCrudDtoService<DTO, ENTITY, ID>
+public abstract class AbstractCrudDtoService<DTO, ENTITY extends IdentifiableEntity<ID>, ID>
         implements CrudDtoService<DTO, ID> {
 
-    protected final BaseCrudService<ENTITY, ID> entityService;
+    protected final MyCrudBaseEntityFacadeService<ENTITY, ID> entityService;
     protected final BaseMapper<DTO, ENTITY> mapper;
 
     @Override
-    public DTO save(DTO dto) {
+    public DTO create(DTO dto) {
         ENTITY e = mapper.toEntity(dto);
-        ENTITY saved = entityService.save(e);
+        ENTITY saved = entityService.create(e);
         return mapper.toDto(saved);
+    }
+
+    @Override
+    public DTO update(DTO dto, ID id){
+        ENTITY e = mapper.toEntity(dto);
+        ENTITY updated = entityService.update(e, id);
+        return mapper.toDto(updated);
     }
 
     @Override

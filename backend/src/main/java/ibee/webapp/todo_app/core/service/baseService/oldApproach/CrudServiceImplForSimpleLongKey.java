@@ -1,6 +1,6 @@
 package ibee.webapp.todo_app.core.service.baseService.oldApproach;
 
-import ibee.webapp.todo_app.core.repository.baseRepo.MyBaseCrudRepo;
+import ibee.webapp.todo_app.core.repository.baseRepo.MyFacadeBaseCrudRepository;
 import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.Optional;
 public abstract class CrudServiceImplForSimpleLongKey<DTO, ENTITY, ID>
         implements CrudServiceForSimpleLongKey<DTO, ENTITY, ID> {
 
-     private final MyBaseCrudRepo<ENTITY, ID> repository;
+     private final MyFacadeBaseCrudRepository<ENTITY, ID> repository;
      private final BaseMapper<DTO, ENTITY> mapper;
 
    

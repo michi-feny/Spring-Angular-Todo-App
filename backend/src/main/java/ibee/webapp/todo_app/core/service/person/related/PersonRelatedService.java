@@ -4,12 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import ibee.webapp.todo_app.core.entity.person.PersonRelatedEntity;
-import ibee.webapp.todo_app.core.service.baseService.newApproach.BaseCrudService;
+import ibee.webapp.todo_app.core.service.baseService.newApproach.MyCrudBaseEntityFacadeService;
 
 public interface PersonRelatedService<
         ENTITY extends PersonRelatedEntity,
         ID>
-        extends BaseCrudService<ENTITY, ID> {
+        extends MyCrudBaseEntityFacadeService<ENTITY, ID> {
 
     List<ID> findIdsByPersonId(Long personId);
 

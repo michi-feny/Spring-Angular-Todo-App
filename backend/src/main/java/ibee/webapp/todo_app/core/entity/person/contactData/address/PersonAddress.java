@@ -3,6 +3,7 @@ package ibee.webapp.todo_app.core.entity.person.contactData.address;
 import ibee.webapp.todo_app.core.entity.Address;
 import ibee.webapp.todo_app.core.entity.Person;
 import ibee.webapp.todo_app.core.entity.person.PersonRelatedEntity;
+import ibee.webapp.todo_app.validation.idHandle.ValidId;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -12,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,12 +27,14 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "person_address"
-)
+@Table(name = "person_address", uniqueConstraints = {
+    
+})
 public class PersonAddress 
-    implements PersonRelatedEntity{
+    implements PersonRelatedEntity<PersonAddressId>{
 
     @EmbeddedId
+    //@ValidId
     private PersonAddressId id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

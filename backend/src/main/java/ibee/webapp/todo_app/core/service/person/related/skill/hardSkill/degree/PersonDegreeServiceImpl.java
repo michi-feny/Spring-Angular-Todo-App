@@ -8,14 +8,17 @@ import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.degree.PersonDegr
 import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.degree.PersonDegreeId;
 import ibee.webapp.todo_app.core.repository.person.personRelated.skill.hardSkill.PersonDegreeRepository;
 import ibee.webapp.todo_app.core.service.person.related.PersonRelatedServiceImpl;
+import ibee.webapp.todo_app.mapper.person.skill.hard.PersonDegreeMapper;
 
 @Service
 @Transactional
 public class PersonDegreeServiceImpl
         extends PersonRelatedServiceImpl<PersonDegree, PersonDegreeId> {
 
-    public PersonDegreeServiceImpl(PersonDegreeRepository repository) {
-        super(repository);
+    public PersonDegreeServiceImpl(
+        PersonDegreeRepository repository,
+        PersonDegreeMapper mapper) {
+        super(repository, mapper);
     }
 
   /* * @Override

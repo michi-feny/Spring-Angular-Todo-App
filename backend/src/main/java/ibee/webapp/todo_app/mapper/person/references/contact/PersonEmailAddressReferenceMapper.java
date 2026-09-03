@@ -6,8 +6,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import ibee.webapp.todo_app.config.MapStructConfig;
-import ibee.webapp.todo_app.core.dto.person.referenceIds.contact.PersonEmailAddressDtoId;
 import ibee.webapp.todo_app.core.entity.person.contactData.emailAddress.PersonEmailAddressId;
+import ibee.webapp.todo_app.features.person.related.referenceIds.contact.PersonEmailAddressDtoId;
 import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
 
 @Mapper(config = MapStructConfig.class)
@@ -24,12 +24,5 @@ public interface PersonEmailAddressReferenceMapper
     @Mapping(target = "personId", source = "personId")
     @Mapping(target = "emailAddressId", source = "emailAddressId")
     PersonEmailAddressId toEntity(PersonEmailAddressDtoId dto);
-/*
-    @Override
-    List<PersonEmailAddressDtoId> toDtoList(List<PersonEmailAddressId> entities);
 
-    @Override
-    List<PersonEmailAddressId> toEntityList(List<PersonEmailAddressDtoId> dtos);
-
-   */  
 }

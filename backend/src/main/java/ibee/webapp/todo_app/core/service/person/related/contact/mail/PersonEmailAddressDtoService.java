@@ -1,23 +1,31 @@
 package ibee.webapp.todo_app.core.service.person.related.contact.mail;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ibee.webapp.todo_app.core.dto.person.contact.mail.PersonEmailAddressDto;
-import ibee.webapp.todo_app.core.dto.person.referenceIds.contact.PersonEmailAddressDtoId;
 import ibee.webapp.todo_app.core.entity.person.contactData.emailAddress.PersonEmailAddress;
 import ibee.webapp.todo_app.core.entity.person.contactData.emailAddress.PersonEmailAddressId;
 import ibee.webapp.todo_app.core.service.person.related.AbstractPersonRelatedDtoService;
+import ibee.webapp.todo_app.core.service.person.related.PersonRelatedDtoService;
 import ibee.webapp.todo_app.core.service.person.related.PersonRelatedService;
+import ibee.webapp.todo_app.features.person.related.referenceIds.contact.PersonEmailAddressDtoId;
 import ibee.webapp.todo_app.mapper.person.contact.PersonEmailAddressMapper;
 import ibee.webapp.todo_app.mapper.person.references.contact.PersonEmailAddressReferenceMapper;
 
 @Service
+@Transactional
 public class PersonEmailAddressDtoService
     extends AbstractPersonRelatedDtoService<
         PersonEmailAddressDto,
         PersonEmailAddress,
         PersonEmailAddressId,
-        PersonEmailAddressDtoId> {
+        PersonEmailAddressDtoId> 
+    implements PersonRelatedDtoService<
+        PersonEmailAddressDto,
+        PersonEmailAddress,
+        PersonEmailAddressId,
+        PersonEmailAddressDtoId>{
 
     public PersonEmailAddressDtoService(
             PersonRelatedService<PersonEmailAddress, PersonEmailAddressId> personEntityService,

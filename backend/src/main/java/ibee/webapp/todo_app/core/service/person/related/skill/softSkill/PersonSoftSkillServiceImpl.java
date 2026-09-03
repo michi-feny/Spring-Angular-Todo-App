@@ -7,14 +7,17 @@ import ibee.webapp.todo_app.core.entity.person.skill.softSkill.PersonSoftSkill;
 import ibee.webapp.todo_app.core.entity.person.skill.softSkill.PersonSoftSkillId;
 import ibee.webapp.todo_app.core.repository.person.personRelated.skill.softSkill.PersonSoftSkillRepository;
 import ibee.webapp.todo_app.core.service.person.related.PersonRelatedServiceImpl;
+import ibee.webapp.todo_app.mapper.person.skill.soft.PersonSoftSkillMapper;
 
 @Service
 @Transactional
 public class PersonSoftSkillServiceImpl
         extends PersonRelatedServiceImpl<PersonSoftSkill, PersonSoftSkillId> {
 
-    public PersonSoftSkillServiceImpl(PersonSoftSkillRepository repository) {
-        super(repository);
+    public PersonSoftSkillServiceImpl(
+        PersonSoftSkillRepository repository,
+        PersonSoftSkillMapper mapper) {
+        super(repository, mapper);
     }
 
 }

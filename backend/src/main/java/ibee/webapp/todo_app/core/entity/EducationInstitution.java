@@ -1,5 +1,6 @@
 package ibee.webapp.todo_app.core.entity;
 
+import ibee.webapp.todo_app.validation.idHandle.ValidId;
 /**
  * EducationInstitution
  */
@@ -17,7 +18,9 @@ public class EducationInstitution {
 
     @Id
     @GeneratedValue(
-        strategy = GenerationType.IDENTITY)
+        strategy = GenerationType.IDENTITY
+    )
+   // @ValidId
     private Long id;
 
     @Column(

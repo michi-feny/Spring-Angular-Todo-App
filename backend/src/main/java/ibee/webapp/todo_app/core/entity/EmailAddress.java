@@ -1,6 +1,7 @@
 package ibee.webapp.todo_app.core.entity;
 
 
+import ibee.webapp.todo_app.validation.idHandle.ValidId;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -33,7 +34,9 @@ public class EmailAddress {
     @Id
     @GeneratedValue(
         strategy 
-            = GenerationType.IDENTITY)
+            = GenerationType.IDENTITY
+        )
+   // @ValidId
     private Long id;
 
     @Column(

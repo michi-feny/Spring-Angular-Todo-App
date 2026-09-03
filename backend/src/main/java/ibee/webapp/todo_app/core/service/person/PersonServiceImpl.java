@@ -11,19 +11,25 @@ import org.springframework.transaction.annotation.Transactional;
 import ibee.webapp.todo_app.core.entity.Person;
 import ibee.webapp.todo_app.core.repository.person.PersonRepository;
 import ibee.webapp.todo_app.core.repository.person.PersonSpecification;
-import ibee.webapp.todo_app.core.service.baseService.newApproach.BaseCrudServiceImpl;
+import ibee.webapp.todo_app.core.service.baseService.newApproach.MyCrudBaseEntityFacedeServiceImpl;
+import ibee.webapp.todo_app.features.person.PersonMapper;
 
 @Service
 @Transactional
 public class PersonServiceImpl 
-        extends BaseCrudServiceImpl<Person, Long> 
+        extends MyCrudBaseEntityFacedeServiceImpl<Person, Long> 
         implements PersonService {
 
     private final PersonRepository personRepository;
+    //private final PersonMapper mapper;
 
-    public PersonServiceImpl(PersonRepository repository) {
-        super(repository);
+    public PersonServiceImpl(
+        PersonRepository repository, 
+        PersonMapper mapper
+    ) {
+        super(repository, mapper);
         this.personRepository = repository;
+        //this.mapper = mapper;
     }
 
    @Override
@@ -53,7 +59,7 @@ public class PersonServiceImpl
 
     @Override
     @Transactional(readOnly = true)
-    public List<Person> findBySocialRecordNumber(Short socialRecordNumber) {
+    public List<Person> findBySocialRecordNumber(Long socialRecordNumber) {
         return personRepository.findAll(PersonSpecification.filterBy(null, null, null, socialRecordNumber));
     }
 
@@ -61,7 +67,7 @@ public class PersonServiceImpl
 
     @Override
     @Transactional(readOnly = true)
-    public List<Person> findByFilter(String firstName, String lastName, LocalDate birthDate, Short socialRecordNumber) {
+    public List<Person> findByFilter(String firstName, String lastName, LocalDate birthDate, Long socialRecordNumber) {
         return personRepository.findAll(PersonSpecification.filterBy(firstName, lastName, birthDate, socialRecordNumber));
     }
 

@@ -72,7 +72,7 @@ public abstract class DEBRICATED_AbstractHateoasCrudController<DTO, ID> {
             @AuthenticationPrincipal AuthenticatedUser userDetails,
             @NotNull @Valid @RequestBody DTO dto) {
 
-        DTO created = service.save(dto);
+        DTO created = service.create(dto);
         List<Link> links = HateoasLinkBuilder.getCollectionLinks(basePath);
         String message = translationService.translate("crud.created", getEntityName());
 
@@ -94,7 +94,7 @@ public abstract class DEBRICATED_AbstractHateoasCrudController<DTO, ID> {
             );
         }
 
-        DTO updated = service.save(dto);
+        DTO updated = service.create(dto);
         List<Link> links = HateoasLinkBuilder.getDefaultCrudLinks(basePath, (Long) id);
         String message = translationService.translate("crud.updated", getEntityName());
 

@@ -4,11 +4,11 @@ import org.springframework.stereotype.Repository;
 
 import ibee.webapp.todo_app.core.entity.hardSkills.ProfessionQualification;
 import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.professionQualification.PersonProfessionQualificationId;
-import ibee.webapp.todo_app.core.repository.baseRepo.MyBaseCrudRepo;
+import ibee.webapp.todo_app.core.repository.baseRepo.MyFacadeBaseCrudRepository;
 
 @Repository
 public interface ProfessionQualifacationRepository 
-    extends MyBaseCrudRepo
+    extends MyFacadeBaseCrudRepository
         <ProfessionQualification, PersonProfessionQualificationId>{
 
 }

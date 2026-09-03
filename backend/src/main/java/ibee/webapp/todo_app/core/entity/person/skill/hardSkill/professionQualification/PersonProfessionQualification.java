@@ -6,6 +6,7 @@ import ibee.webapp.todo_app.core.entity.EducationInstitution;
 import ibee.webapp.todo_app.core.entity.Person;
 import ibee.webapp.todo_app.core.entity.hardSkills.ProfessionQualification;
 import ibee.webapp.todo_app.core.entity.person.PersonRelatedEntity;
+import ibee.webapp.todo_app.validation.idHandle.ValidId;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
@@ -20,8 +21,9 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PersonProfessionQualification 
-    implements PersonRelatedEntity{
+    implements PersonRelatedEntity<PersonProfessionQualificationId>{
     
+    //@ValidId
     @EmbeddedId
     private PersonProfessionQualificationId id;
 

@@ -6,26 +6,35 @@ import java.util.Optional;
 import org.springframework.transaction.annotation.Transactional;
 
 import ibee.webapp.todo_app.core.entity.person.PersonRelatedEntity;
+import ibee.webapp.todo_app.core.entity.person.contactData.address.PersonAddressId;
 import ibee.webapp.todo_app.core.repository.baseRepo.person.PersonRelatedRepository;
-import ibee.webapp.todo_app.core.service.baseService.newApproach.BaseCrudServiceImpl;
+import ibee.webapp.todo_app.core.service.baseService.newApproach.MyCrudBaseEntityFacedeServiceImpl;
+import ibee.webapp.todo_app.mapper.baseMaper.EntityUpdateMapper;
 
 
 @Transactional
 public abstract class PersonRelatedServiceImpl<
-        ENTITY extends PersonRelatedEntity,
+        ENTITY extends PersonRelatedEntity<ID>,
         ID>
-        extends BaseCrudServiceImpl<ENTITY, ID>
+        extends MyCrudBaseEntityFacedeServiceImpl<ENTITY, ID>
         implements PersonRelatedService<ENTITY, ID> {
 
    protected final PersonRelatedRepository<ENTITY, ID>
             personRelatedRepository;
 
     protected PersonRelatedServiceImpl(
-            PersonRelatedRepository<ENTITY, ID> repository) {
+            PersonRelatedRepository<ENTITY, ID> repository,
+            EntityUpdateMapper<ENTITY> entityMapper
+        ) {
 
-        super(repository);
+        super(repository, entityMapper);
 
         this.personRelatedRepository = repository;
+    }
+
+    @Override
+    protected void validateCompositeId(ID id, String Context) {
+        super.validateCompositeId(id, Context);
     }
 
     @Override

@@ -3,6 +3,9 @@ package ibee.webapp.todo_app.core.repository.person.personRelated.contact.addres
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import ibee.webapp.todo_app.core.entity.person.contactData.address.PersonAddress;
@@ -20,5 +23,17 @@ public interface PersonAddressRepository
     })
     Optional<PersonAddress> findWithDetailsById(
         PersonAddressId id
+    );
+
+    @Modifying
+    @Query("""
+        UPDATE PersonAddress pa 
+        SET pa.mainAddress = false 
+        WHERE pa.person.id = :personId 
+          AND pa.id.addressId != :excludeAddressId
+    """)
+    void resetOtherMainAddresses(
+        @Param("personId") Long personId, 
+        @Param("excludeAddressId") Long excludeAddressId
     );
 }

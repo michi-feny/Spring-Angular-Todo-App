@@ -8,12 +8,12 @@ import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.query.Param;
 
 import ibee.webapp.todo_app.core.entity.person.PersonRelatedEntity;
-import ibee.webapp.todo_app.core.repository.baseRepo.MyBaseCrudRepo;
+import ibee.webapp.todo_app.core.repository.baseRepo.MyFacadeBaseCrudRepository;
 
 @NoRepositoryBean
 public interface PersonRelatedRepository
     <ENTITY extends PersonRelatedEntity, ID>
-        extends MyBaseCrudRepo<ENTITY, ID> {
+        extends MyFacadeBaseCrudRepository<ENTITY, ID> {
 
 
     @Query("""

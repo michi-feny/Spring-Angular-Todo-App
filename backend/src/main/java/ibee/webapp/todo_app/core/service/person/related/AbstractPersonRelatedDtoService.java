@@ -3,6 +3,8 @@ package ibee.webapp.todo_app.core.service.person.related;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.util.Assert;
+
 import ibee.webapp.todo_app.core.entity.person.PersonRelatedEntity;
 import ibee.webapp.todo_app.core.service.baseService.newApproach.AbstractCrudDtoService;
 import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
@@ -10,7 +12,7 @@ import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
 
 public abstract class AbstractPersonRelatedDtoService<
         DTO,
-        ENTITY extends PersonRelatedEntity,
+        ENTITY extends PersonRelatedEntity<ID>,
         ID,
         IDDTO>
     extends AbstractCrudDtoService<DTO, ENTITY, ID> {
@@ -39,6 +41,8 @@ public abstract class AbstractPersonRelatedDtoService<
     public Optional<DTO> findWithDetailsById(ID id) {
         return personEntityService.findWithDetailsById(id).map(mapper::toDto);
     }
+
+   
 
    
 }

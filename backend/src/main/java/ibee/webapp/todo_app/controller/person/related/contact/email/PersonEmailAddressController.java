@@ -2,10 +2,11 @@ package ibee.webapp.todo_app.controller.person.related.contact.email;
 
 import ibee.webapp.todo_app.controller.person.related.AbstractSpringPersonRelatedHateoasController;
 import ibee.webapp.todo_app.core.dto.person.contact.mail.PersonEmailAddressDto;
-import ibee.webapp.todo_app.core.dto.person.referenceIds.contact.PersonEmailAddressDtoId;
 import ibee.webapp.todo_app.core.entity.person.contactData.emailAddress.PersonEmailAddress;
 import ibee.webapp.todo_app.core.entity.person.contactData.emailAddress.PersonEmailAddressId;
 import ibee.webapp.todo_app.core.service.person.related.PersonRelatedDtoService;
+import ibee.webapp.todo_app.core.service.person.related.contact.mail.PersonEmailAddressDtoService;
+import ibee.webapp.todo_app.features.person.related.referenceIds.contact.PersonEmailAddressDtoId;
 import ibee.webapp.todo_app.infrastructure.i18n.TranslationService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -55,11 +56,15 @@ public class PersonEmailAddressController extends AbstractSpringPersonRelatedHat
         PersonEmailAddressId,
         PersonEmailAddressDtoId> {
 
+    @SuppressWarnings("unchecked")
     public PersonEmailAddressController(
-            PersonRelatedDtoService<PersonEmailAddressDto, PersonEmailAddress, PersonEmailAddressId, PersonEmailAddressDtoId> service,
+            PersonEmailAddressDtoService service, // Spring finds the concrete bean here
             TranslationService translationService,
             PersonEmailAddressModelAssembler assembler) {
-        
-        super(service, translationService, assembler, "entity.personEmailAddress");
+
+    super((PersonRelatedDtoService<PersonEmailAddressDto, PersonEmailAddress, PersonEmailAddressId, PersonEmailAddressDtoId>) service, 
+              translationService, 
+              assembler, 
+              "entity.personEmailAddress");
     }
 }

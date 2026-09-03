@@ -2,6 +2,9 @@ package ibee.webapp.todo_app.mapper.person.skill.soft;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.BeanMapping;
 
 import ibee.webapp.todo_app.config.MapStructConfig;
 import ibee.webapp.todo_app.core.dto.person.skills.soft.PersonSoftSkillDto;
@@ -31,4 +34,18 @@ public interface PersonSoftSkillMapper
         @Mapping(target = "softSkill", source = "softSkill")  
         PersonSoftSkillDto toDto(PersonSoftSkill entity);
 
+        // --- 3. DTO UPDATE (UI -> DB) ---
+    @Override
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "person", ignore = true)
+    @Mapping(target = "softSkill", source = "softSkill")
+    void updateEntityFromDto(PersonSoftSkillDto dto, @MappingTarget PersonSoftSkill entity);
+
+    // --- 4. INTERNAL UPDATE ---
+    @Override
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "person", ignore = true)
+    @Mapping(target = "softSkill", source = "softSkill")
+    void updateEntityFromEntity(PersonSoftSkill sourceUpdates, @MappingTarget PersonSoftSkill dbEntity);
 }

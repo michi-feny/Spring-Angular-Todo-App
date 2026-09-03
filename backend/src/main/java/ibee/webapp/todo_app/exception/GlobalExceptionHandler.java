@@ -1,0 +1,100 @@
+package ibee.webapp.todo_app.exception;
+
+import ibee.webapp.todo_app.core.exception.BaseException;
+import ibee.webapp.todo_app.core.exception.ResourceNotFoundException;
+import ibee.webapp.todo_app.infrastructure.i18n.TranslationService;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.net.URI;
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
+
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    private final TranslationService translationService;
+
+    public GlobalExceptionHandler(TranslationService translationService) {
+        this.translationService = translationService;
+    }
+
+    /**
+     * 1. Handles your custom BaseExceptions (like ResourceNotFoundException, ResetTokenException, etc.)
+     * and automatically localizes the message using your TranslationService and i18n codes.
+     */
+    @ExceptionHandler(BaseException.class)
+    public ResponseEntity<ProblemDetail> handleBaseException(BaseException ex) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        if (ex instanceof ResourceNotFoundException) {
+            status = HttpStatus.NOT_FOUND;
+        }
+
+        // Translate the i18n code using dynamic arguments if provided
+        String translatedMessage = translationService.translate(ex.getI18nCode(), ex.getArgs());
+        if (translatedMessage == null || translatedMessage.equals(ex.getI18nCode())) {
+            translatedMessage = ex.getMessage(); // Fallback to debug message
+        }
+
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(status, translatedMessage);
+        problemDetail.setTitle("Application Error");
+        problemDetail.setType(URI.create("https://api.ihreapp.de/errors/" + ex.getI18nCode()));
+        problemDetail.setProperty("timestamp", Instant.now());
+       
+
+        return ResponseEntity.status(status).body(problemDetail);
+    }
+
+    /**
+     * 2. Handles Controller DTO validation failures (@Validated / @Valid)
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ProblemDetail> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+        problemDetail.setTitle("Validation Failed");
+        problemDetail.setDetail(translationService.translate("validation.failed", "One or more fields have validation errors"));
+        problemDetail.setType(URI.create("https://api.ihreapp.de/errors/validation-failed"));
+
+        Map<String, String> fieldErrors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(error -> 
+            fieldErrors.put(error.getField(), error.getDefaultMessage())
+        );
+
+        problemDetail.setProperty("errors", fieldErrors);
+        problemDetail.setProperty("timestamp", Instant.now());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
+    }
+
+    /**
+     * 3. Handles Database Entity validation failures (Hibernate Pre-Persist/Pre-Update triggers)
+     */
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ProblemDetail> handleConstraintViolation(ConstraintViolationException ex) {
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+        problemDetail.setTitle("Database Validation Failed");
+        problemDetail.setDetail("Entity constraints were violated");
+        problemDetail.setType(URI.create("https://api.ihreapp.de/errors/constraint-violation"));
+
+        Map<String, String> violations = new HashMap<>();
+        for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
+            String fieldName = "";
+            for (jakarta.validation.Path.Node node : violation.getPropertyPath()) {
+                fieldName = node.getName();
+            }
+            violations.put(fieldName, violation.getMessage());
+        }
+
+        problemDetail.setProperty("errors", violations);
+        problemDetail.setProperty("timestamp", Instant.now());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
+    }
+}

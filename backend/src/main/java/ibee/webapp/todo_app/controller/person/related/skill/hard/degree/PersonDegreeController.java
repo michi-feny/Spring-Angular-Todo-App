@@ -2,11 +2,12 @@ package ibee.webapp.todo_app.controller.person.related.skill.hard.degree;
 
 
 import ibee.webapp.todo_app.controller.person.related.AbstractSpringPersonRelatedHateoasController;
-import ibee.webapp.todo_app.core.dto.person.referenceIds.skill.hard.PersonDegreeDtoId;
 import ibee.webapp.todo_app.core.dto.person.skills.hard.PersonDegreeDto;
 import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.degree.PersonDegree;
 import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.degree.PersonDegreeId;
 import ibee.webapp.todo_app.core.service.person.related.PersonRelatedDtoService;
+import ibee.webapp.todo_app.core.service.person.related.skill.hardSkill.degree.PersonDegreeDtoService;
+import ibee.webapp.todo_app.features.person.related.referenceIds.skill.hard.PersonDegreeDtoId;
 import ibee.webapp.todo_app.infrastructure.i18n.TranslationService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -53,11 +54,12 @@ public class PersonDegreeController extends AbstractSpringPersonRelatedHateoasCo
         PersonDegreeId,
         PersonDegreeDtoId> {
 
+    @SuppressWarnings("unchecked")
     public PersonDegreeController(
-            PersonRelatedDtoService<PersonDegreeDto, PersonDegree, PersonDegreeId, PersonDegreeDtoId> service,
+            PersonDegreeDtoService service,
             TranslationService translationService,
             PersonDegreeModelAssembler assembler) {
         
-        super(service, translationService, assembler, "entity.personDegree");
+        super((PersonRelatedDtoService<PersonDegreeDto, PersonDegree, PersonDegreeId, PersonDegreeDtoId>)service, translationService, assembler, "entity.personDegree");
     }
 }

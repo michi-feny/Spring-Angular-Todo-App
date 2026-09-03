@@ -14,7 +14,7 @@ public class PersonSpecification {
             String firstName, 
             String lastName, 
             java.time.LocalDate birthDate, 
-            Short socialRecordNumber) {
+            Long socialRecordNumber) {
         
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();

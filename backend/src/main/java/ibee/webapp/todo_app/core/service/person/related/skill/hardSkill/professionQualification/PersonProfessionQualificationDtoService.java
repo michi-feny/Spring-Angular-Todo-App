@@ -1,23 +1,35 @@
 package ibee.webapp.todo_app.core.service.person.related.skill.hardSkill.professionQualification;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import ibee.webapp.todo_app.core.dto.person.referenceIds.skill.hard.PersonProfessionQualificationDtoId;
+import ibee.webapp.todo_app.core.dto.person.skills.hard.PersonDegreeDto;
 import ibee.webapp.todo_app.core.dto.person.skills.hard.PersonProfessionQualificationDto;
+import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.degree.PersonDegree;
+import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.degree.PersonDegreeId;
 import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.professionQualification.PersonProfessionQualification;
 import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.professionQualification.PersonProfessionQualificationId;
 import ibee.webapp.todo_app.core.service.person.related.AbstractPersonRelatedDtoService;
+import ibee.webapp.todo_app.core.service.person.related.PersonRelatedDtoService;
 import ibee.webapp.todo_app.core.service.person.related.PersonRelatedService;
+import ibee.webapp.todo_app.features.person.related.referenceIds.skill.hard.PersonDegreeDtoId;
+import ibee.webapp.todo_app.features.person.related.referenceIds.skill.hard.PersonProfessionQualificationDtoId;
 import ibee.webapp.todo_app.mapper.person.references.skill.hard.PersonProfessionQualificationReferenceMapper;
 import ibee.webapp.todo_app.mapper.person.skill.hard.PersonProfessionQualificationMapper;
 
 @Service
+@Transactional
 public class PersonProfessionQualificationDtoService
         extends AbstractPersonRelatedDtoService<
             PersonProfessionQualificationDto,
             PersonProfessionQualification,
             PersonProfessionQualificationId,
-            PersonProfessionQualificationDtoId> {
+            PersonProfessionQualificationDtoId> 
+        implements PersonRelatedDtoService<
+            PersonProfessionQualificationDto,
+            PersonProfessionQualification,
+            PersonProfessionQualificationId,
+            PersonProfessionQualificationDtoId>{
 
     public PersonProfessionQualificationDtoService(
             PersonRelatedService<PersonProfessionQualification, PersonProfessionQualificationId> personEntityService,

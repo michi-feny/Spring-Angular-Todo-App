@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Optional;
 
 import ibee.webapp.todo_app.core.entity.Person;
-import ibee.webapp.todo_app.core.service.baseService.newApproach.BaseCrudService;
+import ibee.webapp.todo_app.core.service.baseService.newApproach.MyCrudBaseEntityFacadeService;
 
 public interface PersonService
-        extends BaseCrudService<Person, Long> {
+        extends MyCrudBaseEntityFacadeService<Person, Long> {
 
     Optional<Person> findDataById(Long id);
 
@@ -22,10 +22,10 @@ public interface PersonService
 
     List<Person> findByBirthDate(LocalDate birthDate);
 
-    List<Person> findBySocialRecordNumber(Short socialRecordNumber);
+    List<Person> findBySocialRecordNumber(Long socialRecordNumber);
 
     // b) Kombinierte Suche (Entity-Ebene mit Null-Prüfung)
-    List<Person> findByFilter(String firstName, String lastName, LocalDate birthDate, Short socialRecordNumber);
+    List<Person> findByFilter(String firstName, String lastName, LocalDate birthDate, Long socialRecordNumber);
 
 
 

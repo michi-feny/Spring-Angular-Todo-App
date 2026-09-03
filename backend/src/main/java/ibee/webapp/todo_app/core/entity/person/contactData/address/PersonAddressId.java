@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,9 +16,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PersonAddressId implements Serializable {
 
-    @Column(name = "person_id")
+    @NotNull
+    @Positive
+    @Column(
+        name = "person_id",
+        nullable  = false
+        )
     private Long personId;
 
+    @NotNull
+    @Positive
     @Column(name = "address_id")
     private Long addressId;
 }

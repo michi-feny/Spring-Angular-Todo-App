@@ -1,12 +1,13 @@
 package ibee.webapp.todo_app.core.dto;
 
+import ibee.webapp.todo_app.validation.idHandle.ValidId;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record CountryDto(
     
-
+    @ValidId
     Long id,
 
     @NotBlank(message = "{country.code.required}")

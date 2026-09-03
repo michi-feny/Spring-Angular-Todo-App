@@ -45,7 +45,14 @@ public class DatabaseSeeder implements CommandLineRunner {
 
         // 3. Finde heraus, welche Sprachen aus den Properties-Dateien gelesen werden (Soll-Zustand)
         Set<Locale> targetLocales = detectImplementedLocales();
+
+        // Explicitly look for English first to guarantee deterministic fallback behavior
+        Locale defaultContextLocale = targetLocales.stream()
+                .filter(locale -> locale.getLanguage().equalsIgnoreCase(Locale.ENGLISH.getLanguage()))
+                .findFirst()
+                .orElseGet(() -> targetLocales.stream().findFirst().orElse(Locale.getDefault()));
         
+
         // 4. Bilde das Delta: Welche Sprachen GIBT ES NOCH NICHT in der DB? (z.B. nur "es")
         Set<Locale> missingLocales = targetLocales.stream()
                 .filter(locale -> !languagesInDb.contains(locale.getLanguage()))
@@ -62,10 +69,18 @@ public class DatabaseSeeder implements CommandLineRunner {
         
         for (String code : isoCountries) {
             Country country = existingCountries.get(code);
+            Locale countryLocale = Locale.of("", code);
+
+            // Uses the explicitly resolved English locale (or first available fallback)
+            String defaultCountryName = countryLocale.getDisplayCountry(defaultContextLocale);
+            if (defaultCountryName == null || defaultCountryName.isEmpty()) {
+                defaultCountryName = code;
+            }
+
 
             if (country == null) {
                 // FALL A: Ein komplett neues Land
-                country = new Country(code); 
+                country = new Country(code, defaultCountryName); 
                 newCountries.add(country);
                 
                 // Für ein neues Land brauchen wir ALLE Ziel-Sprachen

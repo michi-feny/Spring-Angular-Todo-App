@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,9 +18,13 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 public class PersonSoftSkillId implements Serializable {
 
+    @NotNull
+    @Positive   
     @Column(name = "person_id")
     private Long personId;
 
+    @NotNull
+    @Positive
     @Column(name = "soft_skill_id")
     private Long softSkillId;
 }

@@ -2,6 +2,7 @@ package ibee.webapp.todo_app.core.entity.person.contactData.phoneNumber;
 import ibee.webapp.todo_app.core.entity.Person;
 import ibee.webapp.todo_app.core.entity.PhoneNumber;
 import ibee.webapp.todo_app.core.entity.person.PersonRelatedEntity;
+import ibee.webapp.todo_app.validation.idHandle.ValidId;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,9 +24,10 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PersonPhoneNumber 
-    implements PersonRelatedEntity{
+    implements PersonRelatedEntity<PersonPhoneNumberId>{
 
 
+   // @ValidId
     @EmbeddedId
     private PersonPhoneNumberId id;
 

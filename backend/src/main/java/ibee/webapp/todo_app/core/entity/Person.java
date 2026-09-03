@@ -14,6 +14,8 @@ import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.additionlHardSkil
 import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.degree.PersonDegree;
 import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.professionQualification.PersonProfessionQualification;
 import ibee.webapp.todo_app.core.entity.person.skill.softSkill.PersonSoftSkill;
+import ibee.webapp.todo_app.core.repository.baseRepo.IdentifiableEntity;
+import ibee.webapp.todo_app.validation.idHandle.ValidId;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,16 +29,17 @@ import lombok.NoArgsConstructor;
 @Builder
 @Table(name = "person"
 )
-public class Person {
+public class Person implements IdentifiableEntity<Long>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@ValidId
     private Long id;
 
     @Column(
         name = "social_record_number",
         nullable = true, length = 10)
-    private short socialRecordNumber;
+    private Integer socialRecordNumber;
     
     @Column(name = "first_name",
             nullable = false)
@@ -55,7 +58,7 @@ public class Person {
     @OneToMany(
         mappedBy = "person",
         fetch = FetchType.LAZY,
-        cascade = CascadeType.ALL,
+        //cascade = CascadeType.ALL,
         orphanRemoval = true
     )
     /*@JoinColumn(
@@ -68,7 +71,7 @@ public class Person {
     @OneToMany(
             mappedBy = "person",
             fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
+            //cascade = CascadeType.ALL,
             orphanRemoval = true
     )
     @Builder.Default
@@ -77,7 +80,7 @@ public class Person {
     @OneToMany(
         mappedBy = "person",
         fetch = FetchType.LAZY,
-        cascade = CascadeType.ALL,
+        //cascade = CascadeType.ALL,
         orphanRemoval = true)
     @Builder.Default
     private List<PersonPhoneNumber> phones = new ArrayList<>();
@@ -85,7 +88,7 @@ public class Person {
     @OneToMany(
         mappedBy = "person",
         fetch = FetchType.LAZY,
-        cascade = CascadeType.ALL,
+        //cascade = CascadeType.ALL,
         orphanRemoval = true
     )
     @Builder.Default
@@ -95,7 +98,7 @@ public class Person {
      @OneToMany(
         mappedBy = "person",
         fetch = FetchType.LAZY,
-        cascade = CascadeType.ALL,
+        //cascade = CascadeType.ALL,
         orphanRemoval = true
     )
     @Builder.Default
@@ -104,7 +107,7 @@ public class Person {
      @OneToMany(
         mappedBy = "person",
         fetch = FetchType.LAZY,
-        cascade = CascadeType.ALL,
+        //cascade = CascadeType.ALL,
         orphanRemoval = true
     )
     @Builder.Default
@@ -114,7 +117,7 @@ public class Person {
     @OneToMany(
         mappedBy = "person",
         fetch = FetchType.LAZY,
-        cascade = CascadeType.ALL,
+        //cascade = CascadeType.ALL,
         orphanRemoval = true
     )
     @Builder.Default
@@ -123,7 +126,7 @@ public class Person {
     @OneToMany(
     mappedBy = "person",
     fetch = FetchType.LAZY,
-    cascade = CascadeType.ALL,
+    //cascade = CascadeType.ALL,
     orphanRemoval = true
     )
     @Builder.Default

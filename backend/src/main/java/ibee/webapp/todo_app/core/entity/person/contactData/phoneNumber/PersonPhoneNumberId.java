@@ -2,6 +2,8 @@ package ibee.webapp.todo_app.core.entity.person.contactData.phoneNumber;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.*;
 
 import java.io.Serializable;
@@ -13,9 +15,13 @@ import java.io.Serializable;
 @EqualsAndHashCode
 public class PersonPhoneNumberId implements Serializable {
 
+    @NotNull
+    @Positive
     @Column(name = "person_id")
     private Long personId;
 
+    @NotNull
+    @Positive
     @Column(name = "phone_number_id")
     private Long phoneNumberId;
 }

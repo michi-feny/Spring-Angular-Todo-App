@@ -3,15 +3,16 @@ package ibee.webapp.todo_app.core.dto.person.skills.hard;
 import java.time.LocalDate;
 
 import ibee.webapp.todo_app.core.dto.EducationInstitutionDto;
-import ibee.webapp.todo_app.core.dto.person.referenceIds.skill.hard.PersonDegreeDtoId;
 import ibee.webapp.todo_app.core.dto.skills.hard.DegreeDto;
+import ibee.webapp.todo_app.features.person.related.referenceIds.skill.hard.PersonDegreeDtoId;
+import ibee.webapp.todo_app.validation.idHandle.ValidId;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 
 public record PersonDegreeDto(
-
+    @ValidId
     PersonDegreeDtoId id,
 
     @NotNull

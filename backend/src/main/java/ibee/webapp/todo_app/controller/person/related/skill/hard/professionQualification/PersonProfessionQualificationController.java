@@ -1,11 +1,12 @@
 package ibee.webapp.todo_app.controller.person.related.skill.hard.professionQualification;
 
 import ibee.webapp.todo_app.controller.person.related.AbstractSpringPersonRelatedHateoasController;
-import ibee.webapp.todo_app.core.dto.person.referenceIds.skill.hard.PersonProfessionQualificationDtoId;
 import ibee.webapp.todo_app.core.dto.person.skills.hard.PersonProfessionQualificationDto;
 import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.professionQualification.PersonProfessionQualification;
 import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.professionQualification.PersonProfessionQualificationId;
 import ibee.webapp.todo_app.core.service.person.related.PersonRelatedDtoService;
+import ibee.webapp.todo_app.core.service.person.related.skill.hardSkill.professionQualification.PersonProfessionQualificationDtoService;
+import ibee.webapp.todo_app.features.person.related.referenceIds.skill.hard.PersonProfessionQualificationDtoId;
 import ibee.webapp.todo_app.infrastructure.i18n.TranslationService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,11 +53,12 @@ public class PersonProfessionQualificationController extends AbstractSpringPerso
         PersonProfessionQualificationId,
         PersonProfessionQualificationDtoId> {
 
+    @SuppressWarnings("unchecked")
     public PersonProfessionQualificationController(
-            PersonRelatedDtoService<PersonProfessionQualificationDto, PersonProfessionQualification, PersonProfessionQualificationId, PersonProfessionQualificationDtoId> service,
+            PersonProfessionQualificationDtoService service,
             TranslationService translationService,
             PersonProfessionQualificationModelAssembler assembler) {
         
-        super(service, translationService, assembler, "entity.personProfessionQualification");
+        super((PersonRelatedDtoService<PersonProfessionQualificationDto, PersonProfessionQualification, PersonProfessionQualificationId, PersonProfessionQualificationDtoId>)service, translationService, assembler, "entity.personProfessionQualification");
     }
 }

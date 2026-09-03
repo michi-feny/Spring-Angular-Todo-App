@@ -4,6 +4,7 @@ package ibee.webapp.todo_app.core.entity.person.skill.softSkill;
 import ibee.webapp.todo_app.core.entity.Person;
 import ibee.webapp.todo_app.core.entity.SoftSkill;
 import ibee.webapp.todo_app.core.entity.person.PersonRelatedEntity;
+import ibee.webapp.todo_app.validation.idHandle.ValidId;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -25,8 +26,9 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PersonSoftSkill 
-    implements PersonRelatedEntity{
+    implements PersonRelatedEntity<PersonSoftSkillId>{
 
+   // @ValidId
     @EmbeddedId
     private PersonSoftSkillId id;
 

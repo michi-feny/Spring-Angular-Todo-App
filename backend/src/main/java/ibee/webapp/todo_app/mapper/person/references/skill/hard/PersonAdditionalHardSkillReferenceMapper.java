@@ -3,8 +3,8 @@ package ibee.webapp.todo_app.mapper.person.references.skill.hard;
 import org.mapstruct.Mapper;
 
 import ibee.webapp.todo_app.config.MapStructConfig;
-import ibee.webapp.todo_app.core.dto.person.referenceIds.skill.hard.PersonAdditionalHardSkillDtoId;
 import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.additionlHardSkill.PersonAdditionalHardSkillId;
+import ibee.webapp.todo_app.features.person.related.referenceIds.skill.hard.PersonAdditionalHardSkillDtoId;
 import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
 
 @Mapper(

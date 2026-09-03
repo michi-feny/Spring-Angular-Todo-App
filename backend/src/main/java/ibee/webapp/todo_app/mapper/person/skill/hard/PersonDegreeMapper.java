@@ -1,9 +1,12 @@
 package ibee.webapp.todo_app.mapper.person.skill.hard;
 
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 
 import ibee.webapp.todo_app.config.MapStructConfig;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import ibee.webapp.todo_app.core.dto.person.skills.hard.PersonDegreeDto;
 import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.degree.PersonDegree;
@@ -38,4 +41,22 @@ public interface PersonDegreeMapper
     @Mapping(target = "degree", source = "degree")
     @Mapping(target = "educationInstitution", source = "educationInstitution")
     PersonDegree toEntity(PersonDegreeDto dto);
+
+    // --- 3. DTO UPDATE (UI -> DB) ---
+    @Override
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "person", ignore = true)
+    @Mapping(target = "degree", source = "degree")
+    @Mapping(target = "educationInstitution", source = "educationInstitution")
+    void updateEntityFromDto(PersonDegreeDto dto, @MappingTarget PersonDegree entity);
+
+    // --- 4. INTERNAL UPDATE ---
+    @Override
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "person", ignore = true)
+    @Mapping(target = "degree", source = "degree")
+    @Mapping(target = "educationInstitution", source = "educationInstitution")
+    void updateEntityFromEntity(PersonDegree sourceUpdates, @MappingTarget PersonDegree dbEntity);
+
 }

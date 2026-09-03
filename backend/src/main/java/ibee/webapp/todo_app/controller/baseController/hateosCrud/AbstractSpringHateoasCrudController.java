@@ -19,6 +19,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import ibee.webapp.todo_app.validation.idHandle.create.OnCreate;
+import ibee.webapp.todo_app.validation.idHandle.update.OnUpdate;
+import org.springframework.validation.annotation.Validated;
+
 import java.util.List;
 //TODO: take the Exceptions and give them into the Service!!!
 
@@ -75,9 +79,9 @@ public abstract class AbstractSpringHateoasCrudController<DTO, ID> {
     @PostMapping
     public ResponseEntity<ApiSuccessResponse<EntityModel<DTO>>> create(
             @AuthenticationPrincipal AuthenticatedUser userDetails,
-            @NotNull @Valid @RequestBody DTO dto) {
+            @NotNull @Validated(OnCreate.class) @RequestBody DTO dto) {
 
-        DTO created = service.save(dto);
+        DTO created = service.create(dto);
         EntityModel<DTO> entityModel = assembler.toModel(created);
         String message = translationService.translate("crud.created", getEntityName());
 
@@ -88,13 +92,13 @@ public abstract class AbstractSpringHateoasCrudController<DTO, ID> {
     public ResponseEntity<ApiSuccessResponse<EntityModel<DTO>>> update(
             @AuthenticationPrincipal AuthenticatedUser userDetails,
             @NotNull @PathVariable ID id,
-            @NotNull @Valid @RequestBody DTO dto) {
+            @NotNull @Validated(OnUpdate.class) @RequestBody DTO dto) {
 
         if (!service.existsById(id)) {
             throw new RuntimeException(translationService.translate("crud.notFound", getEntityName(), id.toString()));
         }
 
-        DTO updated = service.save(dto);
+        DTO updated = service.update(dto, id);
         EntityModel<DTO> entityModel = assembler.toModel(updated);
         String message = translationService.translate("crud.updated", getEntityName());
 

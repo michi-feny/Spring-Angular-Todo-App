@@ -3,6 +3,7 @@ package ibee.webapp.todo_app.core.entity;
 
 import org.springframework.data.annotation.Transient;
 
+import ibee.webapp.todo_app.validation.idHandle.ValidId;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -26,6 +27,7 @@ public class PhoneNumber {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@ValidId
     private Long id;
 
     @Column(

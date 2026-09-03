@@ -6,12 +6,15 @@ import ibee.webapp.todo_app.core.entity.person.contactData.phoneNumber.PersonPho
 import ibee.webapp.todo_app.core.entity.person.contactData.phoneNumber.PersonPhoneNumberId;
 import ibee.webapp.todo_app.core.repository.person.personRelated.contact.phone.PersonPhoneNumberRepositroy;
 import ibee.webapp.todo_app.core.service.person.related.PersonRelatedServiceImpl;
+import ibee.webapp.todo_app.mapper.person.contact.PersonPhoneNumberMapper;
 
 @Service
 public class PersonPhoneNumberServiceImpl
         extends PersonRelatedServiceImpl<PersonPhoneNumber, PersonPhoneNumberId> {
 
-    public PersonPhoneNumberServiceImpl(PersonPhoneNumberRepositroy repository) {
-        super(repository);
+    public PersonPhoneNumberServiceImpl(
+        PersonPhoneNumberRepositroy repository,
+        PersonPhoneNumberMapper mapper) {
+        super(repository, mapper);
     }
 }

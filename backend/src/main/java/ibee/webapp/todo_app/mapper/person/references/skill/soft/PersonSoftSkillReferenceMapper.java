@@ -4,8 +4,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import ibee.webapp.todo_app.config.MapStructConfig;
-import ibee.webapp.todo_app.core.dto.person.referenceIds.skill.soft.PersonSoftSkillDtoId;
 import ibee.webapp.todo_app.core.entity.person.skill.softSkill.PersonSoftSkillId;
+import ibee.webapp.todo_app.features.person.related.referenceIds.skill.soft.PersonSoftSkillDtoId;
 import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
 
 @Mapper(config = MapStructConfig.class)

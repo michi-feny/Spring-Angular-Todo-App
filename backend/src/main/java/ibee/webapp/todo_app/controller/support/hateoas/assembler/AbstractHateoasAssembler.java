@@ -8,6 +8,7 @@ import ibee.webapp.todo_app.controller.baseController.hateosCrud.AbstractSpringH
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
@@ -40,10 +41,10 @@ public abstract class AbstractHateoasAssembler<DTO, ID>
         );
     }
 
-    public CollectionModel<EntityModel<DTO>> toCollectionModel(List<DTO> dtos) {
-        List<EntityModel<DTO>> entityModels = dtos.stream()
-                .map(this::toModel)
-                .collect(Collectors.toList());
+    public CollectionModel<EntityModel<DTO>> toCollectionModel(Iterable<? extends DTO> dtos) {
+        List<EntityModel<DTO>> entityModels = StreamSupport.stream(dtos.spliterator(), false)
+            .map(this::toModel)
+            .collect(Collectors.toList());
 
         return CollectionModel.of(entityModels,
             linkTo(methodOn(controllerClass).getAll(null)).withSelfRel()

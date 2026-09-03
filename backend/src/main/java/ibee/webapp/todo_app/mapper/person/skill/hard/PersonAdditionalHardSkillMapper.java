@@ -2,8 +2,11 @@ package ibee.webapp.todo_app.mapper.person.skill.hard;
 
 import java.util.List;
 
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import ibee.webapp.todo_app.config.MapStructConfig;
 import ibee.webapp.todo_app.core.dto.person.skills.hard.PersonAdditionalHardSkillDto;
@@ -35,27 +38,19 @@ public interface PersonAdditionalHardSkillMapper
     @Mapping(target = "additionalHardSkill", source = "personAdditionalHardSkillDto")
     PersonAdditionalHardSkill toEntity(PersonAdditionalHardSkillDto dto);
 
-    // Null-safe list wrappers delegating to element methods
- /*   @Override
-    default List<PersonAdditionalHardSkillDto> toDtoList(List<PersonAdditionalHardSkill> entities) {
-        if (entities == null) return null;
-        return entities.stream().map(this::toDto).toList();
-    }
-
+    // --- 3. DTO UPDATE (UI -> DB) ---
     @Override
-    default List<PersonAdditionalHardSkill> toEntityList(List<PersonAdditionalHardSkillDto> dtos) {
-        if (dtos == null) return null;
-        return dtos.stream().map(this::toEntity).toList();
-    }
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "person", ignore = true)
+    @Mapping(target = "additionalHardSkill", source = "personAdditionalHardSkillDto")
+    void updateEntityFromDto(PersonAdditionalHardSkillDto dto, @MappingTarget PersonAdditionalHardSkill entity);
 
-    // convenience: map embedded id <-> dto id record
-    @Mapping(target = "additionalHardSkillId", source = "additionalHardSkillId")
-    @Mapping(target = "personId", source = "personId")
-    PersonAdditionalHardSkillDtoId toIdDto(PersonAdditionalHardSkillId id);
-
-    @Mapping(target = "additionalHardSkillId", source = "additionalHardSkillId")
-    @Mapping(target = "personId", source = "personId")
-    PersonAdditionalHardSkillId toIdEntity(PersonAdditionalHardSkillDtoId id);
-
-*/ 
+    // --- 4. INTERNAL UPDATE ---
+    @Override
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "person", ignore = true)
+    @Mapping(target = "additionalHardSkill", source = "additionalHardSkill")
+    void updateEntityFromEntity(PersonAdditionalHardSkill sourceUpdates, @MappingTarget PersonAdditionalHardSkill dbEntity);
+  
 }

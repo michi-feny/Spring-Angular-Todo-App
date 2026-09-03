@@ -1,5 +1,6 @@
 package ibee.webapp.todo_app.core.entity;
 
+import ibee.webapp.todo_app.validation.idHandle.ValidId;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,6 +24,7 @@ public class CountryTranslation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@ValidId
     private Long id;
 
     @Column(name = "language_code", nullable = false, length = 10)

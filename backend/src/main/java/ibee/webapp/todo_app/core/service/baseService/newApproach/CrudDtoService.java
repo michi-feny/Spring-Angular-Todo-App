@@ -3,9 +3,17 @@ package ibee.webapp.todo_app.core.service.baseService.newApproach;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.validation.annotation.Validated;
+
+import ibee.webapp.todo_app.validation.idHandle.create.OnCreate;
+import ibee.webapp.todo_app.validation.idHandle.update.OnUpdate;
+
+@Validated
 public interface CrudDtoService<DTO, ID> {
 
-    DTO save(DTO dto);
+    DTO create(@Validated(OnCreate.class) DTO dto);
+
+    DTO update(@Validated(OnUpdate.class) DTO dto, ID id);
 
     List<DTO> saveAll(Iterable<DTO> dtos);
 

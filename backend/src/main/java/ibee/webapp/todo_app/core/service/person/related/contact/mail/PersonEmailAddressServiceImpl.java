@@ -9,13 +9,16 @@ import ibee.webapp.todo_app.core.entity.person.contactData.emailAddress.PersonEm
 import ibee.webapp.todo_app.core.entity.person.contactData.emailAddress.PersonEmailAddressId;
 import ibee.webapp.todo_app.core.repository.person.personRelated.contact.mail.PersonEmailAddressRepository;
 import ibee.webapp.todo_app.core.service.person.related.PersonRelatedServiceImpl;
+import ibee.webapp.todo_app.mapper.person.contact.PersonEmailAddressMapper;
 
 @Service
 public class PersonEmailAddressServiceImpl
         extends PersonRelatedServiceImpl<PersonEmailAddress, PersonEmailAddressId> {
 
-    public PersonEmailAddressServiceImpl(PersonEmailAddressRepository repository) {
-        super(repository);
+    public PersonEmailAddressServiceImpl(
+        PersonEmailAddressRepository repository,
+        PersonEmailAddressMapper mapper) {
+        super(repository, mapper);
     }
 
 

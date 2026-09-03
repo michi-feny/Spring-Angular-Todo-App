@@ -1,20 +1,25 @@
 package ibee.webapp.todo_app.mapper.person.contact;
 
 
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import ibee.webapp.todo_app.config.MapStructConfig;
 import ibee.webapp.todo_app.mapper.CountryMapper;
+import ibee.webapp.todo_app.mapper.CountryTranslationMapper;
 import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
 import ibee.webapp.todo_app.mapper.person.references.contact.PersonCountryReferenceMapper;
-import ibee.webapp.todo_app.core.dto.person.contact.country.PersonCountryDto;
 import ibee.webapp.todo_app.core.entity.person.contactData.nationality.PersonCountry;
+import ibee.webapp.todo_app.features.person.related.country.dto.PersonCountryDto;
 
 @Mapper(
     config = MapStructConfig.class,
     uses = { 
             CountryMapper.class,
+            CountryTranslationMapper.class,
             PersonCountryReferenceMapper.class
      }
 )
@@ -30,48 +35,25 @@ public interface PersonCountryMapper
     @Override
     @Mapping(target = "id", source = "id")
     @Mapping(target = "person.id", source = "id.personId")
-    @Mapping(target = "country", source = "country")
+    @Mapping(target = "person", ignore = true)
+    @Mapping(target = "country", ignore = true)
     @Mapping(target = "mainCountry", source = "mainCountry") 
     PersonCountry toEntity(PersonCountryDto dto);
-/* 
+
+    // --- 3. DTO UPDATE (UI -> DB) ---
     @Override
-    default List<PersonCountryDto> toDtoList(List<PersonCountry> entities) {
-        if (entities == null) {
-            return null;
-        }
-        return entities.stream()
-            .map(this::toDto)
-            .toList();
-    }
+    @Mapping(target = "id", ignore = true) 
+    @Mapping(target = "person", ignore = true) // Target IS the Entity, so we MUST ignore it here
+    @Mapping(target = "mainCountry", source = "mainCountry", defaultValue = "false")
+    @Mapping(target = "country", ignore = true) // <-- Add this to prevent mapping/instantiating Country on update
+    void updateEntityFromDto(PersonCountryDto dto, @MappingTarget PersonCountry entity);
 
+    // --- 4. INTERNAL UPDATE ---
     @Override
-    default List<PersonCountry> toEntityList(List<PersonCountryDto> dtos) {
-        if (dtos == null) {
-            return null;
-        }
-        return dtos.stream()
-            .map(this::toEntity)
-            .toList();
-    }
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "person", ignore = true) // Target IS the Entity
+    @Mapping(target = "country", ignore = true)
+    void updateEntityFromEntity(PersonCountry sourceUpdates, @MappingTarget PersonCountry dbEntity);
 
-    // convenience mappings to UI id
-    @Mapping(target = "personId", source = "id.personId")
-    @Mapping(target = "countryId", source = "id.countryId")
-    PersonCountryDtoId toUiId(PersonCountry entity);
-
-    @Mapping(target = "personId", source = "id.personId")
-    @Mapping(target = "countryId", source = "id.countryId")
-    PersonCountryDtoId toUiId(PersonCountryDto dto);
-
-    // collection helpersdefault List<PersonCountryUiId> toUiIdListFromEntities(List<PersonCountry> entities) {
-    default List<PersonCountryDtoId> toUiIdListFromEntities(List<PersonCountry> entities) {
-        if (entities == null) return null;
-        return entities.stream().map(this::toUiId).toList();
-    }
-
-    default List<PersonCountryDtoId> toUiIdListFromDtos(List<PersonCountryDto> dtos) {
-        if (dtos == null) return null;
-        return dtos.stream().map(this::toUiId).toList();
-    }
-*/
 }

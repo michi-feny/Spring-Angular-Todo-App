@@ -1,5 +1,6 @@
 package ibee.webapp.todo_app.core.entity;
 
+import ibee.webapp.todo_app.validation.idHandle.ValidId;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,6 +26,7 @@ public class DebricatedCountry {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+   // @ValidId
     private Long id;
     
     @Column(

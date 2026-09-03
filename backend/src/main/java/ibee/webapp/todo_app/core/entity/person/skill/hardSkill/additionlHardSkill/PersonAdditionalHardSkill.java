@@ -2,6 +2,7 @@ package ibee.webapp.todo_app.core.entity.person.skill.hardSkill.additionlHardSki
 import ibee.webapp.todo_app.core.entity.Person;
 import ibee.webapp.todo_app.core.entity.hardSkills.AdditionalHardSkill;
 import ibee.webapp.todo_app.core.entity.person.PersonRelatedEntity;
+import ibee.webapp.todo_app.validation.idHandle.ValidId;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,8 +15,10 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PersonAdditionalHardSkill 
-    implements PersonRelatedEntity{
+    implements PersonRelatedEntity<PersonAdditionalHardSkillId>{
 
+
+    //@ValidId
     @EmbeddedId
     private PersonAdditionalHardSkillId id;
 

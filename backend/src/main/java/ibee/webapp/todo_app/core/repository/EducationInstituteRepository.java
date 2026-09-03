@@ -6,11 +6,11 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.stereotype.Repository;
 
 import ibee.webapp.todo_app.core.entity.EducationInstitution;
-import ibee.webapp.todo_app.core.repository.baseRepo.MyBaseCrudRepo;
+import ibee.webapp.todo_app.core.repository.baseRepo.MyFacadeBaseCrudRepository;
 
 @Repository
 public interface EducationInstituteRepository 
-    extends MyBaseCrudRepo
+    extends MyFacadeBaseCrudRepository
         <EducationInstitution, Long>{
 
 
