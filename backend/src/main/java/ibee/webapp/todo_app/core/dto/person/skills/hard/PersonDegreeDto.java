@@ -11,6 +11,7 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 
+
 public record PersonDegreeDto(
     @ValidId
     PersonDegreeDtoId id,

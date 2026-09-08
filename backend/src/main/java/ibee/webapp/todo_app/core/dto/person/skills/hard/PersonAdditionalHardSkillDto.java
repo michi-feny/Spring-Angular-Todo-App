@@ -6,6 +6,7 @@ import ibee.webapp.todo_app.validation.idHandle.ValidId;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
+
 public record PersonAdditionalHardSkillDto(
 
     @ValidId

@@ -69,7 +69,7 @@ public class PersonController extends AbstractSpringHateoasCrudController<Person
     @GetMapping("/{id}/overview")
     public ResponseEntity<ApiSuccessResponse<PersonOverview>> getOverview(
             @AuthenticationPrincipal AuthenticatedUser userDetails,
-            @PathVariable Long id) {
+            @PathVariable("id") Long id) {
         
         PersonOverview overview = personDtoService.getOverviewById(id)
                 .orElseThrow(() -> new RuntimeException(

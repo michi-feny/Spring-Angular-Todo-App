@@ -36,7 +36,7 @@ public class UpdatePersonWorkExperienceCommand {
             personWorkExperienceServiceImpl.saveAll(sequenceHelper.normalize(visibleRecords));
         }
 
-        PersonWorkExperience existingRecord = personWorkExperienceServiceImpl.findById(currentId)
+        PersonWorkExperience existingRecord = personWorkExperienceServiceImpl.findByIdWithoutException(currentId)
                 .orElseThrow(() -> new EntityNotFoundException("Record not found for update"));
         Integer oldOrder = existingRecord.getDisplayOrder();
 
@@ -46,7 +46,7 @@ public class UpdatePersonWorkExperienceCommand {
             personWorkExperienceServiceImpl.validateChronologicalTimeline(incomingWorkExp);
             
             var resolvedWorkExp = incomingWorkExp.getId() != null
-                    ? coreWorkExperienceService.findById(incomingWorkExp.getId())
+                    ? coreWorkExperienceService.findByIdWithoutException(incomingWorkExp.getId())
                         .map(existing -> coreWorkExperienceService.update(incomingWorkExp, existing.getId()))
                         .orElseGet(() -> coreWorkExperienceService.create(incomingWorkExp))
                     : coreWorkExperienceService.create(incomingWorkExp);
@@ -60,7 +60,7 @@ public class UpdatePersonWorkExperienceCommand {
 
         // 3. Shift Math & explicitly save shifted rows
         List<PersonWorkExperience> shiftedRecords = sequenceHelper.adjustDisplayOrdersForPlacement(incomingUpdates, oldOrder, visibleRecords);
-        if (!shiftedRecords.isEmpty()) {
+        if (shiftedRecords.isEmpty() == false) {
             personWorkExperienceServiceImpl.saveAll(shiftedRecords);
         }
 

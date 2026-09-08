@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "phone_number",
-    uniqueConstraints = @UniqueConstraint(columnNames = "number")
+    uniqueConstraints = @UniqueConstraint(columnNames = "phone_number")
 )
 public class PhoneNumber {
 

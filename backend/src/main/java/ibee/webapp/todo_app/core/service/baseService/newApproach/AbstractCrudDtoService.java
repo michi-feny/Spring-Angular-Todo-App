@@ -37,8 +37,13 @@ public abstract class AbstractCrudDtoService<DTO, ENTITY extends IdentifiableEnt
     }
 
     @Override
-    public Optional<DTO> findById(ID id) {
-        return entityService.findById(id).map(mapper::toDto);
+    public DTO findById(ID id) {
+        return mapper.toDto(entityService.findById(id));
+    }
+
+    @Override
+    public Optional<DTO> findByIdWithoutException(ID id) {
+        return entityService.findByIdWithoutException(id).map(mapper::toDto);
     }
 
     @Override

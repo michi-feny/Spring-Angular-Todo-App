@@ -1,26 +1,20 @@
 package ibee.webapp.todo_app.validation.idHandle;
 
-import ibee.webapp.todo_app.validation.idHandle.create.OnCreate;
-import ibee.webapp.todo_app.validation.idHandle.create.ValidCreateId;
-import ibee.webapp.todo_app.validation.idHandle.update.OnUpdate;
-import ibee.webapp.todo_app.validation.idHandle.update.ValidUpdateId;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import java.lang.annotation.*;
+import ibee.webapp.todo_app.validation.idHandle.update.OnUpdate;
 
-@ValidCreateId(groups = OnCreate.class)
-@ValidUpdateId(groups = OnUpdate.class)
-@Valid // Automatically cascades into EmbeddedKeys
-@Target({ElementType.FIELD})
+@Target({ElementType.FIELD, ElementType.RECORD_COMPONENT})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = {}) // Empty because it delegates to the annotations above
+@Constraint(validatedBy = {}) 
+@NotNull(groups = OnUpdate.class, message = "ID must not be null on update")
+@Positive(groups = OnUpdate.class, message = "ID must be a positive number")
 @Documented
 public @interface ValidId {
-    
-    String message() default "ID is invalid for the requested operation";
-    
+    String message() default "Invalid ID for the requested operation";
     Class<?>[] groups() default {};
-    
     Class<? extends Payload>[] payload() default {};
 }

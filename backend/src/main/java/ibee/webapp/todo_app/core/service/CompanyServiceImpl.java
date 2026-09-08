@@ -56,7 +56,7 @@ public class CompanyServiceImpl extends MyCrudBaseEntityFacedeServiceImpl<Compan
         }
 
         return Optional.ofNullable(address.getId())
-                .flatMap(addressService::findById)
+                .flatMap(addressService::findByIdWithoutException)
                 .orElseGet(() -> addressService.create(address));
     }
 

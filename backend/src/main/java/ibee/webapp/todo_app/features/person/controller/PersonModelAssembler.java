@@ -2,10 +2,10 @@ package ibee.webapp.todo_app.features.person.controller;
 
 import ibee.webapp.todo_app.controller.support.hateoas.assembler.AbstractHateoasAssembler;
 import ibee.webapp.todo_app.features.person.dto.PersonData;
-
+import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Component;
-
+import org.springframework.hateoas.Link;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @Component
@@ -23,46 +23,50 @@ public class PersonModelAssembler
 
     @Override
     public EntityModel<PersonData> toModel(PersonData dto) {
-        // 1. Get standard CRUD links (self, update, delete, list)
         EntityModel<PersonData> model = super.toModel(dto);
         Long personId = extractId(dto);
 
-        // 2. Add Link to the Overview Endpoint
-        model.add(
-            linkTo(methodOn(PersonController.class).getOverview(null, personId))
-            .withRel("overview")
-        );
-
-        // 3. Add Links for Single-Field Searches (Only if the data exists)
-        if (dto.firstName() != null && !dto.firstName().isBlank()) {
+        if (personId != null) {
             model.add(
-                linkTo(methodOn(PersonController.class).searchByFirstName(null, dto.firstName()))
-                .withRel("search-first-name")
+                linkTo(PersonController.class)
+                    .slash(personId)
+                    .slash("overview")
+                    .withRel("overview")
             );
+        }
+
+        String baseUrl = linkTo(PersonController.class).toUri().toString();
+
+        if (dto.firstName() != null && !dto.firstName().isBlank()) {
+            String uri = UriComponentsBuilder.fromUriString(baseUrl + "/search/firstName")
+                    .queryParam("firstName", dto.firstName())
+                    .build()
+                    .toUriString();
+            model.add(Link.of(uri).withRel("search-first-name"));
         }
 
         if (dto.lastName() != null && !dto.lastName().isBlank()) {
-            model.add(
-                linkTo(methodOn(PersonController.class)
-                    .searchByLastName(null, dto.lastName()))
-                .withRel("search-last-name")
-            );
+            String uri = UriComponentsBuilder.fromUriString(baseUrl + "/search/lastName")
+                    .queryParam("lastName", dto.lastName())
+                    .build()
+                    .toUriString();
+            model.add(Link.of(uri).withRel("search-last-name"));
         }
 
         if (dto.birthDate() != null) {
-            model.add(
-                linkTo(methodOn(PersonController.class)
-                    .searchByBirthDate(null, dto.birthDate()))
-                .withRel("search-birth-date")
-            );
+            String uri = UriComponentsBuilder.fromUriString(baseUrl + "/search/birthDate")
+                    .queryParam("birthDate", dto.birthDate().toString())
+                    .build()
+                    .toUriString();
+            model.add(Link.of(uri).withRel("search-birth-date"));
         }
 
         if (dto.socialRecordNumber() != null) {
-            model.add(
-                linkTo(methodOn(PersonController.class)
-                    .searchBySocialRecordNumber(null, dto.socialRecordNumber()))
-                .withRel("search-social-record-number")
-            );
+            String uri = UriComponentsBuilder.fromUriString(baseUrl + "/search/socialRecordNumber")
+                    .queryParam("socialRecordNumber", dto.socialRecordNumber())
+                    .build()
+                    .toUriString();
+            model.add(Link.of(uri).withRel("search-social-record-number"));
         }
 
         return model;

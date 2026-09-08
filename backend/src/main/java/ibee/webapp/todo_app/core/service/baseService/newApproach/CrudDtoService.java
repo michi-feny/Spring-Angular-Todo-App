@@ -17,7 +17,9 @@ public interface CrudDtoService<DTO, ID> {
 
     List<DTO> saveAll(Iterable<DTO> dtos);
 
-    Optional<DTO> findById(ID id);
+    DTO findById(ID id);
+    
+    Optional<DTO> findByIdWithoutException(ID id);
 
     List<DTO> findAllById(Iterable<ID> ids);
 

@@ -56,7 +56,7 @@ public abstract class DEBRICATED_AbstractHateoasCrudController<DTO, ID> {
             @AuthenticationPrincipal AuthenticatedUser userDetails,
             @NotNull @PathVariable ID id) {
         
-        DTO dto = service.findById(id)
+        DTO dto = service.findByIdWithoutException(id)
                 .orElseThrow(() -> new RuntimeException(
                     translationService.translate("crud.notFound", getEntityName(), id)
                 ));

@@ -4,6 +4,7 @@ import ibee.webapp.todo_app.core.dto.skills.hard.SkillType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+
 public record ProfessionQualificationDto(
     Long id,
     @NotBlank

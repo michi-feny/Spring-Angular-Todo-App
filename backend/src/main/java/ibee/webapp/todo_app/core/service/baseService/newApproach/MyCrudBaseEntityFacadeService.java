@@ -17,7 +17,9 @@ public interface MyCrudBaseEntityFacadeService<ENTITY, ID> {
 
     List<ENTITY> saveAll(@Validated(OnCreate.class) Iterable<ENTITY> entities);
 
-    Optional<ENTITY> findById(ID id);
+    ENTITY findById(ID id);
+    
+    Optional<ENTITY> findByIdWithoutException(ID id);
 
     List<ENTITY> findAllById(Iterable<ID> ids);
 

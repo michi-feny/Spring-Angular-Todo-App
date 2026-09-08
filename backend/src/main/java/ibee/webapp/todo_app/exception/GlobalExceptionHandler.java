@@ -17,10 +17,16 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Centralized global exception handler for the application.
+ * Intercepts exceptions thrown by controllers or services and converts them 
+ * into standardized, localized JSON responses using Spring 3 {@link ProblemDetail}.
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     private final TranslationService translationService;
+
 
     public GlobalExceptionHandler(TranslationService translationService) {
         this.translationService = translationService;
@@ -38,7 +44,9 @@ public class GlobalExceptionHandler {
         }
 
         // Translate the i18n code using dynamic arguments if provided
-        String translatedMessage = translationService.translate(ex.getI18nCode(), ex.getArgs());
+        String translatedMessage = 
+            translationService.translate(
+                ex.getI18nCode(), ex.getArgs());
         if (translatedMessage == null || translatedMessage.equals(ex.getI18nCode())) {
             translatedMessage = ex.getMessage(); // Fallback to debug message
         }
@@ -96,5 +104,43 @@ public class GlobalExceptionHandler {
         problemDetail.setProperty("timestamp", Instant.now());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
+    }
+
+    /**
+     * Catches generic IllegalArgumentExceptions, commonly thrown by Spring's 
+     * {@link org.springframework.util.Assert} class during validation.
+     *
+     * @param ex The intercepted IllegalArgumentException
+     * @return A standard HTTP 400 Bad Request response containing the assertion message
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ProblemDetail> handleIllegalArgumentException(IllegalArgumentException ex) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
+                HttpStatus.BAD_REQUEST, 
+                ex.getMessage() // This will be the message you passed into Assert.notNull()
+        );
+        problemDetail.setTitle("Invalid Argument");
+        problemDetail.setProperty("timestamp", Instant.now());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
+    }
+
+    /**
+     * 4. Catch-all for any unhandled exceptions (Prevents ugly Tomcat 500 HTML pages)
+     */
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ProblemDetail> handleGenericException(Exception ex) {
+        // Log the actual error for the developer to see in the console
+        ex.printStackTrace(); 
+        
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
+                HttpStatus.INTERNAL_SERVER_ERROR, 
+                "An unexpected server error occurred."
+        );
+        problemDetail.setTitle("Internal Server Error");
+        problemDetail.setType(URI.create("https://api.ihreapp.de/errors/internal-error"));
+        problemDetail.setProperty("timestamp", Instant.now());
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(problemDetail);
     }
 }

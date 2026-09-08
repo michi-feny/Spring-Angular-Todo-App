@@ -101,7 +101,7 @@ public class PersonWorkExperience
         name = "is_visible", 
         nullable = false, 
         columnDefinition = """
-                boolean default true:
+                boolean default true COMMENT:
                 if the work Exp should be displayed,
                 if it is false:
                 meaningg it is part of a merged work exp Field;

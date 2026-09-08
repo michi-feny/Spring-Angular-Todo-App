@@ -42,7 +42,7 @@ public abstract class AbstractSpringPersonRelatedHateoasController<
     @GetMapping("/person/{personId}")
     public ResponseEntity<ApiSuccessResponse<CollectionModel<EntityModel<DTO>>>> getByPersonId(
             @AuthenticationPrincipal AuthenticatedUser userDetails,
-            @PathVariable Long personId) {
+            @PathVariable("personId") Long personId) {
         
         List<DTO> list = personRelatedService.findByPersonId(personId);
         CollectionModel<EntityModel<DTO>> collectionModel = assembler.toCollectionModel(list);
@@ -55,7 +55,7 @@ public abstract class AbstractSpringPersonRelatedHateoasController<
     @GetMapping("/person/{personId}/ids")
     public ResponseEntity<ApiSuccessResponse<List<IDDTO>>> getIdsByPersonId(
             @AuthenticationPrincipal AuthenticatedUser userDetails,
-            @PathVariable Long personId) {
+            @PathVariable("personId") Long personId) {
         
         List<IDDTO> list = personRelatedService.findIdsByPersonId(personId);
         String message = translationService.translate("crud.loadedIdsForPerson", getEntityName());
@@ -67,7 +67,7 @@ public abstract class AbstractSpringPersonRelatedHateoasController<
     @GetMapping("/{id}/details")
     public ResponseEntity<ApiSuccessResponse<EntityModel<DTO>>> getWithDetailsById(
             @AuthenticationPrincipal AuthenticatedUser userDetails,
-            @PathVariable ID id) {
+            @PathVariable("id") ID id) {
         
         DTO dto = personRelatedService.findWithDetailsById(id)
                 .orElseThrow(() -> new RuntimeException(

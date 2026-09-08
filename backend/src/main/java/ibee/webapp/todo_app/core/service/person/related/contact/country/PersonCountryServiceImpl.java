@@ -63,8 +63,9 @@ public void resetOtherMainCountries(Long personId, Long countryId) {
         validatePropertyPersonId(entity.getId());
         validatePropertyCountryId(entity.getId());
 
-        Country existingCountry = countryService.findById(entity.getId().getCountryId())
-            .orElseThrow(() -> new IllegalArgumentException("Country not found with ID: " + entity.getId().getCountryId()));
+        Country existingCountry = countryService.findById(entity.getId().getCountryId());
+            //throws RessourceNorFoundExeption inside subservice for the Entity
+            //.orElseThrow(() -> new IllegalArgumentException("Country not found with ID: " + entity.getId().getCountryId()));
         entity.setCountry(existingCountry);
 
         validateCompositeId(entity.getId(), "Final PersonCountryId");
@@ -85,9 +86,12 @@ public void resetOtherMainCountries(Long personId, Long countryId) {
         // Reference Resolution: Since Country is a static state/lookup entity that must NEVER 
         // be updated, mutated, or created via user workflows, we fetch the existing database 
         // instance to link it safely without altering the master Country record itself.
-        if (incomingUpdates.getCountry() != null && incomingUpdates.getCountry().getId() != null) {
-            Country resolvedCountry = countryService.findById(incomingUpdates.getId().getCountryId())
-                .orElseThrow(() -> new IllegalArgumentException("Country not found with ID: " + incomingUpdates.getId().getCountryId()));
+        if (incomingUpdates.getCountry() != null 
+            && incomingUpdates.getCountry().getId() != null) 
+        {
+            Country resolvedCountry = countryService.findById(incomingUpdates.getId().getCountryId());
+                // happens implicit inside subService
+                //.orElseThrow(() -> new IllegalArgumentException("Country not found with ID: " + incomingUpdates.getId().getCountryId()));
             incomingUpdates.setCountry(resolvedCountry);
         }
 

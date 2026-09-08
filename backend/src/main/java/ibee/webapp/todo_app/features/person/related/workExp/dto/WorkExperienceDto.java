@@ -6,6 +6,7 @@ import ibee.webapp.todo_app.core.dto.CompanyDto;
 import ibee.webapp.todo_app.validation.idHandle.ValidId;
 import jakarta.validation.constraints.Past;
 
+
 public record WorkExperienceDto(
     @ValidId
     Long id,

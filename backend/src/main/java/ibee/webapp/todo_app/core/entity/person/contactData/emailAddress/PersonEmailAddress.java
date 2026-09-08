@@ -32,7 +32,7 @@ import lombok.ToString;
     uniqueConstraints = @UniqueConstraint(
         columnNames = {
             "person_id", 
-            "email_id"}
+            "email_address_id"}
     )
 )
 public class PersonEmailAddress 

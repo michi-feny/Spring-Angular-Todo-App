@@ -71,7 +71,7 @@ extends AbstractCrudDtoService<PersonData, Person, Long>
 
     @Transactional(readOnly = true)
     public Optional<PersonOverview> getOverviewById(Long personId) {
-        return personService.findById(personId)
+        return personService.findByIdWithoutException(personId)
                 .map(person -> new PersonOverview(
                         personMapper.toDto(person),
                         personAddressDtoService.findIdsByPersonId(personId),

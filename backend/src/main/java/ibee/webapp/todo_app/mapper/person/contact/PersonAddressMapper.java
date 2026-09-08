@@ -10,6 +10,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import ibee.webapp.todo_app.config.MapStructConfig;
 import ibee.webapp.todo_app.core.entity.person.contactData.address.PersonAddress;
 import ibee.webapp.todo_app.features.person.related.contact.PersonAddressDto;
+import ibee.webapp.todo_app.features.person.related.referenceIds.contact.PersonAddressDtoId;
 import ibee.webapp.todo_app.mapper.AddressMapper;
 import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
 import ibee.webapp.todo_app.mapper.person.references.contact.PersonAddressReferenceMapper;
@@ -25,7 +26,7 @@ public interface PersonAddressMapper
     extends BaseMapper<PersonAddressDto, PersonAddress> {
 
     @Override
-    @Mapping(target = "id", source = "id")
+    @Mapping(target = "id", expression = "java(extractReliableId(entity))")
     @Mapping(target = "address", source = "address")
     @Mapping(target = "mainAddress", source = "mainAddress", defaultValue = "false")
     PersonAddressDto toDto(PersonAddress entity);
@@ -41,7 +42,7 @@ public interface PersonAddressMapper
     @Override
     @Mapping(target = "id", ignore = true) 
     @Mapping(target = "person", ignore = true) // Target IS the Entity, so we MUST ignore it here
-    @Mapping(target = "address", ignore = true)
+    @Mapping(target = "address", source = "address")
     @Mapping(target = "mainAddress", source = "mainAddress", defaultValue = "false")
     void updateEntityFromDto(PersonAddressDto dto, @MappingTarget PersonAddress entity);
 
@@ -52,4 +53,15 @@ public interface PersonAddressMapper
     @Mapping(target = "person", ignore = true) // Target IS the Entity
     @Mapping(target = "address", ignore = true)
     void updateEntityFromEntity(PersonAddress sourceUpdates, @MappingTarget PersonAddress dbEntity);
+
+
+    default PersonAddressDtoId extractReliableId(PersonAddress entity) {
+        if (entity == null || entity.getPerson() == null || entity.getAddress() == null) {
+            return null;
+        }
+        return new PersonAddressDtoId(
+            entity.getPerson().getId(), 
+            entity.getAddress().getId()
+        );
+    }
 }

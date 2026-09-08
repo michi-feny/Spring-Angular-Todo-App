@@ -62,7 +62,7 @@ public class MergePersonWorkExperiencesCommand {
         // 4. Create Master Core Entity
         var savedMasterWorkExp = newMasterDetails.getId() == null 
                 ? coreWorkExperienceService.create(newMasterDetails) 
-                : coreWorkExperienceService.findById(newMasterDetails.getId()).orElseGet(() -> coreWorkExperienceService.create(newMasterDetails));
+                : coreWorkExperienceService.findByIdWithoutException(newMasterDetails.getId()).orElseGet(() -> coreWorkExperienceService.create(newMasterDetails));
 
         // 5. Hide Sub-Records (This naturally clears the slot at minOrder)
         personWorkExperienceServiceImpl.hideAndLinkSubRecords(personId, workExpIdsToMerge, savedMasterWorkExp.getId());
