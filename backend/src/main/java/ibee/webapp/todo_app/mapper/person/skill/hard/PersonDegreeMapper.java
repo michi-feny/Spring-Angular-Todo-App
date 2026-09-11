@@ -8,8 +8,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
-import ibee.webapp.todo_app.core.dto.person.skills.hard.PersonDegreeDto;
 import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.degree.PersonDegree;
+import ibee.webapp.todo_app.features.person.related.skill.dto.hard.PersonDegreeDto;
 import ibee.webapp.todo_app.mapper.skills.hard.DegreeMapper;
 import ibee.webapp.todo_app.mapper.EducationInstitutionMapper;
 import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;

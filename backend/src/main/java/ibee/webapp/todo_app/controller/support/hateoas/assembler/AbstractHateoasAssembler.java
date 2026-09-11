@@ -5,7 +5,6 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 
-import ibee.webapp.todo_app.controller.baseController.hateosCrud.AbstractSpringHateoasCrudController;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +23,10 @@ public abstract class AbstractHateoasAssembler<DTO, ID>
 
     protected AbstractHateoasAssembler(Class<?> controllerClass) {
         this.controllerClass = controllerClass;
+    }
+
+    protected Class<?> getController(){
+        return controllerClass;
     }
 
     protected abstract ID extractId(DTO dto);
@@ -53,4 +56,6 @@ public abstract class AbstractHateoasAssembler<DTO, ID>
             linkTo(controllerClass).withSelfRel()
         );
     }
+
+    
 }

@@ -1,0 +1,36 @@
+<div class="form-wrapper">
+  <h3>Create Person Email Address</h3>
+
+  <div class="form-group">
+    <label>Email Address:</label>
+    <input 
+      [(ngModel)]="formData().emailAddress.email" 
+      type="email" 
+      placeholder="e.g. hello@example.com" 
+    />
+  </div>
+
+  <div class="form-group checkbox-group">
+    <label>
+      <input type="checkbox" [(ngModel)]="formData().mainEmailAddress" />
+      Set as Main Email Address
+    </label>
+  </div>
+
+  <button class="btn-primary" (click)="submit()">Save Email Address</button>
+
+  @if (showOverwriteModal()) {
+    <div class="modal-overlay">
+      <div class="modal-content">
+        <h4>Email Address Conflict</h4>
+        <p class="error-text">{{ errorMessage() }}</p>
+        <p>Would you like to overwrite the existing main email address with this new data?</p>
+        
+        <div class="modal-actions">
+          <button class="btn-secondary" (click)="showOverwriteModal.set(false)">No, Cancel</button>
+          <button class="btn-danger" (click)="confirmOverwrite()">Yes, Overwrite</button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

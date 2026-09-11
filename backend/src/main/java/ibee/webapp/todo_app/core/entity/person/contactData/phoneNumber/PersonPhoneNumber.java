@@ -2,7 +2,6 @@ package ibee.webapp.todo_app.core.entity.person.contactData.phoneNumber;
 import ibee.webapp.todo_app.core.entity.Person;
 import ibee.webapp.todo_app.core.entity.PhoneNumber;
 import ibee.webapp.todo_app.core.entity.person.PersonRelatedEntity;
-import ibee.webapp.todo_app.validation.idHandle.ValidId;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,9 +15,9 @@ import lombok.ToString;
 @Entity
 @Table(
     name = "person_phone_number",
-    uniqueConstraints = @UniqueConstraint(
-        columnNames = {"person_id", "phone_number_id"}
-    )
+    uniqueConstraints = {
+        
+    }
 )
 @Data
 @NoArgsConstructor

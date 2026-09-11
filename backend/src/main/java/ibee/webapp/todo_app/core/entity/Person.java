@@ -15,7 +15,6 @@ import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.degree.PersonDegr
 import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.professionQualification.PersonProfessionQualification;
 import ibee.webapp.todo_app.core.entity.person.skill.softSkill.PersonSoftSkill;
 import ibee.webapp.todo_app.core.repository.baseRepo.IdentifiableEntity;
-import ibee.webapp.todo_app.validation.idHandle.ValidId;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -7,12 +7,14 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import org.springframework.stereotype.Component;
 
 import ibee.webapp.todo_app.controller.support.hateoas.assembler.AbstractHateoasAssembler;
-import ibee.webapp.todo_app.core.entity.person.workExperience.PersonWorkExperienceId;
+import ibee.webapp.todo_app.features.person.related.referenceIds.workExp.PersonWorkExperienceDtoId;
 import ibee.webapp.todo_app.features.person.related.workExp.dto.PersonWorkExperienceDto;
 
 @Component
 public class PersonWorkExperienceHateoasAssembler 
-        extends AbstractHateoasAssembler<PersonWorkExperienceDto, PersonWorkExperienceId> {
+        extends AbstractHateoasAssembler
+            <PersonWorkExperienceDto, 
+            PersonWorkExperienceDtoId> {
 
     public PersonWorkExperienceHateoasAssembler() {
         // Bind the precise controller class to enable methodOn() route inference
@@ -20,12 +22,9 @@ public class PersonWorkExperienceHateoasAssembler
     }
 
     @Override
-    protected PersonWorkExperienceId extractId(PersonWorkExperienceDto dto) {
+    protected PersonWorkExperienceDtoId extractId(PersonWorkExperienceDto dto) {
         // Maps the composite key for the dynamic link generation
-        return new PersonWorkExperienceId(
-            dto.id().personId(), 
-            dto.id().workExperienceId()
-        );
+        return dto.id();
     }
 
     /**

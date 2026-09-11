@@ -1,13 +1,13 @@
 package ibee.webapp.todo_app.core.service;
 
-import ibee.webapp.todo_app.core.dto.requests.AuthRequest;
-import ibee.webapp.todo_app.core.dto.response.TokenPair;
-import ibee.webapp.todo_app.core.dto.requests.SignUpRequest;
 import ibee.webapp.todo_app.core.entity.RefreshToken;
 import ibee.webapp.todo_app.core.entity.User;
 import ibee.webapp.todo_app.core.exception.UserAlreadyExists;
 import ibee.webapp.todo_app.core.exception.UserNotFoundException;
 import ibee.webapp.todo_app.core.repository.UserRepository;
+import ibee.webapp.todo_app.dto.requests.AuthRequest;
+import ibee.webapp.todo_app.dto.requests.SignUpRequest;
+import ibee.webapp.todo_app.dto.response.TokenPair;
 import ibee.webapp.todo_app.security.AuthenticatedUser;
 import ibee.webapp.todo_app.security.jwt.JwtService;
 import lombok.AllArgsConstructor;

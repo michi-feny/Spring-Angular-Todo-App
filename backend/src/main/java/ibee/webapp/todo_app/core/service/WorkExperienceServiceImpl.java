@@ -4,7 +4,7 @@ import ibee.webapp.todo_app.core.entity.Company;
 import ibee.webapp.todo_app.core.entity.WorkExperience;
 import ibee.webapp.todo_app.core.entity.person.workExperience.PersonWorkExperience;
 import ibee.webapp.todo_app.core.repository.person.WorkExperienceRepository;
-import ibee.webapp.todo_app.core.service.baseService.newApproach.MyCrudBaseEntityFacedeServiceImpl;
+import ibee.webapp.todo_app.core.service.baseService.persist.MyCrudBaseEntityFacedeServiceImpl;
 import ibee.webapp.todo_app.mapper.WorkExperienceMapper;
 
 import java.util.List;

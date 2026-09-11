@@ -3,15 +3,18 @@ package ibee.webapp.todo_app.core.entity;
 
 import org.springframework.data.annotation.Transient;
 
-import ibee.webapp.todo_app.validation.idHandle.ValidId;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Id;
-
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +24,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "phone_number",
-    uniqueConstraints = @UniqueConstraint(columnNames = "phone_number")
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "uk_phone_number_country", 
+            columnNames = {
+                "phone_number", 
+                "country_id",
+                "country_code"
+            }
+        )
+    }
+
 )
 public class PhoneNumber {
 
@@ -46,6 +59,21 @@ public class PhoneNumber {
 
     @Transient
     private String fullNumber = countryCode+phoneNumber;
+
+    @NotNull
+    @ManyToOne(
+        fetch = FetchType.LAZY,
+        optional = false
+    )
+    @JoinColumn(
+        name = "country_id",
+        nullable = false,
+        foreignKey = @ForeignKey(
+            name = "fk_phone_number_country"
+        )
+    )
+    private Country country;
+    
 
     //TODO: add international CountryCode
 

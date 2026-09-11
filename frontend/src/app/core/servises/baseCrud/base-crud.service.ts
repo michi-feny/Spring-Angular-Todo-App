@@ -21,7 +21,10 @@ import { ApiSuccessResponse } from '../../models/api-success-response';
    * DELETE /api/v1/{resource}/{id}
    * Deletes an entity by ID. Does not return a data body.
    */
-export abstract class BaseCrudService<DTO, ID = number> extends BaseService {
+export abstract class BaseCrudService
+    <DTO, ID = number, WRITE_RES = EntityModel<DTO>> 
+  extends BaseService {
+
   protected readonly http = inject(HttpClient);
   protected readonly resourceUrl: string;
 
@@ -50,17 +53,15 @@ export abstract class BaseCrudService<DTO, ID = number> extends BaseService {
  /**
    * POST /api/v1/{resource}
    */
-  public create(dto: DTO): Observable<ApiSuccessResponse<EntityModel<DTO>>> {
-    // FIXED: Added space between > > to prevent TS parsing error
-    return this.http.post<ApiSuccessResponse<EntityModel<DTO>> >(this.resourceUrl, dto);
+  public create(dto: DTO): Observable<ApiSuccessResponse<WRITE_RES>> {
+    return this.http.post<ApiSuccessResponse<WRITE_RES>>(this.resourceUrl, dto);
   }
 
  /**
    * PUT /api/v1/{resource}/{id}
    */
-  public update(id: ID, dto: DTO): Observable<ApiSuccessResponse<EntityModel<DTO>>> {
-    // FIXED: Added space between > > to prevent TS parsing error
-    return this.http.put<ApiSuccessResponse<EntityModel<DTO>> >(`${this.resourceUrl}/${id}`, dto);
+  public update(id: ID, dto: DTO): Observable<ApiSuccessResponse<WRITE_RES>> {
+    return this.http.put<ApiSuccessResponse<WRITE_RES>>(`${this.resourceUrl}/${id}`, dto);
   }
 
   /**

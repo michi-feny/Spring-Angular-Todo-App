@@ -7,8 +7,8 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import ibee.webapp.todo_app.config.MapStructConfig;
-import ibee.webapp.todo_app.core.dto.CompanyDto;
 import ibee.webapp.todo_app.core.entity.Company;
+import ibee.webapp.todo_app.dto.CompanyDto;
 import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
 
 @Mapper(

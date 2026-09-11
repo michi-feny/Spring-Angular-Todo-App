@@ -8,7 +8,7 @@ import ibee.webapp.todo_app.controller.baseController.hateosCrud.AbstractSpringH
 import ibee.webapp.todo_app.controller.support.ApiSuccessResponse;
 import ibee.webapp.todo_app.controller.support.hateoas.assembler.AbstractHateoasAssembler;
 import ibee.webapp.todo_app.core.entity.person.PersonRelatedEntity;
-import ibee.webapp.todo_app.core.service.person.related.PersonRelatedDtoService;
+import ibee.webapp.todo_app.core.service.person.related.baseInfrastructure.AbstractMappedPersonRelatedDtoService;
 import ibee.webapp.todo_app.infrastructure.i18n.TranslationService;
 import ibee.webapp.todo_app.security.AuthenticatedUser;
 import org.springframework.hateoas.CollectionModel;
@@ -22,19 +22,20 @@ import java.util.List;
 
 public abstract class AbstractSpringPersonRelatedHateoasController<
         DTO,
-        ENTITY extends PersonRelatedEntity,
+        ENTITY extends PersonRelatedEntity<ID>,
         ID,
         IDDTO>
-        extends AbstractSpringHateoasCrudController<DTO, ID> {
+        extends AbstractSpringHateoasCrudController<DTO, IDDTO> 
+        //implements CrudDtoService<DTO, IDDTO>
+{
 
-    protected final PersonRelatedDtoService<DTO, ENTITY, ID, IDDTO> personRelatedService;
+protected final AbstractMappedPersonRelatedDtoService<DTO, ENTITY, ID, IDDTO> personRelatedService;
 
     protected AbstractSpringPersonRelatedHateoasController(
-            PersonRelatedDtoService<DTO, ENTITY, ID, IDDTO> service,
+            AbstractMappedPersonRelatedDtoService<DTO, ENTITY, ID, IDDTO> service,
             TranslationService translationService,
-            AbstractHateoasAssembler<DTO, ID> assembler,
+            AbstractHateoasAssembler<DTO, IDDTO> assembler,
             String entityKey) {
-        
         super(service, translationService, assembler, entityKey);
         this.personRelatedService = service;
     }
@@ -46,7 +47,11 @@ public abstract class AbstractSpringPersonRelatedHateoasController<
         
         List<DTO> list = personRelatedService.findByPersonId(personId);
         CollectionModel<EntityModel<DTO>> collectionModel = assembler.toCollectionModel(list);
-        String message = translationService.translate("crud.loadedAllForPerson", getEntityName());
+        //String message = translationService.translate("crud.loadedAllForPerson", getEntityName());
+
+        String message = list.isEmpty() 
+            ? translationService.translate("crud.emptyListForPerson", getEntityName())
+            : translationService.translate("crud.loadedAllForPerson", getEntityName());
 
         // 2. Use the builder!
         return buildResponse(collectionModel, message);
@@ -58,7 +63,11 @@ public abstract class AbstractSpringPersonRelatedHateoasController<
             @PathVariable("personId") Long personId) {
         
         List<IDDTO> list = personRelatedService.findIdsByPersonId(personId);
-        String message = translationService.translate("crud.loadedIdsForPerson", getEntityName());
+        //String message = translationService.translate("crud.loadedIdsForPerson", getEntityName());
+
+        String message = list.isEmpty() 
+            ? translationService.translate("crud.emptyListForPerson", getEntityName())
+            : translationService.translate("crud.loadedIdsForPerson", getEntityName());
 
         // 3. Use the builder!
         return buildResponse(list, message);
@@ -67,13 +76,13 @@ public abstract class AbstractSpringPersonRelatedHateoasController<
     @GetMapping("/{id}/details")
     public ResponseEntity<ApiSuccessResponse<EntityModel<DTO>>> getWithDetailsById(
             @AuthenticationPrincipal AuthenticatedUser userDetails,
-            @PathVariable("id") ID id) {
+            @PathVariable("id") IDDTO id) {
         
-        DTO dto = personRelatedService.findWithDetailsById(id)
-                .orElseThrow(() -> new RuntimeException(
-                    translationService.translate("crud.notFound", getEntityName(), id.toString())
-                ));
-
+        DTO dto = personRelatedService.findWithDetailsById(id);
+                //no null check needed, 
+                // cause the service for the entity would throw a ressourceNotFOundException
+        
+        //or hte Assembler would throw a not null dto input Exception
         EntityModel<DTO> entityModel = assembler.toModel(dto);
         String message = translationService.translate("crud.loadedWithDetails", getEntityName());
 

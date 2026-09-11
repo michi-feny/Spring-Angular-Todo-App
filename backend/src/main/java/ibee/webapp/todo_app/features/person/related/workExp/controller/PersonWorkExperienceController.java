@@ -17,8 +17,7 @@ import ibee.webapp.todo_app.controller.baseController.hateosCrud.AbstractSpringH
 import ibee.webapp.todo_app.controller.support.ApiSuccessResponse;
 import ibee.webapp.todo_app.core.entity.person.workExperience.PersonWorkExperience;
 import ibee.webapp.todo_app.core.entity.person.workExperience.PersonWorkExperienceId;
-import ibee.webapp.todo_app.core.service.person.related.PersonRelatedDtoService;
-import ibee.webapp.todo_app.core.service.person.related.PersonRelatedService;
+import ibee.webapp.todo_app.core.service.person.related.baseInfrastructure.PersonRelatedService;
 import ibee.webapp.todo_app.features.person.related.referenceIds.workExp.PersonWorkExperienceDtoId;
 import ibee.webapp.todo_app.features.person.related.workExp.dto.MergeWorkExperiencesRequestDto;
 import ibee.webapp.todo_app.features.person.related.workExp.dto.PersonWorkExperienceDto;
@@ -31,19 +30,19 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/person-work-experiences")
 public class PersonWorkExperienceController 
-        extends AbstractSpringHateoasCrudController<PersonWorkExperienceDto, PersonWorkExperienceId> {
+        extends AbstractSpringHateoasCrudController
+            <PersonWorkExperienceDto, PersonWorkExperienceDtoId> {
 
     // Retain a strongly typed reference to access custom methods not present in CrudDtoService
     private final PersonWorkExperienceDtoServiceImpl customService;
 
-    @SuppressWarnings("unchecked")
     public PersonWorkExperienceController(
             PersonWorkExperienceDtoServiceImpl customService,
             TranslationService translationService,
             PersonWorkExperienceHateoasAssembler assembler) {
         
         // Fulfill the base controller's generic dependencies
-        super((PersonRelatedDtoService<PersonWorkExperienceDto, PersonWorkExperience, PersonWorkExperienceId, PersonWorkExperienceDtoId>)customService, translationService, assembler, "personWorkExperience");
+        super(customService, translationService, assembler, "personWorkExperience");
         this.customService = customService;
         
     }

@@ -4,6 +4,7 @@ import static ibee.webapp.todo_app.controller.support.hateoas.builder.ApiRespons
 
 import ibee.webapp.todo_app.controller.baseController.hateosCrud.AbstractSpringHateoasCrudController;
 import ibee.webapp.todo_app.controller.support.ApiSuccessResponse;
+import ibee.webapp.todo_app.core.exception.ResourceNotFoundException;
 import ibee.webapp.todo_app.features.person.dto.PersonData;
 import ibee.webapp.todo_app.features.person.dto.PersonOverview;
 import ibee.webapp.todo_app.features.person.service.PersonDtoService;
@@ -71,9 +72,15 @@ public class PersonController extends AbstractSpringHateoasCrudController<Person
             @AuthenticationPrincipal AuthenticatedUser userDetails,
             @PathVariable("id") Long id) {
         
+                //TODO: make sure that the Controller is not throwing the Exception:
+                //it should happen inside the Service!!!
         PersonOverview overview = personDtoService.getOverviewById(id)
-                .orElseThrow(() -> new RuntimeException(
-                    translationService.translate("crud.notFound", getEntityName(), id.toString())
+                // Use the custom exception so your @RestControllerAdvice catches it!
+                .orElseThrow(() -> new ResourceNotFoundException(
+                    "Overview not found", 
+                    "crud.notFound.single", 
+                    getEntityName(), 
+                    id.toString()
                 ));
 
         String message = translationService.translate("crud.loadedOverview", getEntityName());

@@ -11,8 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ibee.webapp.todo_app.core.entity.Person;
 import ibee.webapp.todo_app.core.repository.person.PersonRepository;
 import ibee.webapp.todo_app.core.repository.person.PersonSpecification;
-import ibee.webapp.todo_app.core.service.baseService.newApproach.MyCrudBaseEntityFacedeServiceImpl;
-import ibee.webapp.todo_app.features.person.PersonMapper;
+import ibee.webapp.todo_app.core.service.baseService.persist.MyCrudBaseEntityFacedeServiceImpl;
+import ibee.webapp.todo_app.mapper.person.PersonMapper;
 
 @Service
 @Transactional

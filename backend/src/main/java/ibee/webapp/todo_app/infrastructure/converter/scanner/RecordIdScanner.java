@@ -1,11 +1,12 @@
 package ibee.webapp.todo_app.infrastructure.converter.scanner;
 
-import ibee.webapp.todo_app.core.dto.base.StringToDtoIdConvertable;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.SimpleMetadataReaderFactory;
 import org.springframework.stereotype.Component;
+
+import ibee.webapp.todo_app.dto.base.StringToDtoIdConvertable;
 
 import java.util.HashSet;
 import java.util.Set;

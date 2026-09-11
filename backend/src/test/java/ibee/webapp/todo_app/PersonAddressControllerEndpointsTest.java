@@ -2,14 +2,15 @@ package ibee.webapp.todo_app;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
-import ibee.webapp.todo_app.core.dto.AddressDto;
-import ibee.webapp.todo_app.core.dto.CountryDto;
+
 import ibee.webapp.todo_app.core.entity.Address;
 import ibee.webapp.todo_app.core.entity.Country;
 import ibee.webapp.todo_app.core.service.AddressServiceImpl;
 import ibee.webapp.todo_app.core.service.CountryServiceImpl;
+import ibee.webapp.todo_app.dto.AddressDto;
+import ibee.webapp.todo_app.dto.CountryDto;
 import ibee.webapp.todo_app.features.person.dto.PersonData;
-import ibee.webapp.todo_app.features.person.related.contact.PersonAddressDto;
+import ibee.webapp.todo_app.features.person.related.contact.dto.PersonAddressDto;
 import ibee.webapp.todo_app.features.person.related.referenceIds.contact.PersonAddressDtoId;
 import ibee.webapp.todo_app.features.person.service.PersonDtoService;
 import ibee.webapp.todo_app.mapper.AddressMapper;

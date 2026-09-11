@@ -1,5 +1,5 @@
 export interface PersonProfessionQualificationDtoId {
-    professionQualificationId: number;
     personId: number;
+    professionQualificationId: number;
     educationInstitutionId: number;
 }

@@ -1,4 +1,4 @@
 export interface PersonAddressDtoId {
-    addressId: number;
     personId: number;
+    addressId: number;
 }

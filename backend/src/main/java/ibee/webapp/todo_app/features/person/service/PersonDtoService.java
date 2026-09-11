@@ -9,27 +9,29 @@ import java.time.LocalDate;
 import java.util.List;
 
 import ibee.webapp.todo_app.core.entity.Person;
-import ibee.webapp.todo_app.core.service.baseService.newApproach.AbstractCrudDtoService;
+import ibee.webapp.todo_app.core.service.baseService.transport.AbstractMappedCrudDtoService;
 import ibee.webapp.todo_app.core.service.person.PersonService;
-import ibee.webapp.todo_app.core.service.person.related.contact.mail.PersonEmailAddressDtoService;
-import ibee.webapp.todo_app.core.service.person.related.contact.phone.PersonPhoneNumberDtoService;
-import ibee.webapp.todo_app.core.service.person.related.skill.hardSkill.additionalHardSkill.PersonAdditionalSkillDtoService;
-import ibee.webapp.todo_app.core.service.person.related.skill.hardSkill.degree.PersonDegreeDtoService;
-import ibee.webapp.todo_app.core.service.person.related.skill.hardSkill.professionQualification.PersonProfessionQualificationDtoService;
-import ibee.webapp.todo_app.core.service.person.related.skill.softSkill.PersonSoftSkillDtoService;
-import ibee.webapp.todo_app.features.person.PersonMapper;
+import ibee.webapp.todo_app.core.service.person.PersonServiceImpl;
 import ibee.webapp.todo_app.features.person.dto.PersonData;
 import ibee.webapp.todo_app.features.person.dto.PersonOverview;
 import ibee.webapp.todo_app.features.person.related.contact.service.PersonAddressDtoService;
-import ibee.webapp.todo_app.features.person.related.country.service.PersonCountryDtoService;
+import ibee.webapp.todo_app.features.person.related.contact.service.PersonCountryDtoService;
+import ibee.webapp.todo_app.features.person.related.contact.service.PersonEmailAddressDtoService;
+import ibee.webapp.todo_app.features.person.related.contact.service.PersonPhoneNumberDtoService;
+import ibee.webapp.todo_app.features.person.related.skill.service.PersonAdditionalSkillDtoService;
+import ibee.webapp.todo_app.features.person.related.skill.service.PersonDegreeDtoService;
+import ibee.webapp.todo_app.features.person.related.skill.service.PersonProfessionQualificationDtoService;
+import ibee.webapp.todo_app.features.person.related.skill.service.PersonSoftSkillDtoService;
+import ibee.webapp.todo_app.mapper.person.PersonMapper;
 
 @Service
 @Transactional
 public class PersonDtoService 
-extends AbstractCrudDtoService<PersonData, Person, Long>
+extends AbstractMappedCrudDtoService
+    <PersonData, Person, Long, Long>
        {
 
-    private final PersonService personService;
+    private final PersonServiceImpl personService;
     private final PersonMapper personMapper;
 
     // Related DTO Services zur Bereitstellung der IDs für das Lazy-Loading im Overview
@@ -43,7 +45,7 @@ extends AbstractCrudDtoService<PersonData, Person, Long>
     private final PersonSoftSkillDtoService personSoftSkillDtoService;
 
     public PersonDtoService(
-            PersonService personEntityService,
+            PersonServiceImpl personEntityService,
             PersonMapper personMapper,
             PersonAddressDtoService personAddressDtoService,
             PersonPhoneNumberDtoService personPhoneNumberDtoService,
@@ -53,7 +55,7 @@ extends AbstractCrudDtoService<PersonData, Person, Long>
             PersonProfessionQualificationDtoService personProfessionQualificationDtoService,
             PersonAdditionalSkillDtoService personAdditionalSkillDtoService,
             PersonSoftSkillDtoService personSoftSkillDtoService) {
-        
+        super(personEntityService, personMapper);
         this.personService = personEntityService;
         this.personMapper = personMapper;
         this.personAddressDtoService = personAddressDtoService;
@@ -64,7 +66,7 @@ extends AbstractCrudDtoService<PersonData, Person, Long>
         this.personProfessionQualificationDtoService = personProfessionQualificationDtoService;
         this.personAdditionalSkillDtoService = personAdditionalSkillDtoService;
         this.personSoftSkillDtoService = personSoftSkillDtoService;
-        super(personEntityService, personMapper);
+        
     }
 
     // --- Overview Aggregation (Initialansicht mit Lazy-ID-Listen) ---

@@ -1,6 +1,6 @@
 package ibee.webapp.todo_app.core.service.person.related.contact.address;
 
-
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,16 +10,20 @@ import ibee.webapp.todo_app.core.entity.person.contactData.address.PersonAddress
 import ibee.webapp.todo_app.core.entity.person.contactData.address.PersonAddressId;
 import ibee.webapp.todo_app.core.repository.person.personRelated.contact.address.PersonAddressRepository;
 import ibee.webapp.todo_app.core.service.AddressServiceImpl;
-import ibee.webapp.todo_app.core.service.person.related.PersonRelatedServiceImpl;
+import ibee.webapp.todo_app.core.service.person.related.baseInfrastructure.PersonRelatedServiceImpl;
+import ibee.webapp.todo_app.core.service.util.CompositeDependentEntityHandler;
 import ibee.webapp.todo_app.mapper.person.contact.PersonAddressMapper;
 
 
 @Service
 @Transactional
 public class PersonAddressServiceImpl
-        extends PersonRelatedServiceImpl<PersonAddress, PersonAddressId> {
+        extends PersonRelatedServiceImpl
+            <PersonAddress, PersonAddressId> 
+        implements CompositeDependentEntityHandler
+            <PersonAddress, PersonAddressId, Address, Long> {
 
-    @Autowired
+    @Autowired 
     private AddressServiceImpl addressService;
 
     
@@ -30,6 +34,38 @@ public class PersonAddressServiceImpl
         PersonAddressMapper mapper) {
         super(repository, mapper);
         this.repository = repository;
+    }
+
+    @Override 
+    public Address extractChild(PersonAddress parent) { 
+        return parent.getAddress(); 
+    }
+    @Override 
+    public void applyChild(PersonAddress parent, Address child) { 
+        parent.setAddress(child); 
+    }
+    @Override 
+    public Long extractChildId(Address child) { 
+        return child.getId(); 
+    }
+    @Override 
+    public Long extractChildIdFromComposite(PersonAddressId parentId) { 
+        return parentId.getAddressId(); 
+    }
+    @Override 
+    public PersonAddress instantiateNewParent() { 
+        return new PersonAddress(); }
+    
+    @Override 
+    public PersonAddressId buildNewCompositeId(
+        PersonAddressId oldId, Long newChildId) 
+    { 
+        return new PersonAddressId(oldId.getPersonId(), newChildId); 
+    }
+    
+    @Override 
+    public void applyCompositeId(PersonAddress parent, PersonAddressId id) { 
+        parent.setId(id); 
     }
 
     /**
@@ -51,38 +87,31 @@ public class PersonAddressServiceImpl
      */
     @Override
     public PersonAddress create(PersonAddress entity) {
+        assertData.entityNotNull(entity);
         
-        Assert.notNull(
-            entity, 
-            "PersonAddress entity cannot be null");
-        Assert.notNull(
-            entity.getId(), 
-            "PersonAddressId cannot be null for creation");
-        
+        validatePropertyPersonId(
+                entity.getId()
+        );
 
-        /* 
-         * SPLIT VALIDATION STAGE 1: FAIL FAST
-         * Why: We cannot validate the AddressId yet because the user might be submitting 
-         * a brand new address that hasn't been saved to the database. However, we must 
-         * strictly validate the PersonId upfront to reject bad requests instantly.
-         */
-        validatePropertyPersonId(entity.getId());
-        
-
-        // 1. Resolve the address through deduplication and generate its new database ID
-        if (entity.getAddress() != null) {
-            Address safeAddress = addressService.create(entity.getAddress());
-            entity.setAddress(safeAddress);
-            
-            // Mutate the existing ID object to attach the newly generated Address ID
-            entity.getId().setAddressId(safeAddress.getId());
-        }
+        validateCompositeId(
+            entity.getId(),
+            "PersonAddressId"
+        );
 
         
-        enforceOnlySingleMainAddressRule(entity);
-
-        return super.create(entity);
+        return resolveChildAndPersistNewLink(
+                entity,
+                addressService,
+                (resolvedEntity) -> {
+                    resolvedEntity.getId().setAddressId(
+                        resolvedEntity.getAddress().getId());
+                    return super.create(resolvedEntity);
+                }
+        );
+    
     }
+
+    
 
     /**
      * Updates an existing PersonAddress link, enforcing business rules and safely handling 
@@ -115,67 +144,17 @@ public class PersonAddressServiceImpl
         validateCompositeId(incomingUpdates.getId(), "Incoming PersonAddressId");
         validateCompositeId(currentId, "Current PersonAddressId");
 
-        // Guard Clause 1: No Address payload. Safe to pass to base class.
-        if (incomingUpdates.getAddress() == null) {
-            enforceOnlySingleMainAddressRule(incomingUpdates);
-            return super.update(incomingUpdates, currentId);
-        }
-
-        Address resolvedAddress = addressService.update(incomingUpdates.getAddress(), currentId.getAddressId());
-        incomingUpdates.setAddress(resolvedAddress);
-
-        // Guard Clause 2: Safe Typo Fix (ID stayed the same). Safe to pass to base class.
-        if (resolvedAddress.getId().equals(currentId.getAddressId())) {
-            enforceOnlySingleMainAddressRule(incomingUpdates);
-            return super.update(incomingUpdates, currentId);
-        }
-
-        // ==========================================
-        // THE FALLTHROUGH: DEDUPLICATION ID SWAP
-        // ==========================================
-        
-        // 1. Fetch the ORIGINAL entity so we don't lose any existing historical data
-        PersonAddress originalEntity = repository.findById(currentId)
-            .orElseThrow(() -> new IllegalArgumentException("Original PersonAddress not found"));
-
-        // 2. Create a BRAND NEW, untracked instance to avoid Hibernate proxy crashes
-        PersonAddress newLink = new PersonAddress();
-        
-        /* 
-         * STAGE 1: CLONE THE EXISTING DATABASE STATE
-         * Why: The newLink is completely empty. The incoming payload might be a partial update 
-         * missing background fields like auditing timestamps, versions, or untouched metadata.
-         * Mapping the original entity into newLink ensures we preserve all existing data 
-         * exactly as it currently exists in the database.
-         */
-        entityMapper.updateEntityFromEntity(originalEntity, newLink);
-        
-        /*
-         * STAGE 2: OVERLAY THE USER'S REQUESTED CHANGES
-         * Why: Now that newLink holds a safe copy of the full database row, we apply the 
-         * delta/patch. Any non-null fields in incomingUpdates (e.g., a changed mainAddress boolean) 
-         * will overwrite the cloned values.
-         */
-        entityMapper.updateEntityFromEntity(incomingUpdates, newLink);
-
-        // 5. Manually force the NEW Composite Key using the All-Args Constructor
-        PersonAddressId newId = 
-            new PersonAddressId(
-                currentId.getPersonId(), 
-                resolvedAddress.getId()
-            );
-        
-        newLink.setId(newId);
-        newLink.setAddress(resolvedAddress);
-
-        // 6. Delete the old row in the database
-        repository.deleteById(currentId);
-
-        // 7. Enforce the business rule on the final, perfectly mapped object
-        enforceOnlySingleMainAddressRule(newLink);
-        
-        // 8. Save the brand new entity
-        return super.create(newLink);
+        return resolveChildAndPersistUpdate(
+                incomingUpdates,
+                currentId,
+                addressService,
+                this::updateWithMainAddressCleanup,  // <-- Custom Action
+                this::createWithMainAddressCleanup,  // <-- Custom Action                            
+                repository::findById,                     
+                entityMapper::updateEntityFromEntity,     
+                repository::deleteById   
+        );
+       
     }
     
 
@@ -189,7 +168,7 @@ public class PersonAddressServiceImpl
             "the incomming personAddress is not allowed to be Null"
         );
 
-        if (entityUpdates.isMainAddress()) {
+        if (entityUpdates.isMainAddress() == true) {
             // DEFENSIVE PROGRAMMING: Guarantee the ID is fully valid before running the DB query
             validateCompositeId(
                 entityUpdates.getId(), 
@@ -203,6 +182,20 @@ public class PersonAddressServiceImpl
         }
     }
 
+    // ========================================================
+    // Custom Actions (Database Consistency logic lives here!)
+    // ========================================================
+    
+    private PersonAddress updateWithMainAddressCleanup(PersonAddress entity, PersonAddressId id) {
+        enforceOnlySingleMainAddressRule(entity);
+        return super.update(entity, id);
+    }
+
+    private PersonAddress createWithMainAddressCleanup(PersonAddress entity) {
+        enforceOnlySingleMainAddressRule(entity);
+        return super.create(entity);
+    }
+
     
 
     private void validatePropertyPersonId(PersonAddressId id){
@@ -211,4 +204,8 @@ public class PersonAddressServiceImpl
 
     }
 
+    public Optional<PersonAddress> findMainAddress(Long personId) {
+        return repository.findByPersonIdAndMainAddressTrue(personId);
+    }
+   
 }

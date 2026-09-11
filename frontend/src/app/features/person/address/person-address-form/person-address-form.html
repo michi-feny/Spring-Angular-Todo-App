@@ -1,0 +1,64 @@
+<div class="form-wrapper">
+  <h3>Create Person Address</h3>
+  
+  <div class="form-group">
+    <label>Street:</label>
+    <input [(ngModel)]="formData().address.street" type="text" />
+  </div>
+
+  <div class="form-group">
+    <label>House Number:</label>
+    <input [(ngModel)]="formData().address.houseNumber" type="text" />
+  </div>
+
+  <div class="form-group">
+    <label>Zip Code:</label>
+    <input [(ngModel)]="formData().address.zipCode" type="text" />
+  </div>
+
+  <div class="form-group">
+    <label>City:</label>
+    <input [(ngModel)]="formData().address.city" type="text" />
+  </div>
+
+  <div class="form-group">
+    <label>Country:</label>
+    <input 
+      type="text" 
+      [ngModel]="countrySearchQuery()" 
+      (ngModelChange)="countrySearchQuery.set($event)" 
+      placeholder="Search country..." 
+      class="search-input-field" 
+    />
+    <select [(ngModel)]="formData().address.countryId">
+      <option [ngValue]="undefined" disabled>Select a country</option>
+      @for (country of filteredCountries(); track country.id) {
+        <option [ngValue]="country.id">{{ country.name }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="form-group checkbox-group">
+    <label>
+      <input type="checkbox" [(ngModel)]="formData().mainAddress" />
+      Set as Main Address
+    </label>
+  </div>
+
+  <button class="btn-primary" (click)="submit()">Save Address</button>
+
+  @if (showOverwriteModal()) {
+    <div class="modal-overlay">
+      <div class="modal-content">
+        <h4>Address Conflict</h4>
+        <p class="error-text">{{ errorMessage() }}</p>
+        <p>Would you like to overwrite the existing main address with this new data?</p>
+        
+        <div class="modal-actions">
+          <button class="btn-secondary" (click)="showOverwriteModal.set(false)">No, Cancel</button>
+          <button class="btn-danger" (click)="confirmOverwrite()">Yes, Overwrite</button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

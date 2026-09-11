@@ -6,8 +6,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 import ibee.webapp.todo_app.config.MapStructConfig;
-import ibee.webapp.todo_app.core.dto.CountryDto;
 import ibee.webapp.todo_app.core.entity.Country;
+import ibee.webapp.todo_app.dto.CountryDto;
 import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
 
 @Mapper(

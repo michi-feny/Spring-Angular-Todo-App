@@ -1,5 +1,5 @@
 export interface PersonDegreeDtoId {
-    degreeId: number;
     personId: number;
+    degreeId: number;
     educationInstitutionId: number;
 }

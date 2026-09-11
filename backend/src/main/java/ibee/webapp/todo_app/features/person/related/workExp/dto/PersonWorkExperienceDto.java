@@ -1,11 +1,11 @@
 package ibee.webapp.todo_app.features.person.related.workExp.dto;
 
 import ibee.webapp.todo_app.features.person.related.referenceIds.workExp.PersonWorkExperienceDtoId;
-import ibee.webapp.todo_app.validation.idHandle.ValidId;
+import jakarta.validation.Valid;
 
 
 public record PersonWorkExperienceDto(
-    @ValidId
+    @Valid 
     PersonWorkExperienceDtoId id,
     WorkExperienceDto workExperience,
     Integer displayOrder,

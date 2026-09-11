@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
+
 @JsonInclude(Include.NON_NULL)
 public record ApiSuccessResponse<T> (
     @Nullable T data,
@@ -14,6 +15,13 @@ public record ApiSuccessResponse<T> (
     public ApiSuccessResponse(T data, List<Link> links) {
         this(data, null, links);
     }
+
+    public ApiSuccessResponse(T data, String message, List<Link> links) {
+        this.data = data;
+        this.message = message;
+        this.links = links;
+    }
+
     public ApiSuccessResponse(T data, String msg) {
         this(data, msg, null);
     }

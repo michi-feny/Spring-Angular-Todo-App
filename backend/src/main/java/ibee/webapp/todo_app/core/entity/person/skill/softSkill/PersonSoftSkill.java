@@ -4,7 +4,7 @@ package ibee.webapp.todo_app.core.entity.person.skill.softSkill;
 import ibee.webapp.todo_app.core.entity.Person;
 import ibee.webapp.todo_app.core.entity.SoftSkill;
 import ibee.webapp.todo_app.core.entity.person.PersonRelatedEntity;
-import ibee.webapp.todo_app.validation.idHandle.ValidId;
+import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -61,4 +61,8 @@ public class PersonSoftSkill
         )
     )
     private SoftSkill softSkill;
+
+    @Column(length = 1000)
+    private String description; 
+    // TODO: Multi-scenario / resume-tailored descriptions (e.g., job XY vs job AB) are not implemented yet.
 }

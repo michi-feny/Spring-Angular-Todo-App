@@ -3,7 +3,6 @@ package ibee.webapp.todo_app.core.entity.person.workExperience;
 import ibee.webapp.todo_app.core.entity.Person;
 import ibee.webapp.todo_app.core.entity.WorkExperience;
 import ibee.webapp.todo_app.core.entity.person.PersonRelatedEntity;
-import ibee.webapp.todo_app.validation.idHandle.ValidId;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;

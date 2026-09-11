@@ -13,6 +13,6 @@ export interface AddressDto {
 
     city: string;
 
-    country?: CountryDto;
+    countryId?: number;
 
 }

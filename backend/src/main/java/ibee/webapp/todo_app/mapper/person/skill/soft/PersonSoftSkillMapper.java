@@ -7,8 +7,8 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.BeanMapping;
 
 import ibee.webapp.todo_app.config.MapStructConfig;
-import ibee.webapp.todo_app.core.dto.person.skills.soft.PersonSoftSkillDto;
 import ibee.webapp.todo_app.core.entity.person.skill.softSkill.PersonSoftSkill;
+import ibee.webapp.todo_app.features.person.related.skill.dto.soft.PersonSoftSkillDto;
 import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
 import ibee.webapp.todo_app.mapper.person.references.skill.soft.PersonSoftSkillReferenceMapper;
 import ibee.webapp.todo_app.mapper.skills.soft.SoftSkillMapper;

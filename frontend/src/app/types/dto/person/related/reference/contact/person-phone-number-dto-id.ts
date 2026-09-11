@@ -1,5 +1,6 @@
 export interface PersonPhoneNumberDtoId {
-    phoneNumberId: number;
     personId: number;
+    phoneNumberId: number;
+    
 
 }

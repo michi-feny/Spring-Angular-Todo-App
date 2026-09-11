@@ -4,9 +4,8 @@ import ibee.webapp.todo_app.core.entity.Address;
 import ibee.webapp.todo_app.core.entity.Company;
 import ibee.webapp.todo_app.core.entity.Country;
 import ibee.webapp.todo_app.core.repository.CompanyRepository;
-import ibee.webapp.todo_app.core.service.baseService.newApproach.MyCrudBaseEntityFacedeServiceImpl;
+import ibee.webapp.todo_app.core.service.baseService.persist.MyCrudBaseEntityFacedeServiceImpl;
 import ibee.webapp.todo_app.mapper.CompanyMapper;
-import ibee.webapp.todo_app.mapper.baseMaper.EntityUpdateMapper;
 
 import java.util.Optional;
 

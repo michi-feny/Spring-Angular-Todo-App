@@ -26,7 +26,10 @@ public interface PersonCountryRepository
         PersonCountryId id
     );
 
+    @Query("SELECT p FROM PersonCountry p WHERE p.id.personId = :personId AND p.mainCountry = true")
+    Optional<PersonCountry> findByPersonIdAndMainCountryTrue(@Param("personId") Long personId);
+
     @Modifying
-@Query("UPDATE PersonCountry pc SET pc.mainCountry = false WHERE pc.id.personId = :personId AND pc.id.countryId <> :countryId")
-void resetOtherMainCountries(@Param("personId") Long personId, @Param("countryId") Long countryId);
+    @Query("UPDATE PersonCountry pc SET pc.mainCountry = false WHERE pc.id.personId = :personId AND pc.id.countryId <> :countryId")
+    void resetOtherMainCountries(@Param("personId") Long personId, @Param("countryId") Long countryId);
 }

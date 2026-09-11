@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import ibee.webapp.todo_app.core.entity.Person;
-import ibee.webapp.todo_app.core.service.baseService.newApproach.MyCrudBaseEntityFacadeService;
+import ibee.webapp.todo_app.core.service.baseService.persist.MyCrudBaseEntityFacadeService;
 
 public interface PersonService
         extends MyCrudBaseEntityFacadeService<Person, Long> {

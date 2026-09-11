@@ -18,7 +18,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-import ibee.webapp.todo_app.validation.idHandle.ValidId;
 
 @Entity
 @Data
@@ -29,7 +28,6 @@ public class WorkExperience {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @ValidId
     private Long id;
 
     @NotNull

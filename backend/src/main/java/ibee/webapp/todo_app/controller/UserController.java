@@ -2,13 +2,13 @@ package ibee.webapp.todo_app.controller;
 
 import ibee.webapp.todo_app.controller.support.ApiSuccessResponse;
 import ibee.webapp.todo_app.controller.support.Link;
-import ibee.webapp.todo_app.core.dto.requests.*;
 import ibee.webapp.todo_app.core.service.AuthService;
 import ibee.webapp.todo_app.core.service.RefreshTokenService;
 import ibee.webapp.todo_app.core.service.ResetPasswordService;
+import ibee.webapp.todo_app.dto.requests.*;
+import ibee.webapp.todo_app.dto.response.TokenPair;
+import ibee.webapp.todo_app.dto.response.ValidateResetTokenResponse;
 import ibee.webapp.todo_app.infrastructure.i18n.TranslationService;
-import ibee.webapp.todo_app.core.dto.response.TokenPair;
-import ibee.webapp.todo_app.core.dto.response.ValidateResetTokenResponse;
 import ibee.webapp.todo_app.core.entity.ResetToken;
 import ibee.webapp.todo_app.security.AuthenticatedUser;
 import ibee.webapp.todo_app.security.cookie.CookieTokenService;

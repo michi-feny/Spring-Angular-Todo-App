@@ -8,10 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ibee.webapp.todo_app.core.entity.person.workExperience.PersonWorkExperience;
 import ibee.webapp.todo_app.core.entity.person.workExperience.PersonWorkExperienceId;
-import ibee.webapp.todo_app.core.service.baseService.newApproach.AbstractCrudDtoService;
-import ibee.webapp.todo_app.core.service.person.related.AbstractPersonRelatedDtoService;
-import ibee.webapp.todo_app.core.service.person.related.PersonRelatedDtoService;
-import ibee.webapp.todo_app.core.service.person.related.PersonRelatedService;
+import ibee.webapp.todo_app.core.service.baseService.transport.AbstractMappedCrudDtoService;
+import ibee.webapp.todo_app.core.service.person.related.baseInfrastructure.AbstractPersonRelatedDtoQuerryAndDeleteServiceService;
+import ibee.webapp.todo_app.core.service.person.related.baseInfrastructure.PersonRelatedService;
 import ibee.webapp.todo_app.core.service.person.related.workExp.PersonWorkExperienceServiceImpl;
 import ibee.webapp.todo_app.features.person.related.referenceIds.workExp.PersonWorkExperienceDtoId;
 import ibee.webapp.todo_app.features.person.related.workExp.dto.MergeWorkExperiencesRequestDto;
@@ -23,16 +22,12 @@ import ibee.webapp.todo_app.mapper.person.workExp.PersonWorkExperienceMapper;
 @Service
 @Transactional
 public class PersonWorkExperienceDtoServiceImpl 
-    extends AbstractPersonRelatedDtoService<
+    extends AbstractMappedCrudDtoService<
         PersonWorkExperienceDto, 
         PersonWorkExperience, 
         PersonWorkExperienceId,
         PersonWorkExperienceDtoId> 
-    implements PersonRelatedDtoService<
-            PersonWorkExperienceDto,
-            PersonWorkExperience,
-            PersonWorkExperienceId,
-            PersonWorkExperienceDtoId>{
+{
 
     private final PersonWorkExperienceServiceImpl entityService;
     private final PersonWorkExperienceMapper personWorkExperienceMapper;

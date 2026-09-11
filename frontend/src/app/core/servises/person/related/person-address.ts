@@ -2,12 +2,19 @@ import { Injectable } from '@angular/core';
 import { BasePersonRelatedCrudService } from '../../baseCrud/base-person-related-crud.service';
 import { PersonAddressDto } from '../../../../types/dto/person/related/contact/address/person-address.dto';
 import { PersonAddressDtoId } from '../../../../types/dto/person/related/reference/contact/person-address-dto-id';
+import { EntityModel } from '../../../models/hateoas-models';
+import { ServiceResult } from '../../../../types/models/service-result';
 
 @Injectable({
   providedIn: 'root'
 })
 // We pass <DTO, IDDTO, ID>. Assuming your IDs are numbers!
-export class PersonAddressService extends BasePersonRelatedCrudService<PersonAddressDto, PersonAddressDtoId, number> {
+export class PersonAddressService 
+  extends BasePersonRelatedCrudService
+    <PersonAddressDto, 
+    PersonAddressDtoId, 
+    string,
+    ServiceResult<EntityModel<PersonAddressDto>>> {
 
   constructor() {
     // Maps exactly to @RequestMapping("/api/v1/person-addresses") in your Spring Controller

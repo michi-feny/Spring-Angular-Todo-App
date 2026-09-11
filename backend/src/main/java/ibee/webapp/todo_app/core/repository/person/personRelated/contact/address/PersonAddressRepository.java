@@ -36,4 +36,8 @@ public interface PersonAddressRepository
         @Param("personId") Long personId, 
         @Param("excludeAddressId") Long excludeAddressId
     );
+
+    boolean existsByPerson_IdAndMainAddressTrue(Long personId);
+
+    Optional<PersonAddress> findByPersonIdAndMainAddressTrue(Long personId);
 }

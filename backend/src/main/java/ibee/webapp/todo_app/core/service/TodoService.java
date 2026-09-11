@@ -1,13 +1,13 @@
 package ibee.webapp.todo_app.core.service;
 
-import ibee.webapp.todo_app.core.dto.response.TodoListResponse;
-import ibee.webapp.todo_app.core.dto.requests.CreateTodo;
-import ibee.webapp.todo_app.core.dto.requests.UpdateTodo;
 import ibee.webapp.todo_app.core.entity.Todo;
 import ibee.webapp.todo_app.core.entity.User;
 import ibee.webapp.todo_app.core.exception.TodoNotFoundException;
 import ibee.webapp.todo_app.core.repository.TodoRepository;
 import ibee.webapp.todo_app.core.repository.UserRepository;
+import ibee.webapp.todo_app.dto.requests.CreateTodo;
+import ibee.webapp.todo_app.dto.requests.UpdateTodo;
+import ibee.webapp.todo_app.dto.response.TodoListResponse;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +25,8 @@ public class TodoService {
     public TodoListResponse findAll(Pageable pageable, Long userId) {
         Page<@NotNull Todo> todoPage = repo.findByUserId(userId, pageable);
 
+        //maybe there is a problem for the return typys!!
+        //noPage is return: could be that i missunderstand the pagiagtion
         return new TodoListResponse(
             todoPage.getContent(),
             todoPage.getTotalElements(),

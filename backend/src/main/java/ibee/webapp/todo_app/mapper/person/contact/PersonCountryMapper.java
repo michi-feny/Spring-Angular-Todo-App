@@ -13,7 +13,7 @@ import ibee.webapp.todo_app.mapper.CountryTranslationMapper;
 import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
 import ibee.webapp.todo_app.mapper.person.references.contact.PersonCountryReferenceMapper;
 import ibee.webapp.todo_app.core.entity.person.contactData.nationality.PersonCountry;
-import ibee.webapp.todo_app.features.person.related.country.dto.PersonCountryDto;
+import ibee.webapp.todo_app.features.person.related.contact.dto.PersonCountryDto;
 
 @Mapper(
     config = MapStructConfig.class,

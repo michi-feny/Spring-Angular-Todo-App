@@ -2,11 +2,11 @@ package ibee.webapp.todo_app.controller;
 
 import ibee.webapp.todo_app.controller.support.ApiSuccessResponse;
 import ibee.webapp.todo_app.controller.support.Link;
-import ibee.webapp.todo_app.core.dto.response.TodoListResponse;
-import ibee.webapp.todo_app.core.dto.requests.CreateTodo;
-import ibee.webapp.todo_app.core.dto.requests.UpdateTodo;
 import ibee.webapp.todo_app.core.entity.Todo;
 import ibee.webapp.todo_app.core.service.TodoService;
+import ibee.webapp.todo_app.dto.requests.CreateTodo;
+import ibee.webapp.todo_app.dto.requests.UpdateTodo;
+import ibee.webapp.todo_app.dto.response.TodoListResponse;
 import ibee.webapp.todo_app.infrastructure.i18n.TranslationService;
 import ibee.webapp.todo_app.security.AuthenticatedUser;
 import jakarta.validation.Valid;

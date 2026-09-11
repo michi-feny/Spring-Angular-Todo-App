@@ -1,9 +1,9 @@
 package ibee.webapp.todo_app.mapper;
 
-import ibee.webapp.todo_app.core.dto.AddressDto;
-import ibee.webapp.todo_app.core.dto.CountryDto;
 import ibee.webapp.todo_app.core.entity.Address;
 import ibee.webapp.todo_app.core.entity.Country;
+import ibee.webapp.todo_app.dto.AddressDto;
+import ibee.webapp.todo_app.dto.CountryDto;
 import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
 import ibee.webapp.todo_app.config.MapStructConfig;
 

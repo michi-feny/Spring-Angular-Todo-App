@@ -2,9 +2,13 @@ import { Observable } from 'rxjs';
 import { BaseCrudService } from './base-crud.service';
 import { ApiSuccessResponse } from '../../models/api-success-response';
 import { CollectionModel, EntityModel } from '../../models/hateoas-models';
+import { PersonAddressDto } from '../../../types/dto/person/related/contact/address/person-address.dto';
+import { ServiceResult } from '../../../types/models/service-result';
 
 
-export abstract class BasePersonRelatedCrudService <DTO, IDDTO, ID = number> extends BaseCrudService<DTO, ID> {
+export abstract class BasePersonRelatedCrudService 
+  <DTO, IDDTO, ID = number, WRITE_RES = EntityModel<DTO>> 
+  extends BaseCrudService<DTO, ID, WRITE_RES> {
 
   protected constructor(resource: string) {
     super(resource);
@@ -40,4 +44,5 @@ export abstract class BasePersonRelatedCrudService <DTO, IDDTO, ID = number> ext
       `${this.resourceUrl}/${id}/details`
     );
   }
+
 }

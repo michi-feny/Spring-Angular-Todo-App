@@ -6,9 +6,8 @@ package ibee.webapp.todo_app.mapper;
 import org.mapstruct.Mapper;
 
 import ibee.webapp.todo_app.config.MapStructConfig;
-
-import ibee.webapp.todo_app.core.dto.EducationInstitutionDto;
 import ibee.webapp.todo_app.core.entity.EducationInstitution;
+import ibee.webapp.todo_app.dto.EducationInstitutionDto;
 import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
 
 @Mapper(

@@ -6,9 +6,9 @@ import org.mapstruct.Mapping;
 
 import ibee.webapp.todo_app.config.MapStructConfig;
 import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
-import ibee.webapp.todo_app.core.dto.skills.hard.DegreeDto;
-import ibee.webapp.todo_app.core.dto.skills.hard.SkillType;
 import ibee.webapp.todo_app.core.entity.hardSkills.Degree;
+import ibee.webapp.todo_app.dto.skills.hard.DegreeDto;
+import ibee.webapp.todo_app.dto.skills.hard.SkillType;
 
 @Mapper(
     config = MapStructConfig.class,

@@ -2,7 +2,6 @@ package ibee.webapp.todo_app.core.entity;
 
 import org.hibernate.annotations.Immutable;
 
-import ibee.webapp.todo_app.validation.idHandle.ValidId;
 import jakarta.persistence.*;
 import lombok.*;
 

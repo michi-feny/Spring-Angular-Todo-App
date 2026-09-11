@@ -3,10 +3,8 @@ package ibee.webapp.todo_app.mapper.person.contact;
 
 
 import ibee.webapp.todo_app.config.MapStructConfig;
-import ibee.webapp.todo_app.core.dto.person.contact.mail.PersonEmailAddressDto;
-import ibee.webapp.todo_app.core.entity.person.contactData.address.PersonAddress;
 import ibee.webapp.todo_app.core.entity.person.contactData.emailAddress.PersonEmailAddress;
-import ibee.webapp.todo_app.features.person.related.contact.PersonAddressDto;
+import ibee.webapp.todo_app.features.person.related.contact.dto.PersonEmailAddressDto;
 import ibee.webapp.todo_app.mapper.EmailAddressMapper;
 import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
 import ibee.webapp.todo_app.mapper.person.references.contact.PersonEmailAddressReferenceMapper;
@@ -45,17 +43,24 @@ public interface PersonEmailAddressMapper extends BaseMapper<PersonEmailAddressD
     @Override
     @Mapping(target = "id", ignore = true) 
     @Mapping(target = "person", ignore = true) // Target IS the Entity, so we MUST ignore it here
-    @Mapping(target = "emailAddress", ignore = true)
+    @Mapping(target = "emailAddress", source ="emailAddress")
     @Mapping(target = "mainEmail", source = "mainEmail", defaultValue = "false")
-    void updateEntityFromDto(PersonEmailAddressDto dto, @MappingTarget PersonEmailAddress entity);
+    void updateEntityFromDto(
+        PersonEmailAddressDto dto, 
+        @MappingTarget PersonEmailAddress entity
+    );
 
        // --- 4. INTERNAL UPDATE ---
     @Override
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @BeanMapping(nullValuePropertyMappingStrategy = 
+        NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "person", ignore = true) // Target IS the Entity
     @Mapping(target = "emailAddress", ignore = true)
-    void updateEntityFromEntity(PersonEmailAddress sourceUpdates, @MappingTarget PersonEmailAddress dbEntity);
+    void updateEntityFromEntity(
+        PersonEmailAddress sourceUpdates, 
+        @MappingTarget PersonEmailAddress dbEntity
+    );
 
     
 }

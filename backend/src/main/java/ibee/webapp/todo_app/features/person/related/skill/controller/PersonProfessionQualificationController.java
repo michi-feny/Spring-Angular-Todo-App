@@ -1,0 +1,69 @@
+package ibee.webapp.todo_app.features.person.related.skill.controller;
+
+import ibee.webapp.todo_app.controller.person.related.AbstractSpringPersonRelatedHateoasController;
+import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.professionQualification.PersonProfessionQualification;
+import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.professionQualification.PersonProfessionQualificationId;
+import ibee.webapp.todo_app.features.person.related.referenceIds.skill.hard.PersonProfessionQualificationDtoId;
+import ibee.webapp.todo_app.features.person.related.skill.controller.assembler.PersonProfessionQualificationModelAssembler;
+import ibee.webapp.todo_app.features.person.related.skill.dto.hard.PersonProfessionQualificationDto;
+import ibee.webapp.todo_app.features.person.related.skill.service.PersonProfessionQualificationDtoService;
+import ibee.webapp.todo_app.infrastructure.i18n.TranslationService;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+/*
+1. Standard CRUD Endpoints (Inherited from AbstractSpringHateoasCrudController)
+Get All: GET /api/v1/person-profession-qualifications
+
+Retrieves a HATEOAS collection model of all person profession qualifications in the system inside an ApiSuccessResponse.
+
+Get By ID: GET /api/v1/person-profession-qualifications/{id}
+
+Retrieves a single qualification entity model by its primary ID, complete with automatic HATEOAS links (self, update, delete, list).
+
+Create: POST /api/v1/person-profession-qualifications
+
+Accepts a validated PersonProfessionQualificationDto request body, saves it, and returns the newly created resource model with a 201 CREATED status.
+
+Update: PUT /api/v1/person-profession-qualifications/{id}
+
+Updates an existing qualification record matching the path ID with the provided request body DTO.
+
+Delete: DELETE /api/v1/person-profession-qualifications/{id}
+
+Deletes the qualification record matching the given ID and returns a successful empty response.
+
+2. Person-Specific Endpoints (Inherited from AbstractSpringPersonRelatedHateoasController)
+Get All By Person ID: GET /api/v1/person-profession-qualifications/person/{personId}
+
+Retrieves a collection model of all qualification records tied directly to a specific person's ID.
+
+Get Reference IDs By Person ID: GET /api/v1/person-profession-qualifications/person/{personId}/ids
+
+Retrieves a lightweight list of reference ID DTOs (PersonProfessionQualificationDtoId) for a given person.
+
+Get With Details By ID: GET /api/v1/person-profession-qualifications/{id}/details
+
+Fetches an extended, detailed view of a specific qualification entity model.
+ */
+@RestController
+@RequestMapping("/api/v1/person-profession-qualifications")
+public class PersonProfessionQualificationController 
+    extends AbstractSpringPersonRelatedHateoasController<
+        PersonProfessionQualificationDto,
+        PersonProfessionQualification,
+        PersonProfessionQualificationId,
+        PersonProfessionQualificationDtoId> {
+
+    
+    public PersonProfessionQualificationController(
+            PersonProfessionQualificationDtoService service,
+            TranslationService translationService,
+            PersonProfessionQualificationModelAssembler assembler) {
+        super(
+            service, 
+            translationService, 
+            assembler, 
+            "entity.personProfessionQualification"
+        );
+    }
+}

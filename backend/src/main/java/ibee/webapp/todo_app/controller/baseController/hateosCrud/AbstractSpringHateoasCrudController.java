@@ -8,9 +8,11 @@ import static ibee.webapp.todo_app.controller.support.hateoas.builder.ApiRespons
 import ibee.webapp.todo_app.controller.support.ApiSuccessResponse;
 import ibee.webapp.todo_app.controller.support.hateoas.assembler.AbstractHateoasAssembler;
 import ibee.webapp.todo_app.core.exception.ResourceNotFoundException;
-import ibee.webapp.todo_app.core.service.baseService.newApproach.CrudDtoService;
+import ibee.webapp.todo_app.core.service.person.related.baseInfrastructure.CrudDtoService;
 import ibee.webapp.todo_app.infrastructure.i18n.TranslationService;
 import ibee.webapp.todo_app.security.AuthenticatedUser;
+import ibee.webapp.todo_app.security.validation.idHandle.create.OnCreate;
+import ibee.webapp.todo_app.security.validation.idHandle.update.OnUpdate;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.hateoas.CollectionModel;
@@ -19,9 +21,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import ibee.webapp.todo_app.validation.idHandle.create.OnCreate;
-import ibee.webapp.todo_app.validation.idHandle.update.OnUpdate;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;

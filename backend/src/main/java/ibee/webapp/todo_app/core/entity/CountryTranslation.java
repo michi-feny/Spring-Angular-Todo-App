@@ -1,6 +1,5 @@
 package ibee.webapp.todo_app.core.entity;
 
-import ibee.webapp.todo_app.validation.idHandle.ValidId;
 import jakarta.persistence.*;
 import lombok.*;
 

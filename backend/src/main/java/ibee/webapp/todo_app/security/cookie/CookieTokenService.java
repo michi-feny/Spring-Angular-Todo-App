@@ -1,11 +1,13 @@
 package ibee.webapp.todo_app.security.cookie;
 
-import ibee.webapp.todo_app.core.dto.response.TokenPair;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
+
+import ibee.webapp.todo_app.dto.response.TokenPair;
+
 import java.util.Objects;
 
 @Service

@@ -1,0 +1,69 @@
+<div class="form-wrapper">
+  <h3>Create Person Phone Number</h3>
+  
+  <div class="form-group">
+    <label>Country:</label>
+    <input 
+      type="text" 
+      [ngModel]="countrySearchQuery()" 
+      (ngModelChange)="countrySearchQuery.set($event)" 
+      placeholder="Search country..." 
+      class="search-input-field" 
+    />
+    <select 
+      [ngModel]="formData().phoneNumber.countryId"
+      (ngModelChange)="onCountryChange($event)">
+      <option [ngValue]="undefined" disabled>Select a country</option>
+      @for (country of filteredCountries(); track country.id) {
+        <option [ngValue]="country.id">{{ country.name }}</option>
+      }
+    </select>
+  </div>
+
+  <!-- UPDATED: Phone Number input group showing the country code -->
+  <div class="form-group">
+    <label>Phone Number:</label>
+    <div style="display: flex; gap: 8px;">
+      <!-- Read-only input showing the derived country code -->
+      <input 
+        type="text" 
+        [value]="formData().phoneNumber.countryCode" 
+        readonly 
+        style="width: 80px; background-color: #f5f5f5; cursor: not-allowed; text-align: center;"
+        placeholder="+XX"
+        title="Country code is set automatically based on the selected country"
+      />
+      <!-- Editable input for the actual number -->
+      <input 
+        [(ngModel)]="formData().phoneNumber.phoneNumber" 
+        type="text" 
+        style="flex: 1;"
+        placeholder="e.g. 6641234567" 
+      />
+    </div>
+  </div>
+
+  <div class="form-group checkbox-group">
+    <label>
+      <input type="checkbox" [(ngModel)]="formData().mainPhoneNumber" />
+      Set as Main Phone Number
+    </label>
+  </div>
+
+  <button class="btn-primary" (click)="submit()">Save Phone Number</button>
+
+  @if (showOverwriteModal()) {
+    <div class="modal-overlay">
+      <div class="modal-content">
+        <h4>Phone Number Conflict</h4>
+        <p class="error-text">{{ errorMessage() }}</p>
+        <p>Would you like to overwrite the existing main phone number with this new data?</p>
+        
+        <div class="modal-actions">
+          <button class="btn-secondary" (click)="showOverwriteModal.set(false)">No, Cancel</button>
+          <button class="btn-danger" (click)="confirmOverwrite()">Yes, Overwrite</button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

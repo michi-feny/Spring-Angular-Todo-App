@@ -1,13 +1,32 @@
 package ibee.webapp.todo_app.features.person.related.contact.controller;
 
-import ibee.webapp.todo_app.controller.person.related.AbstractSpringPersonRelatedHateoasController;
-import ibee.webapp.todo_app.core.entity.person.contactData.address.PersonAddress;
+import static ibee.webapp.todo_app.controller.support.hateoas.builder.ApiResponseBuilder.*;
+
+import java.util.List;
+
+import ibee.webapp.todo_app.features.person.related.AbstractSpringPersonRelatedHateoasController;
+import ibee.webapp.todo_app.controller.support.ApiSuccessResponse;
+import ibee.webapp.todo_app.controller.support.Link;
 import ibee.webapp.todo_app.core.entity.person.contactData.address.PersonAddressId;
-import ibee.webapp.todo_app.core.service.person.related.PersonRelatedDtoService;
-import ibee.webapp.todo_app.features.person.related.contact.PersonAddressDto;
+import ibee.webapp.todo_app.core.result.ServiceResult;
+import ibee.webapp.todo_app.core.service.baseService.transport.PersonRelatedQueryDtoService;
+import ibee.webapp.todo_app.core.service.baseService.transport.businessRuleMainFlag.BusinessWriteDtoService;
+import ibee.webapp.todo_app.features.person.related.contact.controller.assembler.PersonAddressModelAssembler;
+import ibee.webapp.todo_app.features.person.related.contact.dto.PersonAddressDto;
 import ibee.webapp.todo_app.features.person.related.contact.service.PersonAddressDtoService;
 import ibee.webapp.todo_app.features.person.related.referenceIds.contact.PersonAddressDtoId;
 import ibee.webapp.todo_app.infrastructure.i18n.TranslationService;
+import ibee.webapp.todo_app.security.validation.idHandle.create.OnCreate;
+import ibee.webapp.todo_app.security.validation.idHandle.update.OnUpdate;
+
+import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 /*
@@ -50,18 +69,78 @@ Fetches an extended, detailed view of a specific address entity model.
 */
 @RestController
 @RequestMapping("/api/v1/person-addresses")
-public class PersonAddressController extends AbstractSpringPersonRelatedHateoasController<
-        PersonAddressDto,
-        PersonAddress,
-        PersonAddressId,
-        PersonAddressDtoId> {
+public class PersonAddressController 
+    extends AbstractSpringPersonRelatedHateoasController
+        <PersonAddressDto, PersonAddressId, PersonAddressDtoId> {
 
-    @SuppressWarnings("unchecked")
+    private final PersonAddressDtoService personAddressService;
+    private final PersonAddressModelAssembler concreteAssembler;
+
     public PersonAddressController(
-            PersonAddressDtoService service,
+            PersonAddressDtoService personAddressService,
             TranslationService translationService,
             PersonAddressModelAssembler assembler) {
         
-        super((PersonRelatedDtoService<PersonAddressDto, PersonAddress, PersonAddressId, PersonAddressDtoId>)service, translationService, assembler, "entity.personAddress");
+        super(personAddressService, translationService, assembler, "entity.personAddress");
+        this.personAddressService = personAddressService;
+        this.concreteAssembler = assembler;
     }
+
+    
+    @PostMapping
+    public ResponseEntity<ApiSuccessResponse<ServiceResult<EntityModel<PersonAddressDto>>>> 
+    create(@RequestBody @Validated(OnCreate.class) PersonAddressDto dto) 
+    {
+        
+        ServiceResult<PersonAddressDto> result = personAddressService.create(dto);
+        
+        if (result.isRejected()) {
+            return buildConflictResponse(result);
+        }
+        
+        return buildSuccessResponse(result, "crud.created", HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiSuccessResponse<ServiceResult<EntityModel<PersonAddressDto>>>> update(
+            @PathVariable("id") PersonAddressDtoId id,
+            @RequestBody @Validated(OnUpdate.class) PersonAddressDto dto) {
+        
+        ServiceResult<PersonAddressDto> result = personAddressService.update(dto, id);
+        
+        if (result.isRejected()) {
+            return buildConflictResponse(result);
+        }
+        
+        return buildSuccessResponse(result, "crud.updated", HttpStatus.OK);
+    }
+
+    private ResponseEntity<ApiSuccessResponse<ServiceResult<EntityModel<PersonAddressDto>>>> buildConflictResponse(
+            ServiceResult<PersonAddressDto> result) {
+        
+        PersonAddressDto rejectedDtoWithExistingId = result.value();
+        Link repairLink = concreteAssembler.getRepairLinkForUpdate(rejectedDtoWithExistingId.id());
+        
+        var rejectedResultModel = EntityModel.of(rejectedDtoWithExistingId);
+        var rejectedServiceResult = ServiceResult.rejected(rejectedResultModel, result.violations());
+        String rejectMessage = translationService.translate("crud.validationFailed", getEntityName());
+        
+        return buildResponse(
+                rejectedServiceResult, 
+                rejectMessage,
+                List.of(repairLink), 
+                HttpStatus.CONFLICT
+        );
+    }
+
+    private ResponseEntity<ApiSuccessResponse<ServiceResult<EntityModel<PersonAddressDto>>>> buildSuccessResponse(
+            ServiceResult<PersonAddressDto> result, String translationKey, HttpStatus status) {
+        
+        EntityModel<PersonAddressDto> entityModel = concreteAssembler.toModel(result.value());
+        ServiceResult<EntityModel<PersonAddressDto>> successServiceResult = ServiceResult.success(entityModel);
+        String successMessage = translationService.translate(translationKey, getEntityName());
+        
+        return buildResponse(successServiceResult, successMessage, status);
+    }
+
 }

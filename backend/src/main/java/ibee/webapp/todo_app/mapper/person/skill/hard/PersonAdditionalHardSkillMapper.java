@@ -9,8 +9,8 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import ibee.webapp.todo_app.config.MapStructConfig;
-import ibee.webapp.todo_app.core.dto.person.skills.hard.PersonAdditionalHardSkillDto;
 import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.additionlHardSkill.PersonAdditionalHardSkill;
+import ibee.webapp.todo_app.features.person.related.skill.dto.hard.PersonAdditionalHardSkillDto;
 import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
 import ibee.webapp.todo_app.mapper.person.references.skill.hard.PersonAdditionalHardSkillReferenceMapper;
 import ibee.webapp.todo_app.mapper.skills.hard.AdditionalHardSkillMapper;

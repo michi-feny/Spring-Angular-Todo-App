@@ -1,8 +1,9 @@
 export interface PhoneNumberDto {
 
-    id?: number | null;
+  id?: number | null;
   phoneNumber: string;
   countryCode: string;
   fullNumber?: string | null;
+  countryId?: number;
 
 }

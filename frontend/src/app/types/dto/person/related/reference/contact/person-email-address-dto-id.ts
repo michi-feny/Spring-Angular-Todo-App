@@ -1,4 +1,5 @@
 export interface PersonEmailAddressDtoId {
-    emailAddressId: number;
     personId: number;
+    emailAddressId: number;
+    
 }

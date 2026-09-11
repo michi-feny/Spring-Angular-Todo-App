@@ -1,4 +1,5 @@
 export interface PersonCountryDtoId {
-    countryId: number;
     personId: number;
+    countryId: number;
+    
 }

@@ -9,13 +9,17 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ibee.webapp.todo_app.core.entity.Address;
 import ibee.webapp.todo_app.core.repository.AddressRepository;
-import ibee.webapp.todo_app.core.service.baseService.newApproach.MyCrudBaseEntityFacedeServiceImpl;
+import ibee.webapp.todo_app.core.result.BusinessViolation;
+import ibee.webapp.todo_app.core.result.ServiceResult;
+import ibee.webapp.todo_app.core.service.baseService.persist.MyCrudBaseEntityFacedeServiceImpl;
 import ibee.webapp.todo_app.mapper.AddressMapper;
 
 @Service
+@Transactional
 public class AddressServiceImpl 
     extends MyCrudBaseEntityFacedeServiceImpl<Address, Long>{
 
@@ -46,24 +50,28 @@ public class AddressServiceImpl
      */
     @Override
     public Address create(Address requestedAddress) {
-        // 1. Ensure the country ID is present from the reference stub
-        if (requestedAddress.getCountry() == null 
-            || requestedAddress.getCountry().getId() == null) {
-            throw new IllegalArgumentException("Address must be associated with a valid Country ID.");
-        }
+        assertAddressCanBeCreated(requestedAddress);
 
         Long countryId = requestedAddress.getCountry().getId();
         
-        return addressRepository.findByStreetAndHouseNumberAndZipCodeAndCityAndCountryId(
-            requestedAddress.getStreet(),
-            requestedAddress.getHouseNumber(),
-            requestedAddress.getZipCode(),
-            requestedAddress.getCity(),
-            countryId
-        ).orElseGet(() -> {
-            // If it doesn't exist, let the base class actually insert it into the DB!
-            return super.create(requestedAddress);
-        });
+        Optional<Address> existing = addressRepository.
+            findByStreetAndHouseNumberAndZipCodeAndCityAndCountryId(
+                requestedAddress.getStreet(),
+                requestedAddress.getHouseNumber(),
+                requestedAddress.getZipCode(),
+                requestedAddress.getCity(),
+                countryId
+        );
+
+        if(existing.isPresent()){
+            return existing.get();
+        }
+
+       
+
+        // If it doesn't exist, let the base class actually insert it into the DB!
+        return super.create(requestedAddress);
+        
     }
 
     /*
@@ -73,29 +81,65 @@ public class AddressServiceImpl
 
     eg PersonAddressServiceImpl is already doing exactly this! 
     It captures the returned Address and actively swaps the ID in its composite key before saving.
+    
+    The address already exists under another ID.
+        We return that Address.
     */
     @Override
     public Address update(Address sourceUpdates, Long id) {
         Long countryId = sourceUpdates.getCountry().getId();
         
         // 1. Check if the newly requested address strings already exist in the DB
-        var existingMatch = addressRepository.findByStreetAndHouseNumberAndZipCodeAndCityAndCountryId(
-            sourceUpdates.getStreet(),
-            sourceUpdates.getHouseNumber(),
-            sourceUpdates.getZipCode(),
-            sourceUpdates.getCity(),
-            countryId
+        var existingMatch = addressRepository
+            .findByStreetAndHouseNumberAndZipCodeAndCityAndCountryId(
+                sourceUpdates.getStreet(),
+                sourceUpdates.getHouseNumber(),
+                sourceUpdates.getZipCode(),
+                sourceUpdates.getCity(),
+                countryId
         );
 
-        // 2. THE SELF-FIX: If it exists under a DIFFERENT ID, we do NOT update.
-        // We quietly return the existing matched row to force deduplication!
-        if (existingMatch.isPresent() && !existingMatch.get().getId().equals(id)) {
+        /*
+         * ========================================================
+         * UPDATE -> DEDUPLICATION
+         * ========================================================
+         *
+         * The address already exists under another ID.
+         *
+         * We return that Address.
+         *
+         * PersonAddressServiceImpl will then handle the fact that
+         * its composite key must change.
+         */
+        if (existingMatch.isPresent() 
+            && 
+            ((existingMatch.get().getId().equals(id)) == false)) {
             return existingMatch.get();
+                    
         }
 
         // 3. SAFE TYPO FIX: If it does not exist anywhere else, it's safe to apply the patch.
         // This will update the row, fixing the typo for everyone linked to it.
         return super.update(sourceUpdates, id);
+    }
+
+    private void assertAddressCanBeCreated(
+            Address address) {
+
+        if (address == null) {
+
+            throw new IllegalArgumentException(
+                    "Address cannot be null."
+            );
+        }
+
+        if (address.getCountry() == null
+                || address.getCountry().getId() == null) {
+
+            throw new IllegalArgumentException(
+                    "Address must be associated with a valid Country ID."
+            );
+        }
     }
 
     

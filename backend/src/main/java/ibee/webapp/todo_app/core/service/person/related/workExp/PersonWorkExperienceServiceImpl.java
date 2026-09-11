@@ -8,7 +8,7 @@ import ibee.webapp.todo_app.core.entity.person.workExperience.PersonWorkExperien
 import ibee.webapp.todo_app.core.entity.person.workExperience.PersonWorkExperienceId;
 import ibee.webapp.todo_app.core.repository.person.personRelated.workExperience.PersonWorkExperienceRepository;
 import ibee.webapp.todo_app.core.service.WorkExperienceServiceImpl;
-import ibee.webapp.todo_app.core.service.person.related.PersonRelatedServiceImpl;
+import ibee.webapp.todo_app.core.service.person.related.baseInfrastructure.PersonRelatedServiceImpl;
 import ibee.webapp.todo_app.mapper.person.workExp.PersonWorkExperienceMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.transaction.annotation.Transactional;

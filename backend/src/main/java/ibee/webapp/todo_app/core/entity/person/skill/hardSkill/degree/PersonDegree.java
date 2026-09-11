@@ -6,7 +6,6 @@ import ibee.webapp.todo_app.core.entity.EducationInstitution;
 import ibee.webapp.todo_app.core.entity.Person;
 import ibee.webapp.todo_app.core.entity.hardSkills.Degree;
 import ibee.webapp.todo_app.core.entity.person.PersonRelatedEntity;
-import ibee.webapp.todo_app.validation.idHandle.ValidId;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
