@@ -6,6 +6,7 @@ import ibee.webapp.todo_app.validation.idHandle.update.OnUpdate;
 import ibee.webapp.todo_app.validation.idHandle.update.ValidUpdateId;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 
@@ -27,6 +28,7 @@ public record PhoneNumberDto(
     String fullNumber,
 
     @NotNull
+    @Positive 
     Long nationalityId
 
     // TODO: add international CountryCode
