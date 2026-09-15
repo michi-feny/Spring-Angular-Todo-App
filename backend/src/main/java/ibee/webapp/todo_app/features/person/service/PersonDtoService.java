@@ -13,6 +13,7 @@ import ibee.webapp.todo_app.core.service.baseService.transport.AbstractMappedCru
 import ibee.webapp.todo_app.core.service.person.PersonService;
 import ibee.webapp.todo_app.core.service.person.PersonServiceImpl;
 import ibee.webapp.todo_app.features.person.dto.PersonData;
+import ibee.webapp.todo_app.features.person.dto.PersonDetails;
 import ibee.webapp.todo_app.features.person.dto.PersonOverview;
 import ibee.webapp.todo_app.features.person.related.contact.service.PersonAddressDtoService;
 import ibee.webapp.todo_app.features.person.related.contact.service.PersonCountryDtoService;
@@ -22,6 +23,7 @@ import ibee.webapp.todo_app.features.person.related.skill.service.PersonAddition
 import ibee.webapp.todo_app.features.person.related.skill.service.PersonDegreeDtoService;
 import ibee.webapp.todo_app.features.person.related.skill.service.PersonProfessionQualificationDtoService;
 import ibee.webapp.todo_app.features.person.related.skill.service.PersonSoftSkillDtoService;
+import ibee.webapp.todo_app.mapper.person.PersonDetailsMapper;
 import ibee.webapp.todo_app.mapper.person.PersonMapper;
 
 @Service
@@ -33,6 +35,7 @@ extends AbstractMappedCrudDtoService
 
     private final PersonServiceImpl personService;
     private final PersonMapper personMapper;
+    private final PersonDetailsMapper personDetailsMapper;
 
     // Related DTO Services zur Bereitstellung der IDs für das Lazy-Loading im Overview
     private final PersonAddressDtoService personAddressDtoService;
@@ -54,7 +57,8 @@ extends AbstractMappedCrudDtoService
             PersonDegreeDtoService personDegreeDtoService,
             PersonProfessionQualificationDtoService personProfessionQualificationDtoService,
             PersonAdditionalSkillDtoService personAdditionalSkillDtoService,
-            PersonSoftSkillDtoService personSoftSkillDtoService) {
+            PersonSoftSkillDtoService personSoftSkillDtoService,
+            PersonDetailsMapper personDetailsMapper) {
         super(personEntityService, personMapper);
         this.personService = personEntityService;
         this.personMapper = personMapper;
@@ -66,7 +70,7 @@ extends AbstractMappedCrudDtoService
         this.personProfessionQualificationDtoService = personProfessionQualificationDtoService;
         this.personAdditionalSkillDtoService = personAdditionalSkillDtoService;
         this.personSoftSkillDtoService = personSoftSkillDtoService;
-        
+        this.personDetailsMapper = personDetailsMapper;
     }
 
     // --- Overview Aggregation (Initialansicht mit Lazy-ID-Listen) ---
@@ -86,6 +90,11 @@ extends AbstractMappedCrudDtoService
                         personSoftSkillDtoService.findIdsByPersonId(personId)
                 ));
     }
+
+    public Optional<PersonDetails> getDetailsById(Long personId) {
+        return personService.findWithDetailsById(personId).map(personDetailsMapper::toDto);
+    }
+    
 
     // --- Spezifische Suchfunktionen (DTO-Ebene) ---
 

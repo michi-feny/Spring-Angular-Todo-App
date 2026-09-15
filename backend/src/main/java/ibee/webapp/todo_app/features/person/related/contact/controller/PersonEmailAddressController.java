@@ -14,8 +14,8 @@ import ibee.webapp.todo_app.features.person.related.contact.dto.PersonEmailAddre
 import ibee.webapp.todo_app.features.person.related.contact.service.PersonEmailAddressDtoService;
 import ibee.webapp.todo_app.features.person.related.referenceIds.contact.PersonEmailAddressDtoId;
 import ibee.webapp.todo_app.infrastructure.i18n.TranslationService;
-import ibee.webapp.todo_app.security.validation.idHandle.create.OnCreate;
-import ibee.webapp.todo_app.security.validation.idHandle.update.OnUpdate;
+import ibee.webapp.todo_app.validation.idHandle.create.OnCreate;
+import ibee.webapp.todo_app.validation.idHandle.update.OnUpdate;
 
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;

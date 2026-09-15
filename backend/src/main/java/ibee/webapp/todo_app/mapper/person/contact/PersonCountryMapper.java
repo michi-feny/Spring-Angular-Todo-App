@@ -13,6 +13,7 @@ import ibee.webapp.todo_app.mapper.CountryTranslationMapper;
 import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
 import ibee.webapp.todo_app.mapper.person.references.contact.PersonCountryReferenceMapper;
 import ibee.webapp.todo_app.core.entity.person.contactData.nationality.PersonCountry;
+import ibee.webapp.todo_app.core.entity.person.contactData.nationality.PersonCountryId;
 import ibee.webapp.todo_app.features.person.related.contact.dto.PersonCountryDto;
 
 @Mapper(
@@ -23,37 +24,50 @@ import ibee.webapp.todo_app.features.person.related.contact.dto.PersonCountryDto
             PersonCountryReferenceMapper.class
      }
 )
-public interface PersonCountryMapper 
-    extends BaseMapper<PersonCountryDto, PersonCountry> {
+public interface PersonCountryMapper extends BaseMapper<PersonCountryDto, PersonCountry> {
 
     @Override
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "country", source = "country")
-    @Mapping(target = "mainCountry", source = "mainCountry") // map referential object
+    @Mapping(target = "mainCountry", source = "mainCountry")
     PersonCountryDto toDto(PersonCountry entity);
 
     @Override
     @Mapping(target = "id", source = "id")
     @Mapping(target = "person.id", source = "id.personId")
     @Mapping(target = "person", ignore = true)
-    @Mapping(target = "country", ignore = true)
-    @Mapping(target = "mainCountry", source = "mainCountry") 
+    @Mapping(
+        target = "country", 
+        expression = """
+            java(dto.id() != null && dto.id().countryId() != null ? 
+            ibee.webapp.todo_app.core.entity.Country
+                .referenceOf(dto.id().countryId()) 
+            : null)
+            """
+    )
+    @Mapping(target = "mainCountry", source = "mainCountry")
     PersonCountry toEntity(PersonCountryDto dto);
 
     // --- 3. DTO UPDATE (UI -> DB) ---
     @Override
-    @Mapping(target = "id", ignore = true) 
-    @Mapping(target = "person", ignore = true) // Target IS the Entity, so we MUST ignore it here
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "person", ignore = true)
     @Mapping(target = "mainCountry", source = "mainCountry", defaultValue = "false")
-    @Mapping(target = "country", ignore = true) // <-- Add this to prevent mapping/instantiating Country on update
+    @Mapping(
+        target = "country", 
+        expression = """
+            java(dto.id() != null && dto.id().countryId() != null ? 
+            ibee.webapp.todo_app.core.entity.Country
+                .referenceOf(dto.id().countryId()) 
+            : null)
+            """
+    )
     void updateEntityFromDto(PersonCountryDto dto, @MappingTarget PersonCountry entity);
 
     // --- 4. INTERNAL UPDATE ---
     @Override
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "person", ignore = true) // Target IS the Entity
+    @Mapping(target = "person", ignore = true) 
     @Mapping(target = "country", ignore = true)
     void updateEntityFromEntity(PersonCountry sourceUpdates, @MappingTarget PersonCountry dbEntity);
-
 }

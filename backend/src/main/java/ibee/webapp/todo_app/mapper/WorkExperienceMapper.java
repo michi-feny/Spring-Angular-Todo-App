@@ -34,17 +34,26 @@ public interface WorkExperienceMapper extends BaseMapper<WorkExperienceDto, Work
     @Mapping(target = "jobTitle", source = "jobTitle")
     @Mapping(target = "description", source = "description")
     @Mapping(target = "militaryService", source = "militaryService", defaultValue = "false")
-    @Mapping(target = "company", ignore = true) // Resolved and managed exclusively via CompanyServiceImpl 
+    @Mapping(target = "company", source = "company") // Resolved and managed exclusively via CompanyServiceImpl 
     WorkExperience toEntity(WorkExperienceDto dto);
 
     @Override
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "company", ignore = true)
-    void updateEntityFromDto(WorkExperienceDto dto, @MappingTarget WorkExperience entity);
+    @Mapping(target = "company", source = "company")
+    void updateEntityFromDto(
+        WorkExperienceDto dto, 
+        @MappingTarget WorkExperience entity
+    );
 
     @Override
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @BeanMapping(
+        nullValuePropertyMappingStrategy = 
+        NullValuePropertyMappingStrategy.IGNORE
+    )
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "company", ignore = true)
-    void updateEntityFromEntity(WorkExperience sourceUpdates, @MappingTarget WorkExperience dbEntity);
+    void updateEntityFromEntity(
+        WorkExperience sourceUpdates, 
+        @MappingTarget WorkExperience dbEntity
+    );
 }

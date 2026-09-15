@@ -1,5 +1,6 @@
 package ibee.webapp.todo_app.core.repository.person.personRelated.contact.mail;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -24,11 +25,16 @@ public interface PersonEmailAddressRepository
     Optional<PersonEmailAddress> findWithDetailsById(
         PersonEmailAddressId id
     );
+
+    // Eagerly fetches the nested 'emailAddress' to prevent LazyInitializationException
+    // when mapping the list of PersonEmailAddress entities to DTOs
+    @EntityGraph(attributePaths = {"emailAddress"})
+    List<PersonEmailAddress> findByPersonId(Long personId);
     
     /**
      * Finds the current main email address for a specific person.
      */
-    @Query("SELECT p FROM PersonEmailAddress p WHERE p.id.personId = :personId AND p.mainEmailAddress = true")
+    @Query("SELECT p FROM PersonEmailAddress p WHERE p.id.personId = :personId AND p.mainEmail = true")
     Optional<PersonEmailAddress> findByPersonIdAndMainEmailAddressTrue(@Param("personId") Long personId);
 
     /**
@@ -39,6 +45,6 @@ public interface PersonEmailAddressRepository
      * @param emailId  The ID of the email address that is becoming the NEW main email (so it is excluded from the reset).
      */
     @Modifying
-    @Query("UPDATE PersonEmailAddress p SET p.mainEmailAddress = false WHERE p.id.personId = :personId AND p.id.emailId != :emailId")
+    @Query("UPDATE PersonEmailAddress p SET p.mainEmail = false WHERE p.id.personId = :personId AND p.id.emailAddressId != :emailId")
     void resetOtherMainEmailAddresses(@Param("personId") Long personId, @Param("emailId") Long emailId);
 }

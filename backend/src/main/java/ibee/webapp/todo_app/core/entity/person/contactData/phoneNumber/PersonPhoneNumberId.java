@@ -20,8 +20,8 @@ public class PersonPhoneNumberId implements Serializable {
     @Column(name = "person_id")
     private Long personId;
 
-    @NotNull
-    @Positive
+    //@NotNull
+    //@Positive
     @Column(name = "phone_number_id")
     private Long phoneNumberId;
 }

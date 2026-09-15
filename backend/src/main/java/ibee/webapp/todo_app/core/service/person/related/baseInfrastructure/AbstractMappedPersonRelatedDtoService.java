@@ -3,6 +3,8 @@ package ibee.webapp.todo_app.core.service.person.related.baseInfrastructure;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import ibee.webapp.todo_app.core.entity.person.PersonRelatedEntity;
 import ibee.webapp.todo_app.core.service.baseService.transport.AbstractMappedCrudDtoService;
 import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
@@ -35,16 +37,19 @@ public abstract class AbstractMappedPersonRelatedDtoService<
     // Person-Specific Queries Only!
     // ==========================================
 
+    @Transactional(readOnly = true)
     @Override
     public List<IDDTO> findIdsByPersonId(Long personId) {
         return idReferenceMapper.toDtoList(personEntityService.findIdsByPersonId(personId));
     }
     
+    @Transactional(readOnly = true)
     @Override 
     public List<DTO> findByPersonId(Long personId) {
         return mapper.toDtoList(personEntityService.findByPersonId(personId));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public DTO findWithDetailsById(IDDTO dtoId) {
         var entity = personEntityService.findWithDetailsById(idReferenceMapper.toEntity(dtoId));
@@ -52,10 +57,23 @@ public abstract class AbstractMappedPersonRelatedDtoService<
         return dto;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Optional<DTO> findWithDetailsByIdWithoutException(IDDTO dtoId) {
         ID entityId = idReferenceMapper.toEntity(dtoId);
         return personEntityService.findWithDetailsByIdWithoutException(entityId)
                                   .map(mapper::toDto);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public DTO findById(IDDTO dtoId) {
+        return findWithDetailsById(dtoId);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<DTO> findByIdWithoutException(IDDTO dtoId) {
+        return findWithDetailsByIdWithoutException(dtoId);
     }
 }

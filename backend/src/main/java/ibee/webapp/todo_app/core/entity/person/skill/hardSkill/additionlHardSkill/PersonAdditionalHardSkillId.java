@@ -21,8 +21,6 @@ public class PersonAdditionalHardSkillId
     @Column(name = "person_id")
     private Long personId;
 
-    @NotNull
-    @Positive
     @Column(name = "additional_hard_skill_id")
     private Long additionalHardSkillId;
 }

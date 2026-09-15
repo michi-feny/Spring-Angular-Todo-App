@@ -1,0 +1,44 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="p-2">
+  <div formArrayName="softSkills">
+    @for (group of softSkillsArray.controls; track $index; let i = $index) {
+      <div [formGroupName]="i" class="card mb-3 border-light bg-light">
+        <div class="card-body">
+          <div class="row g-2 align-items-center">
+            <div class="col-md-11 col-10">
+              <app-form-control
+                [control]="getControl(group, 'softSkill.name')"
+                [label]="'Soft Skill #' + (i + 1)"
+                placeholder="z.B. Teamfähigkeit, Analytisches Denken..."
+                [type]="inputTypes.Text">
+              </app-form-control>
+            </div>
+
+            <div class="col-md-1 col-2 text-end">
+              <button 
+                type="button" 
+                class="btn btn-outline-danger btn-sm w-100" 
+                (click)="removeSoftSkill(i)"
+                title="Eintrag entfernen">
+                ✕
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    } @empty {
+      <div class="alert alert-secondary text-center my-2 py-3">
+        Keine sozialen oder personalen Kompetenzen (Soft Skills) eingetragen.
+      </div>
+    }
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center mt-3">
+    <button type="button" class="btn btn-outline-primary btn-sm" (click)="addSoftSkill()">
+      + Soft Skill hinzufügen
+    </button>
+
+    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
+      Soft Skills speichern
+    </button>
+  </div>
+</form>

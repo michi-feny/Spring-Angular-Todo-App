@@ -1,5 +1,6 @@
 package ibee.webapp.todo_app.core.repository.person.personRelated.skill.hardSkill;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -14,6 +15,7 @@ public interface PersonProfessionQualificationRepository
     extends PersonRelatedRepository
         <PersonProfessionQualification, PersonProfessionQualificationId>{
 
+    @Override
     @EntityGraph(attributePaths = {
         "professionQualification",
         "educationInstitution",
@@ -23,4 +25,13 @@ public interface PersonProfessionQualificationRepository
     Optional<PersonProfessionQualification> findWithDetailsById(
         PersonProfessionQualificationId id
     );
+
+    @Override
+    @EntityGraph(attributePaths = {
+            "professionQualification",
+            "educationInstitution",
+            "educationInstitution.address",
+            "educationInstitution.address.country"
+    })
+    List<PersonProfessionQualification> findWithDetailsByPersonId(Long personId);
 }

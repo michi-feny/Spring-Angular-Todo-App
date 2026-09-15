@@ -1,5 +1,7 @@
 package ibee.webapp.todo_app.core.entity;
 
+import java.util.Objects;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -95,5 +97,15 @@ public class Address {
         new ArrayList<>();
 */
 
+    public boolean hasEqualValuesAs(Address incoming) {
+            if (incoming == null) return false;
+            return Objects.equals(this.street, incoming.getStreet()) &&
+                Objects.equals(this.houseNumber, incoming.getHouseNumber()) &&
+                Objects.equals(this.zipCode, incoming.getZipCode()) &&
+                Objects.equals(this.city, incoming.getCity()) &&
+                (this.country != null && incoming.getCountry() != null ? 
+                        Objects.equals(this.country.getId(), incoming.getCountry().getId()) : 
+                        Objects.equals(this.country, incoming.getCountry()));
+    }
     
 }

@@ -36,8 +36,33 @@ protected final AbstractMappedPersonRelatedDtoService<DTO, ENTITY, ID, IDDTO> pe
             TranslationService translationService,
             AbstractHateoasAssembler<DTO, IDDTO> assembler,
             String entityKey) {
-        super(service, translationService, assembler, entityKey);
+        super(
+            service, 
+            translationService, 
+            assembler, 
+            entityKey);
         this.personRelatedService = service;
+    }
+
+    /**
+     * THE HOOK: Overridden by child controllers to inject custom links.
+     */
+    protected void enrichCollectionModel(CollectionModel<EntityModel<DTO>> collectionModel, Long personId) {
+        // Default implementation does nothing
+    }
+
+    /**
+     * YOUR HELPER METHOD: Wraps the assembler and the hook so you never have to 
+     * write the boilerplate in your child controllers!
+     */
+    protected CollectionModel<EntityModel<DTO>> hateoasCollectionBuilder(Iterable<DTO> dtos, Long personId) {
+        // 1. Standard assembly (adds base links + merge link)
+        CollectionModel<EntityModel<DTO>> collectionModel = assembler.toCollectionModel(dtos);
+        
+        // 2. Automatically fire the custom hook (adds the tree link)
+        enrichCollectionModel(collectionModel, personId);
+        
+        return collectionModel;
     }
 
     @GetMapping("/person/{personId}")
@@ -73,20 +98,35 @@ protected final AbstractMappedPersonRelatedDtoService<DTO, ENTITY, ID, IDDTO> pe
         return buildResponse(list, message);
     }
 
-    @GetMapping("/{id}/details")
-    public ResponseEntity<ApiSuccessResponse<EntityModel<DTO>>> getWithDetailsById(
-            @AuthenticationPrincipal AuthenticatedUser userDetails,
-            @PathVariable("id") IDDTO id) {
+    // @GetMapping("/{id}/single-detail")
+    // public ResponseEntity<ApiSuccessResponse<EntityModel<DTO>>> getWithDetailsById(
+    //         @AuthenticationPrincipal AuthenticatedUser userDetails,
+    //         @PathVariable("id") IDDTO id) {
         
-        DTO dto = personRelatedService.findWithDetailsById(id);
-                //no null check needed, 
-                // cause the service for the entity would throw a ressourceNotFOundException
+    //     DTO dto = personRelatedService.findWithDetailsById(id);
+    //             //no null check needed, 
+    //             // cause the service for the entity would throw a ressourceNotFOundException
         
-        //or hte Assembler would throw a not null dto input Exception
-        EntityModel<DTO> entityModel = assembler.toModel(dto);
-        String message = translationService.translate("crud.loadedWithDetails", getEntityName());
+    //     //or hte Assembler would throw a not null dto input Exception
+    //     EntityModel<DTO> entityModel = assembler.toModel(dto);
+    //     String message = translationService.translate("crud.loadedWithDetails", getEntityName());
 
-        // 4. Use the builder!
-        return buildResponse(entityModel, message);
-    }
+    //     // 4. Use the builder!
+    //     return buildResponse(entityModel, message);
+    // }
+
+    // @GetMapping("/{personId:\\d+}/details")
+    // public ResponseEntity<ApiSuccessResponse<CollectionModel<EntityModel<DTO>>>> getAllDetailsForPerson(
+    //         @AuthenticationPrincipal AuthenticatedUser userDetails,
+    //         @PathVariable("personId") Long personId) {
+        
+    //     List<DTO> list = personRelatedService.findByPersonId(personId);
+    //     CollectionModel<EntityModel<DTO>> collectionModel = assembler.toCollectionModel(list);
+
+    //     String message = list.isEmpty() 
+    //         ? translationService.translate("crud.emptyListForPerson", getEntityName())
+    //         : translationService.translate("crud.loadedAllForPerson", getEntityName());
+
+    //     return buildResponse(collectionModel, message);
+    // }
 }

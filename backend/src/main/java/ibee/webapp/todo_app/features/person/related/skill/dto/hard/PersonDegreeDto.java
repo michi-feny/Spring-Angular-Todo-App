@@ -10,7 +10,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
 
 
 public record PersonDegreeDto(
@@ -18,9 +17,11 @@ public record PersonDegreeDto(
     PersonDegreeDtoId id,
 
     @NotNull
+    @Valid 
     DegreeDto degree,
 
     @NotNull
+    @Valid 
     EducationInstitutionDto educationInstitution,
 
     /*
@@ -37,6 +38,7 @@ public record PersonDegreeDto(
     // LocalDate endDate,
 
     @Valid 
+    @NotNull 
     LocalDateDurationDto degreeDuration,
 
 

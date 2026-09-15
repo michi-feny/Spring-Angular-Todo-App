@@ -38,11 +38,12 @@ public class PersonWorkExperienceHateoasAssembler
         CollectionModel<EntityModel<PersonWorkExperienceDto>> collectionModel = 
                 super.toCollectionModel(dtos);
 
-        // 2. Append the custom collection-level "merge" transition
+        // 2. Attach the "merge" link safely using slash()
+        // Resolves to: /api/v1/person-work-experiences/merge
         collectionModel.add(
-            linkTo(methodOn(PersonWorkExperienceController.class).mergeWorkExperiences(null, null))
-                .withRel("merge")
+            linkTo(getController()).slash("merge").withRel("merge")
         );
+        
 
         return collectionModel;
     }

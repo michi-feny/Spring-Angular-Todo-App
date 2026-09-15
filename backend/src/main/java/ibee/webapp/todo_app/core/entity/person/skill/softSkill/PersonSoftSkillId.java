@@ -23,8 +23,7 @@ public class PersonSoftSkillId implements Serializable {
     @Column(name = "person_id")
     private Long personId;
 
-    @NotNull
-    @Positive
+    
     @Column(name = "soft_skill_id")
     private Long softSkillId;
 }

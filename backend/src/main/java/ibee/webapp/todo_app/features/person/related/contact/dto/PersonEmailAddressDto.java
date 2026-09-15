@@ -7,10 +7,12 @@ import jakarta.validation.constraints.NotNull;
 
 public record PersonEmailAddressDto(
 
+    @NotNull
     @Valid 
     PersonEmailAddressDtoId id,
 
     @NotNull
+    @Valid 
     EmailAddressDto emailAddress,
 
     @NotNull

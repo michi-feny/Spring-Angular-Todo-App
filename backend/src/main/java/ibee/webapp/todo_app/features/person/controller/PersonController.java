@@ -6,6 +6,7 @@ import ibee.webapp.todo_app.controller.baseController.hateosCrud.AbstractSpringH
 import ibee.webapp.todo_app.controller.support.ApiSuccessResponse;
 import ibee.webapp.todo_app.core.exception.ResourceNotFoundException;
 import ibee.webapp.todo_app.features.person.dto.PersonData;
+import ibee.webapp.todo_app.features.person.dto.PersonDetails;
 import ibee.webapp.todo_app.features.person.dto.PersonOverview;
 import ibee.webapp.todo_app.features.person.service.PersonDtoService;
 import ibee.webapp.todo_app.infrastructure.i18n.TranslationService;
@@ -85,6 +86,23 @@ public class PersonController extends AbstractSpringHateoasCrudController<Person
 
         String message = translationService.translate("crud.loadedOverview", getEntityName());
         return buildResponse(overview, message);
+    }
+
+    @GetMapping("/{id}/details")
+    public ResponseEntity<ApiSuccessResponse<PersonDetails>> getDetails(
+            @AuthenticationPrincipal AuthenticatedUser userDetails,
+            @PathVariable("id") Long id) {
+
+        PersonDetails details = personDtoService.getDetailsById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                    "Person Details not found", 
+                    "crud.notFound.single", 
+                    getEntityName(), 
+                    id.toString()
+                ));
+
+        String message = translationService.translate("crud.loadedDetails", getEntityName());
+        return buildResponse(details, message);
     }
 
     // --- Specific Single-Field Searches ---

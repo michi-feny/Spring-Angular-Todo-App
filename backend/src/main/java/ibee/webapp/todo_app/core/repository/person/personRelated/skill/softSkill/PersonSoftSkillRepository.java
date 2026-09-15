@@ -1,6 +1,7 @@
 package ibee.webapp.todo_app.core.repository.person.personRelated.skill.softSkill;
 
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -15,10 +16,15 @@ public interface PersonSoftSkillRepository
     extends PersonRelatedRepository
         <PersonSoftSkill, PersonSoftSkillId>{
 
+    @Override
     @EntityGraph(attributePaths = {
         "softSkill"
     })
     Optional<PersonSoftSkill> findWithDetailsById(
         PersonSoftSkillId id
     );
+
+    @Override
+    @EntityGraph(attributePaths = {"softSkill"})
+    List<PersonSoftSkill> findWithDetailsByPersonId(Long personId);
 }

@@ -1,0 +1,31 @@
+<div class="row mt-5">
+    <form class="col-3 border border-primary mx-auto rounded p-3"
+        [formGroup]="loginForm" (ngSubmit)="handleSubmit()"
+        [appServerSideValidation]="selectAuthError"
+    >
+        <h1 class="text-primary h2 text-center">{{ 'AUTH.HEADING' | translate }}</h1>
+
+        <app-flash-message></app-flash-message>
+
+        <app-form-control
+            [control]="loginForm | control:'email'"
+            label="{{ 'FORM.EMAIL' | translate }}"
+            [type]="InputTypesEnum.Email"
+        />
+
+        <app-form-control
+            [control]="loginForm | control:'password'"
+            label="{{ 'FORM.PASSWORD' | translate }}"
+            [type]="InputTypesEnum.Password"
+        />
+
+        <div class="d-flex justify-content-between mb-3">
+            <a routerLink="/auth/signup">{{ 'AUTH.LINK_NO_ACCOUNT' | translate }}?</a>
+            <a routerLink="/auth/forgotPassword">{{ 'AUTH.LINK_PASSWORD_FORGOTTEN' | translate }}?</a>
+        </div>
+
+        <button class="btn btn-primary mx-auto" [disabled]="(isLoading$ | async)">
+            {{ 'AUTH.SUBMIT_BUTTON' | translate }}
+        </button>
+    </form>
+</div>

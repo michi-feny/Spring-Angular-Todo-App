@@ -1,10 +1,10 @@
 package ibee.webapp.todo_app.features.person.related.referenceIds.contact;
 
 import ibee.webapp.todo_app.dto.base.StringToDtoIdConvertable;
-import ibee.webapp.todo_app.security.validation.idHandle.create.OnCreate;
-import ibee.webapp.todo_app.security.validation.idHandle.create.ValidCreateId;
-import ibee.webapp.todo_app.security.validation.idHandle.update.OnUpdate;
-import ibee.webapp.todo_app.security.validation.idHandle.update.ValidUpdateId;
+import ibee.webapp.todo_app.validation.idHandle.create.OnCreate;
+import ibee.webapp.todo_app.validation.idHandle.create.ValidCreateId;
+import ibee.webapp.todo_app.validation.idHandle.update.OnUpdate;
+import ibee.webapp.todo_app.validation.idHandle.update.ValidUpdateId;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
@@ -14,12 +14,17 @@ public record PersonCountryDtoId(
     @Positive
     Long personId,
 
-    @ValidCreateId(groups = OnCreate.class)
-    @ValidUpdateId(groups = OnUpdate.class)
+    //@ValidCreateId(groups = OnCreate.class)
+    //@ValidUpdateId(groups = OnUpdate.class)
+    @NotNull()
+    @Positive()
     Long countryId
 
     
 ) implements StringToDtoIdConvertable
 {
-
+    @Override
+    public String toString() {
+        return personId + "_" + countryId;
+    }
 }

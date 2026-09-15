@@ -154,6 +154,17 @@ public class PersonWorkExperienceServiceImpl
         return repository.findVisibleByPersonId(personId);
     }
 
+    /* ==============================================================================
+     * TREE FETCHING FOR THE UI (DTO Controller)
+     * ==============================================================================
+     * Fetches only the root/master nodes (where mergedInto IS NULL) while eagerly 
+     * loading the hidden/merged sub-experiences into the subExperiences list.
+     */
+    @Transactional(readOnly = true)
+    public List<PersonWorkExperience> findRootExperiencesTree(Long personId) {
+        return repository.findRootsByPersonIdAndMergedIntoIsNull(personId);
+    }
+
     @Transactional
     public List<PersonWorkExperience> saveAll(List<PersonWorkExperience> entities) {
         return repository.saveAll(entities);

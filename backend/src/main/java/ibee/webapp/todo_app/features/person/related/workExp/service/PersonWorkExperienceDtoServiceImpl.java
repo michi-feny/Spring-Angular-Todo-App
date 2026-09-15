@@ -1,16 +1,13 @@
 package ibee.webapp.todo_app.features.person.related.workExp.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ibee.webapp.todo_app.core.entity.person.workExperience.PersonWorkExperience;
 import ibee.webapp.todo_app.core.entity.person.workExperience.PersonWorkExperienceId;
-import ibee.webapp.todo_app.core.service.baseService.transport.AbstractMappedCrudDtoService;
-import ibee.webapp.todo_app.core.service.person.related.baseInfrastructure.AbstractPersonRelatedDtoQuerryAndDeleteServiceService;
-import ibee.webapp.todo_app.core.service.person.related.baseInfrastructure.PersonRelatedService;
+import ibee.webapp.todo_app.core.service.person.related.baseInfrastructure.AbstractMappedPersonRelatedDtoService;
 import ibee.webapp.todo_app.core.service.person.related.workExp.PersonWorkExperienceServiceImpl;
 import ibee.webapp.todo_app.features.person.related.referenceIds.workExp.PersonWorkExperienceDtoId;
 import ibee.webapp.todo_app.features.person.related.workExp.dto.MergeWorkExperiencesRequestDto;
@@ -22,7 +19,7 @@ import ibee.webapp.todo_app.mapper.person.workExp.PersonWorkExperienceMapper;
 @Service
 @Transactional
 public class PersonWorkExperienceDtoServiceImpl 
-    extends AbstractMappedCrudDtoService<
+    extends AbstractMappedPersonRelatedDtoService<
         PersonWorkExperienceDto, 
         PersonWorkExperience, 
         PersonWorkExperienceId,
@@ -60,6 +57,19 @@ public class PersonWorkExperienceDtoServiceImpl
 
         // 2. Map and return
         return personWorkExperienceMapper.toDtoList(refreshedList);
+    }
+
+    // 1. Expose the Flat Data for the Base Controller (Inherited standard behavior)
+    public List<PersonWorkExperienceDto> findByPersonId(Long personId) {
+        List<PersonWorkExperience> entities = entityService.findByPersonId(personId);
+        return personWorkExperienceMapper.toDtoList(entities);
+    }
+
+    // 2. Expose the Tree Data for the Custom Controller Endpoint
+    public List<PersonWorkExperienceDto> findRootExperiencesTree(Long personId) {
+        List<PersonWorkExperience> rootEntities = entityService.findRootExperiencesTree(personId);
+        // MapStruct automatically uses toDtoList recursively for subExperiences
+        return personWorkExperienceMapper.toDtoList(rootEntities);
     }
 
     

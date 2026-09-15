@@ -2,16 +2,13 @@ package ibee.webapp.todo_app.core.service;
 
 import ibee.webapp.todo_app.core.entity.Company;
 import ibee.webapp.todo_app.core.entity.WorkExperience;
-import ibee.webapp.todo_app.core.entity.person.workExperience.PersonWorkExperience;
 import ibee.webapp.todo_app.core.repository.person.WorkExperienceRepository;
 import ibee.webapp.todo_app.core.service.baseService.persist.MyCrudBaseEntityFacedeServiceImpl;
 import ibee.webapp.todo_app.mapper.WorkExperienceMapper;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -21,8 +18,8 @@ import org.springframework.util.Assert;
 public class WorkExperienceServiceImpl extends MyCrudBaseEntityFacedeServiceImpl<WorkExperience, Long> {
 
 
-    @Autowired
-    private CompanyServiceImpl companyService;
+    
+    private final CompanyServiceImpl companyService;
 
     public WorkExperienceServiceImpl(
             WorkExperienceRepository repository,

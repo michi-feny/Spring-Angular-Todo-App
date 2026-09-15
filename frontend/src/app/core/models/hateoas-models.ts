@@ -12,6 +12,7 @@ export type EntityModel<T> = T & {
 
 // CollectionModel wraps a list of items inside _embedded and adds _links
 export interface CollectionModel<T> {
+  content?: T[];
   _embedded?: {
     // The key here will usually be the collection name, e.g., 'persons'
     [rel: string]: T[];

@@ -1,0 +1,57 @@
+import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { PersonState } from './person.models';
+import { personFeatureKey } from './person.reducer';
+
+export const selectPersonState = createFeatureSelector<PersonState>(personFeatureKey);
+
+export const selectPersonList = createSelector(
+    selectPersonState,
+    (state) => state.searchResults
+  );
+  export const selectIsListLoading = createSelector(
+    selectPersonState,
+    (state) => state.isListLoading
+  );
+  
+  export const selectExpandedPersonIds = createSelector(
+    selectPersonState,
+    (state) => state.expandedPersonIds
+  );
+  
+  export const selectPersonDetailsCache = createSelector(
+    selectPersonState,
+    (state) => state.detailsCache
+  );
+  
+  export const selectLoadingDetailIds = createSelector(
+    selectPersonState,
+    (state) => state.loadingDetailIds
+  );
+  
+  export const selectPersonError = createSelector(
+    selectPersonState,
+    (state) => state.error
+  );
+  
+  // --- 3. Parametrisierte Selectors (Gezielter Zugriff pro Person ID) ---
+  
+  /** Holt die geladenen Details einer spezifischen Person aus dem Cache */
+  export const selectPersonDetailsById = (id: number) =>
+    createSelector(
+      selectPersonDetailsCache,
+      (cache) => cache[id] ?? null
+    );
+  
+  /** Prüft, ob exakt für diese Person gerade Daten vom Server geladen werden */
+  export const selectIsPersonLoading = (id: number) =>
+    createSelector(
+      selectLoadingDetailIds,
+      (loadingIds) => loadingIds.includes(id)
+    );
+  
+  /** Prüft, ob das Accordion dieser Person aktuell ausgeklappt ist */
+  export const selectIsPersonExpanded = (id: number) =>
+    createSelector(
+      selectExpandedPersonIds,
+      (expandedIds) => expandedIds.includes(id)
+    );
