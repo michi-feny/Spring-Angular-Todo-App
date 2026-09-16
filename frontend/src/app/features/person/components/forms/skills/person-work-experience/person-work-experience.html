@@ -1,0 +1,192 @@
+<div [formGroup]="form" class="p-2">
+    <div formArrayName="workExperiences">
+      @for (group of manager.array.controls; track group; let i = $index) {
+        <div 
+          [formGroupName]="i" 
+          class="card mb-3 transition-all"
+          [ngClass]="{
+            'border-warning bg-light': manager.isUnsaved(i),
+            'border-primary shadow-sm bg-white': !manager.isUnsaved(i),
+            'border-light bg-light': !manager.isUnsaved(i)
+          }">
+          <div class="card-body">
+            
+            <!-- Card Header & Actions -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div class="d-flex align-items-center gap-2">
+                <h5 class="mb-0 fw-bold">Eintrag #{{ i + 1 }}</h5>
+                @if (manager.isUnsaved(i)) {
+                  <span class="badge bg-warning text-dark">Ungespeichert</span>
+                }
+              </div>
+  
+              <div class="d-flex gap-2">
+                <button 
+                  type="button" 
+                  class="btn btn-sm"
+                  [ngClass]="manager.isSaved(i) ? 'btn-outline-primary' : 'btn-success'"
+                  [disabled]="manager.isSaveDisabled(i)"
+                  (click)="saveWorkExperience(i)">
+                  {{ manager.isSaved(i) ? 'Aktualisieren' : 'Speichern' }}
+                </button>
+  
+                <span class="d-inline-block" [ngbTooltip]="manager.getDeleteTooltip(i)" container="body">
+                  <button 
+                    type="button" 
+                    class="btn btn-outline-danger btn-sm" 
+                    [disabled]="!manager.canDelete(i)"
+                    (click)="deleteWorkExperience(i)">
+                    ✕ Löschen
+                  </button>
+                </span>
+              </div>
+            </div>
+  
+            <!-- Root Meta-Fields -->
+            <div class="row g-3 mb-3">
+              <div class="col-md-3">
+                <app-form-control
+                  [control]="$any(group.get('displayOrder'))"
+                  label="Anzeigereihenfolge"
+                  [type]="inputTypes.Number">
+                </app-form-control>
+              </div>
+              <div class="col-md-3 d-flex align-items-center pt-3">
+                <app-form-control
+                  [control]="$any(group.get('visible'))"
+                  label="Sichtbar"
+                  [type]="inputTypes.Checkbox">
+                </app-form-control>
+              </div>
+            </div>
+  
+            <!-- Position Details -->
+            <div class="border-top pt-3">
+              <h6 class="fw-semibold text-secondary mb-3">Position Details</h6>
+              
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <app-form-control
+                    [control]="$any(group.get('workExperience.jobTitle'))"
+                    label="Berufsbezeichnung"
+                    placeholder="z.B. Software Entwickler"
+                    [type]="inputTypes.Text">
+                  </app-form-control>
+                </div>
+                <div class="col-md-3">
+                  <app-form-control
+                    [control]="$any(group.get('workExperience.startDate'))"
+                    label="Startdatum"
+                    [type]="inputTypes.Date">
+                  </app-form-control>
+                </div>
+                <div class="col-md-3">
+                  <app-form-control
+                    [control]="$any(group.get('workExperience.endDate'))"
+                    label="Enddatum"
+                    [type]="inputTypes.Date">
+                  </app-form-control>
+                </div>
+                <div class="col-12">
+                  <app-form-control
+                    [control]="$any(group.get('workExperience.description'))"
+                    label="Beschreibung"
+                    placeholder="Beschreibung der Aufgaben..."
+                    [type]="inputTypes.Textarea">
+                  </app-form-control>
+                </div>
+                <div class="col-12">
+                  <app-form-control
+                    [control]="$any(group.get('workExperience.militaryService'))"
+                    label="Wehr- / Zivildienst"
+                    [type]="inputTypes.Checkbox">
+                  </app-form-control>
+                </div>
+              </div>
+            </div>
+  
+            <!-- Unternehmensdaten -->
+            <div class="border-top pt-3 mt-3">
+              <h6 class="fw-semibold text-secondary mb-3">Unternehmensdaten</h6>
+              
+              <div class="row g-3">
+                <div class="col-md-8">
+                  <app-form-control
+                    [control]="$any(group.get('workExperience.company.name'))"
+                    label="Firmenname"
+                    placeholder="z.B. Muster GmbH"
+                    [type]="inputTypes.Text">
+                  </app-form-control>
+                </div>
+                <div class="col-md-4">
+                  <app-form-control
+                    [control]="$any(group.get('workExperience.company.legalForm'))"
+                    label="Rechtsform"
+                    placeholder="z.B. GmbH, AG"
+                    [type]="inputTypes.Text">
+                  </app-form-control>
+                </div>
+              </div>
+  
+              <!-- Adresse des Unternehmens -->
+              <div class="border-top pt-3 mt-3">
+                <p class="small text-muted mb-2">Adresse des Unternehmens</p>
+                
+                <div class="row g-3">
+                  <div class="col-md-8">
+                    <app-form-control
+                      [control]="$any(group.get('workExperience.company.address.street'))"
+                      label="Straße"
+                      placeholder="z.B. Hauptstraße"
+                      [type]="inputTypes.Text">
+                    </app-form-control>
+                  </div>
+                  <div class="col-md-4">
+                    <app-form-control
+                      [control]="$any(group.get('workExperience.company.address.houseNumber'))"
+                      label="Hausnummer"
+                      placeholder="z.B. 12"
+                      [type]="inputTypes.Text">
+                    </app-form-control>
+                  </div>
+                  <div class="col-md-4">
+                    <app-form-control
+                      [control]="$any(group.get('workExperience.company.address.zipCode'))"
+                      label="PLZ"
+                      placeholder="z.B. 1010"
+                      [type]="inputTypes.Text">
+                    </app-form-control>
+                  </div>
+                  <div class="col-md-8">
+                    <app-form-control
+                      [control]="$any(group.get('workExperience.company.address.city'))"
+                      label="Stadt"
+                      placeholder="z.B. Wien"
+                      [type]="inputTypes.Text">
+                    </app-form-control>
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+          </div>
+        </div>
+      } @empty {
+        <div class="alert alert-secondary text-center my-2 py-3">
+          Keine Berufserfahrungen eingetragen.
+        </div>
+      }
+    </div>
+  
+    <div class="mt-3">
+      <span class="d-inline-block" [ngbTooltip]="manager.hasUnsavedItem ? 'Bitte speichern Sie die neue Berufserfahrung zuerst ab.' : ''" container="body">
+        <button 
+          type="button" 
+          class="btn btn-outline-primary btn-sm" 
+          [disabled]="manager.hasUnsavedItem"
+          (click)="addWorkExperience()">
+          + Berufserfahrung hinzufügen
+        </button>
+      </span>
+    </div>
+  </div>

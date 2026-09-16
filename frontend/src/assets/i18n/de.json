@@ -42,7 +42,7 @@
     },
     "NAV": {
         "HEADING": "Todo App",
-        "TODOS": "Todos",
+        "PERSONS": "Personenübersicht",
         "ACCOUNT": {
             "HEADING": "Konto",
             "LOGIN": "Anmelden",

@@ -1,0 +1,100 @@
+<div [formGroup]="form" class="p-2">
+  <div formArrayName="emails">
+    @for (group of manager.array.controls; track group; let i = $index) {
+      <div 
+        [formGroupName]="i" 
+        class="card mb-3 transition-all position-relative"
+        [ngClass]="{
+          'border-warning bg-light': manager.isUnsaved(i),
+          'border-primary shadow-sm bg-white': !manager.isUnsaved(i) && group.get('mainEmail')?.value,
+          'border-light bg-light': !manager.isUnsaved(i) && !group.get('mainEmail')?.value
+        }">
+        <div class="card-body">
+          @if (group.get('mainEmail')?.value || manager.isUnsaved(i)) {
+            <div class="position-absolute top-0  p-2 d-flex gap-1">
+              @if (group.get('mainEmail')?.value) {
+                <span class="badge bg-primary">Hauptmail</span>
+              }
+              @if (manager.isUnsaved(i)) {
+                <span class="badge bg-warning text-dark">Ungespeichert</span>
+              }
+            </div>
+          }
+          <div class="row g-3 align-items-center p-3">
+            
+            <!-- Radio für Haupt-E-Mail & Badges -->
+            <div class="col-md-3 col-12">
+              <div class="d-flex align-items-center gap-2">
+                <span class="d-inline-block" [ngbTooltip]="manager.getMainRadioTooltip(i)" container="body">
+                  <div class="form-check mb-0">
+                    <input 
+                      type="radio" 
+                      name="'mainEmailRadio_' + i" 
+                      class="form-check-input" 
+                      [id]="'mainEmail_' + i"
+                      [checked]="group.get('mainEmail')?.value"
+                      [disabled]="!manager.canSelectMain(i)"
+                      (change)="manager.setMain(i)" />
+                    <label class="form-check-label fw-semibold" [for]="'mainEmail_' + i">
+                      Hauptadresse
+                    </label>
+                  </div>
+                </span>
+              </div>
+            </div>
+
+            <!-- E-Mail-Adresse Input -->
+            <div class="col-md-6 col-sm-8">
+              <app-form-control
+                [control]="$any(group.get('emailAddress.emailAddress'))"
+                label="E-Mail-Adresse"
+                placeholder="z.B. max.mustermann@example.com"
+                [type]="inputTypes.Email">
+              </app-form-control>
+            </div>
+
+            <!-- Action Buttons: Speichern/Aktualisieren & Löschen -->
+            <div class="col-md-3 col-12 text-end d-flex justify-content-end gap-2 align-items-center mt-md-4">
+              <button 
+                type="button" 
+                class="btn btn-sm"
+                [ngClass]="manager.isSaved(i) ? 'btn-outline-primary' : 'btn-success'"
+                [disabled]="manager.isSaveDisabled(i)"
+                (click)="saveSingleEmail(i)">
+                {{ manager.isSaved(i) ? 'Aktualisieren' : 'Speichern' }}
+              </button>
+
+              <span class="d-inline-block" [ngbTooltip]="manager.getDeleteTooltip(i)" container="body">
+                <button 
+                  type="button" 
+                  class="btn btn-sm btn-outline-danger" 
+                  [disabled]="!manager.canDelete(i)"
+                  (click)="deleteEmail(i)">
+                  ✕ Löschen
+                </button>
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    } @empty {
+      <div class="alert alert-secondary text-center my-2 py-3">
+        Keine E-Mail-Adressen eingetragen.
+      </div>
+    }
+  </div>
+
+  <!-- Add Button -->
+  <div class="mt-3">
+    <span class="d-inline-block" [ngbTooltip]="manager.hasUnsavedItem ? 'Bitte speichern Sie die neue E-Mail-Adresse zuerst ab.' : ''" container="body">
+      <button 
+        type="button" 
+        class="btn btn-outline-primary btn-sm" 
+        [disabled]="manager.hasUnsavedItem"
+        (click)="addEmail()">
+        + E-Mail-Adresse hinzufügen
+      </button>
+    </span>
+  </div>
+</div>

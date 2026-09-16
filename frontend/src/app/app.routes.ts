@@ -6,6 +6,7 @@ import { authGuard } from './core/guard/auth.guard';
 import { ForgotPassword } from './features/auth/forgot-password/forgot-password';
 import { ResetPasswordFlow } from './features/auth/reset-password-flow/reset-password-flow';
 import { UserMainActionTab } from './features/main-tab/user-main-action-tab/user-main-action-tab';
+import { PersonList } from './features/person/components/person-list/person-list';
 
 export const routes: Routes = [
     {
@@ -29,17 +30,10 @@ export const routes: Routes = [
         title: 'Reset Password'
     },
     {
-        component: TodoList,
-        path: 'todos',
+        component: PersonList,
+        path: 'persons',
         canActivate: [authGuard],
-        title: 'Todos'
+        title: 'persons'
     }, 
-    {
-        component: UserMainActionTab,
-        canActivate: [authGuard],
-        path: 'user-main-action-tab',
-        title: 'MainView'
-        
-    }
 
 ];

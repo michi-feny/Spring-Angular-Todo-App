@@ -1,0 +1,89 @@
+<div [formGroup]="form" class="p-2">
+  <div formArrayName="softSkills">
+    @for (group of manager.array.controls; track group; let i = $index) {
+      <div 
+        [formGroupName]="i" 
+        class="card mb-3 transition-all"
+        [ngClass]="{
+          'border-warning bg-light': manager.isUnsaved(i),
+          'border-light bg-light': !manager.isUnsaved(i)
+        }">
+        <div class="card-body">
+          <div class="row g-3 align-items-center">
+            
+            <!-- Badges / Status -->
+            <div class="col-md-2 col-12">
+              <div class="d-flex align-items-center gap-2">
+                <span class="fw-bold">Skill #{{ i + 1 }}</span>
+                @if (manager.isUnsaved(i)) {
+                  <span class="badge bg-warning text-dark">Ungespeichert</span>
+                }
+              </div>
+            </div>
+
+            <!-- Soft Skill Name & Description (Nested Group Path) -->
+            <ng-container formGroupName="softSkill">
+              <div class="col-md-3 col-sm-6">
+                <app-form-control
+                  [control]="$any(group.get('softSkill.name'))"
+                  label="Soft Skill"
+                  placeholder="z.B. Teamfähigkeit"
+                  [type]="inputTypes.Text">
+                </app-form-control>
+              </div>
+
+              <div class="col-md-4 col-sm-6">
+                <app-form-control
+                  [control]="$any(group.get('softSkill.description'))"
+                  label="Beschreibung"
+                  placeholder="Optionale Beschreibung..."
+                  [type]="inputTypes.Text">
+                </app-form-control>
+              </div>
+            </ng-container>
+
+            <!-- Action Buttons -->
+            <div class="col-md-3 col-12 text-end d-flex justify-content-end gap-2 align-items-center mt-md-4">
+              <button 
+                type="button" 
+                class="btn btn-sm"
+                [ngClass]="manager.isSaved(i) ? 'btn-outline-primary' : 'btn-success'"
+                [disabled]="manager.isSaveDisabled(i)"
+                (click)="saveSoftSkill(i)">
+                {{ manager.isSaved(i) ? 'Aktualisieren' : 'Speichern' }}
+              </button>
+
+              <span class="d-inline-block" [ngbTooltip]="manager.getDeleteTooltip(i)" container="body">
+                <button 
+                  type="button" 
+                  class="btn btn-sm btn-outline-danger" 
+                  [disabled]="!manager.canDelete(i)"
+                  (click)="deleteSoftSkill(i)">
+                  ✕ Löschen
+                </button>
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    } @empty {
+      <div class="alert alert-secondary text-center my-2 py-3">
+        Keine sozialen oder personalen Kompetenzen (Soft Skills) eingetragen.
+      </div>
+    }
+  </div>
+
+  <!-- Hinzufügen-Button -->
+  <div class="mt-3">
+    <span class="d-inline-block" [ngbTooltip]="manager.hasUnsavedItem ? 'Bitte speichern Sie den neuen Soft Skill zuerst ab.' : ''" container="body">
+      <button 
+        type="button" 
+        class="btn btn-outline-primary btn-sm" 
+        [disabled]="manager.hasUnsavedItem"
+        (click)="addSoftSkill()">
+        + Soft Skill hinzufügen
+      </button>
+    </span>
+  </div>
+</div>

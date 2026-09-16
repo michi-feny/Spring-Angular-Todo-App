@@ -1,4 +1,5 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { isPossiblePhoneNumber, isValidPhoneNumber } from 'libphonenumber-js';
 
 export interface ChoiceValidatorOptions {
     choices: any[] | object;
@@ -92,4 +93,22 @@ export class CustomValidators {
             return checkValue(value) ? null : { choice: {  allowedValues } };
         };
     }
+    static phoneNumber(countryField: string, phoneField: string ): ValidatorFn {
+        return (control: AbstractControl): ValidationErrors | null => {
+            const countryCode = control.get(countryField)?.value;
+            const phoneNumber = control.get(phoneField)?.value;
+        
+            if (!countryCode || !phoneNumber) {
+              return null; // Leere Felder werden über separate Validators.required abgefangen
+            }
+        
+            try {
+              const fullNumber = `${countryCode}${phoneNumber}`;
+              const isValid = isPossiblePhoneNumber(fullNumber) && isValidPhoneNumber(fullNumber);
+              return isValid ? null : { invalidPhoneNumber: true };
+            } catch {
+              return { invalidPhoneNumber: true };
+            }
+          };
+    }   
 }

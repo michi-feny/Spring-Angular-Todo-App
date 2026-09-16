@@ -1,0 +1,184 @@
+<div [formGroup]="form" class="p-2">
+  <div formArrayName="professions">
+    @for (group of manager.array.controls; track group; let i = $index) {
+      <div 
+        [formGroupName]="i" 
+        class="card mb-3 transition-all"
+        [ngClass]="{
+          'border-warning bg-light': manager.isUnsaved(i),
+          'border-light bg-light': !manager.isUnsaved(i)
+        }">
+        <div class="card-body">
+          
+          <!-- Card Header & Status Badge -->
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="d-flex align-items-center gap-2">
+              <h6 class="mb-0 fw-bold">Qualifikation #{{ i + 1 }}</h6>
+              @if (manager.isUnsaved(i)) {
+                <span class="badge bg-warning text-dark">Ungespeichert</span>
+              }
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex gap-2">
+              <button 
+                type="button" 
+                class="btn btn-sm"
+                [ngClass]="manager.isSaved(i) ? 'btn-outline-primary' : 'btn-success'"
+                [disabled]="manager.isSaveDisabled(i)"
+                (click)="saveProfession(i)">
+                {{ manager.isSaved(i) ? 'Aktualisieren' : 'Speichern' }}
+              </button>
+
+              <span class="d-inline-block" [ngbTooltip]="manager.getDeleteTooltip(i)" container="body">
+                <button 
+                  type="button" 
+                  class="btn btn-sm btn-outline-danger" 
+                  [disabled]="!manager.canDelete(i)"
+                  (click)="deleteProfession(i)">
+                  ✕ Löschen
+                </button>
+              </span>
+            </div>
+          </div>
+
+          <!-- Formular-Felder -->
+          <div class="row g-2">
+            <!-- Allgemeiner Name der Qualifikation -->
+            <!-- Zertifikatsnummer -->
+            <div class="col-md-6 col-12">
+              <app-form-control
+                [control]="$any(group.get('certificateNumber'))"
+                label="Zertifikatsnummer"
+                placeholder="z.B. CERT-2024-1234"
+                [type]="inputTypes.Text">
+              </app-form-control>
+            </div>
+
+            <!-- Section: Details zur Qualifikation (professionQualification) -->
+            <ng-container formGroupName="professionQualification">
+              <div class="col-md-6 col-12">
+                <app-form-control
+                  [control]="$any(group.get('professionQualification.name'))"
+                  label="Qualifikation / Beruf"
+                  placeholder="z.B. Software Architekt"
+                  [type]="inputTypes.Text">
+                </app-form-control>
+              </div>
+
+              <div class="col-md-3 col-sm-6">
+                <app-form-control
+                  [control]="$any(group.get('professionQualification.level'))"
+                  label="Level"
+                  placeholder="z.B. Senior / Level 1"
+                  [type]="inputTypes.Text">
+                </app-form-control>
+              </div>
+
+              <div class="col-md-3 col-sm-6">
+                <app-form-control
+                  [control]="$any(group.get('professionQualification.weight'))"
+                  label="Gewichtung"
+                  [type]="inputTypes.Number">
+                </app-form-control>
+              </div>
+            </ng-container>
+
+            <!-- Section: Zeitraum (professionQualificationDuration) -->
+            <ng-container formGroupName="professionQualificationDuration">
+              <div class="col-md-6 col-sm-6">
+                <app-form-control
+                  [control]="$any(group.get('professionQualificationDuration.startDate'))"
+                  label="Beginn"
+                  [type]="inputTypes.Date">
+                </app-form-control>
+              </div>
+
+              <div class="col-md-6 col-sm-6">
+                <app-form-control
+                  [control]="$any(group.get('professionQualificationDuration.endDate'))"
+                  label="Ende (Optional)"
+                  [type]="inputTypes.Date">
+                </app-form-control>
+              </div>
+            </ng-container>
+
+            <!-- Section: Bildungseinrichtung (educationInstitution) -->
+            <ng-container formGroupName="educationInstitution">
+              <div class="col-12 mt-3">
+                <h6 class="fw-bold text-secondary mb-2">Bildungseinrichtung / Aussteller</h6>
+              </div>
+
+              <div class="col-12">
+                <app-form-control
+                  [control]="$any(group.get('educationInstitution.name'))"
+                  label="Name der Einrichtung"
+                  placeholder="z.B. iSAQB / WKO"
+                  [type]="inputTypes.Text">
+                </app-form-control>
+              </div>
+
+              <!-- Adresse der Bildungseinrichtung -->
+              <ng-container formGroupName="address">
+                <div class="col-md-8 col-8">
+                  <app-form-control
+                    [control]="$any(group.get('educationInstitution.address.street'))"
+                    label="Straße"
+                    placeholder="Musterstraße"
+                    [type]="inputTypes.Text">
+                  </app-form-control>
+                </div>
+
+                <div class="col-md-4 col-4">
+                  <app-form-control
+                    [control]="$any(group.get('educationInstitution.address.houseNumber'))"
+                    label="Hausnummer"
+                    placeholder="12a"
+                    [type]="inputTypes.Text">
+                  </app-form-control>
+                </div>
+
+                <div class="col-md-4 col-4">
+                  <app-form-control
+                    [control]="$any(group.get('educationInstitution.address.zipCode'))"
+                    label="PLZ"
+                    placeholder="1010"
+                    [type]="inputTypes.Text">
+                  </app-form-control>
+                </div>
+
+                <div class="col-md-8 col-8">
+                  <app-form-control
+                    [control]="$any(group.get('educationInstitution.address.city'))"
+                    label="Stadt"
+                    placeholder="Wien"
+                    [type]="inputTypes.Text">
+                  </app-form-control>
+                </div>
+              </ng-container>
+            </ng-container>
+
+          </div>
+
+        </div>
+      </div>
+    } @empty {
+      <div class="alert alert-secondary text-center my-2 py-3">
+        Keine Berufsqualifikationen eingetragen.
+      </div>
+    }
+  </div>
+
+  <!-- Hinzufügen-Button -->
+  <div class="mt-3">
+    <span class="d-inline-block" [ngbTooltip]="manager.hasUnsavedItem ? 'Bitte speichern Sie die neue Qualifikation zuerst ab.' : ''" container="body">
+      <button 
+        type="button" 
+        class="btn btn-outline-primary btn-sm" 
+        [disabled]="manager.hasUnsavedItem"
+        (click)="addProfession()">
+        + Berufsqualifikation hinzufügen
+      </button>
+    </span>
+  </div>
+</div>

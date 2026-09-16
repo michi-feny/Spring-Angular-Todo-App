@@ -1,0 +1,108 @@
+@if (person) {
+    <div class="card shadow-sm border-0">
+      <div class="card-body p-0">
+        <ngbd-accordion-static 
+          [items]="accordionSections" 
+          [headerTemplate]="accordionHeaderTpl" 
+          [bodyTemplate]="accordionBodyTpl">
+        </ngbd-accordion-static>
+      </div>
+    </div>
+  }
+    <!-- HEADER TEMPLATE -->
+    <ng-template #accordionHeaderTpl let-section>
+        <strong>{{ section.title }}</strong>
+    </ng-template>
+  
+<!-- BODY TEMPLATE -->
+<ng-template #accordionBodyTpl let-section>
+
+    @if (section.id === 'generalData') {
+      <app-person-general-form
+        [person]="person.person" 
+        (save)="onSaveGeneralData($event)"
+      />
+    }
+
+    @if (section.id === 'nationalitys') {
+      <app-person-nationalities-form 
+        [nationalities]="person.nationalities || []" 
+        [personId]="person.person.id!"
+        (save)="onSaveNationality($event)"
+        (delete)="onDeleteNationality($event)"
+      />
+    }
+
+    @if (section.id === 'addresses') {
+      <app-person-addresses-form
+        [addresses]="person.addresses || []"
+        [personId]="person.person.id!"
+        (save)="onSaveAddress($event)"
+        (delete)="onDeleteAddress($event)"
+      />
+    }  
+
+    @if (section.id === 'phones') {
+      <app-person-phones-form
+        [phones]="person.phones || []"
+        [personId]="person.person.id!"
+        (save)="onSavePhone($event)"
+        (delete)="onDeletePhone($event)"
+      />
+    } 
+
+    @if (section.id === 'emails') {
+      <app-person-emails-form
+        [personId]="person.person.id!"
+        [emails]="person.emails || []"
+        (save)="onSaveEmail($event)"
+        (delete)="onDeleteEmail($event)"
+      />
+    }  
+
+    @if (section.id === 'degrees') {
+      <app-person-degrees-form 
+        [personId]="person.person.id!"
+        [degrees]="person.degrees || []" 
+        (save)="onSaveDegree($event)"
+        (delete)="onDeleteDegree($event)"
+      />
+    }
+
+    @if (section.id === 'additionalSkills') {
+      <app-person-additional-skills-form
+        [personId]="person.person.id!"
+        [additionalSkills]="person.additionalSkills || []"
+        (save)="onSaveAdditionalSkill($event)"
+        (delete)="onDeleteAdditionalSkill($event)"
+      />
+    }
+
+    @if (section.id === 'softSkills') {
+      <app-person-soft-skills-form 
+        [personId]="person.person.id!"
+        [softSkills]="person.softSkills || []"
+        (save)="onSaveSoftSkill($event)"
+        (delete)="onDeleteSoftSkill($event)"
+      />
+    }
+
+    @if (section.id === 'professions') {
+      <app-person-professions-form
+        [personId]="person.person.id!"
+        [professions]="person.professions || []" 
+        (save)="onSaveProfession($event)"
+        (delete)="onDeleteProfession($event)"
+      />
+    }
+
+    @if (section.id === 'workExperience') {
+      <app-person-work-experience
+        [personId]="person.person.id!"
+        [workExperiences]="[]"
+        (save)="onSaveWorkExperience($event)"
+        (delete)="onDeleteWorkExperience($event)"
+      />
+    }
+
+  </ng-template>

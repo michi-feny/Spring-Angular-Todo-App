@@ -1,0 +1,61 @@
+<div class="container my-4">
+    <h2 class="mb-4">Personenliste</h2>
+  
+    <!-- Globaler Loader für die Gesamtliste -->
+    @if (isListLoading$ | async) {
+      <div class="d-flex align-items-center gap-2">
+        <div class="spinner-border text-primary" role="status"></div>
+        <span>Personenliste wird geladen...</span>
+      </div>
+    } @else {
+      <!-- Accordion Liste mit Vorbehalt für leere Ergebnisse -->
+      @if (searchResults$ | async; as persons) {
+        @if (persons.length > 0) {
+          <ngbd-accordion-static
+            [items]="persons"
+            [headerTemplate]="headerTpl"
+            [bodyTemplate]="bodyTpl">
+          </ngbd-accordion-static>
+        } @else {
+          <p class="text-muted">Keine Personen gefunden.</p>
+        }
+      }
+    }
+  </div>
+  
+  <!-- HEADER TEMPLATE (PersonData Übersicht) -->
+  <ng-template #headerTpl let-item>
+    <div 
+      class="d-flex justify-content-between align-items-center w-100 pe-3"
+      (click)="onToggleAccordion(item.id)">
+      <div>
+        <strong>{{ item.firstName }} {{ item.lastName }}</strong>
+        <span class="text-muted ms-3">
+          SVNR: {{ item.socialRecordNumber }} | Geb: {{ item.birthDate }}
+        </span>
+      </div>
+  
+      <!-- Spinner NUR für dieses spezifische Element beim Nachladen -->
+      @if (isLoadingDetails(loadingDetailIds$ | async, item.id)) {
+        <div class="spinner-border spinner-border-sm text-primary" role="status">
+          <span class="visually-hidden">Laden...</span>
+        </div>
+      }
+    </div>
+  </ng-template>
+  
+  <!-- BODY TEMPLATE (PersonOverview mit gecachten PersonDto Details) -->
+  <ng-template #bodyTpl let-item>
+    @if (detailsCache$ | async; as detailsCache) {
+      @if (detailsCache[item.id]; as details) {
+        
+        <app-person-details [person]="details"></app-person-details>
+  
+      } @else {
+        <div class="p-3 text-muted text-center">
+          <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+          Personendetails werden geladen...
+        </div>
+      }
+    }
+  </ng-template>

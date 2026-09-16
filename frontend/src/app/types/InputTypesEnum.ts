@@ -6,5 +6,6 @@ export enum InputTypesEnum {
     Textarea = 'textarea',
     Select = 'select',
     Checkbox = 'checkbox',
-    Hidden = 'hidden'
+    Hidden = 'hidden',
+    Date = 'date'
 }

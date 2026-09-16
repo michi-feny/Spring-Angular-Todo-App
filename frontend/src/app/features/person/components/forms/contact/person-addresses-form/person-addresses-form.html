@@ -1,0 +1,129 @@
+<div [formGroup]="form" class="p-2">
+  <div formArrayName="addresses">
+    @for (group of manager.array.controls; track group; let i = $index) {
+      <div 
+        [formGroupName]="i" 
+        class="card mb-3 transition-all"
+        [ngClass]="{
+          'border-warning bg-light': manager.isUnsaved(i),
+          'border-primary shadow-sm bg-white': !manager.isUnsaved(i) && group.get('mainAddress')?.value,
+          'border-light bg-light': !manager.isUnsaved(i) && !group.get('mainAddress')?.value
+        }">
+        <div class="card-body">
+          
+
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="d-flex align-items-center gap-2">
+              <span class="d-inline-block" [ngbTooltip]="manager.getMainRadioTooltip(i)" container="body">
+                <div class="form-check mb-0">
+                  <input 
+                    type="radio" 
+                    name="'mainAddressRadio_' + i" 
+                    class="form-check-input" 
+                    [id]="'mainAddress_' + i"
+                    [checked]="group.get('mainAddress')?.value"
+                    [disabled]="!manager.canSelectMain(i)"
+                    (change)="manager.setMain(i)" />
+                  <label class="form-check-label fw-semibold" [for]="'mainAddress_' + i">
+                    Hauptadresse
+                  </label>
+                </div>
+              </span>
+
+              @if (group.get('mainAddress')?.value) {
+                <span class="badge bg-primary">Hauptadresse</span>
+              }
+              @if (manager.isUnsaved(i)) {
+                <span class="badge bg-warning text-dark">Ungespeichert</span>
+              }
+            </div>
+
+            <div class="d-flex gap-2">
+              <button 
+                type="button" 
+                class="btn btn-sm"
+                [ngClass]="manager.isSaved(i) ? 'btn-outline-primary' : 'btn-success'"
+                [disabled]="manager.isSaveDisabled(i)"
+                (click)="saveSingleAddress(i)">
+                {{ manager.isSaved(i) ? 'Aktualisieren' : 'Speichern' }}
+              </button>
+
+              <span class="d-inline-block" [ngbTooltip]="manager.getDeleteTooltip(i)" container="body">
+                <button 
+                  type="button" 
+                  class="btn btn-outline-danger btn-sm" 
+                  [disabled]="!manager.canDelete(i)"
+                  (click)="deleteAddress(i)">
+                  ✕ Löschen
+                </button>
+              </span>
+            </div>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-md-8 col-sm-12">
+              <app-form-control
+                [control]="$any(group.get('address.street'))"
+                label="Straße"
+                placeholder="z.B. Hauptstraße"
+                [type]="inputTypes.Text">
+              </app-form-control>
+            </div>
+            <div class="col-md-4 col-sm-12">
+              <app-form-control
+                [control]="$any(group.get('address.houseNumber'))"
+                label="Hausnummer / Tür"
+                placeholder="z.B. 12a / Top 3"
+                [type]="inputTypes.Text">
+              </app-form-control>
+            </div>
+            <div class="col-md-3 col-sm-4">
+              <app-form-control
+                [control]="$any(group.get('address.zipCode'))"
+                label="PLZ"
+                placeholder="z.B. 1010"
+                [type]="inputTypes.Text">
+              </app-form-control>
+            </div>
+            <div class="col-md-5 col-sm-8">
+              <app-form-control
+                [control]="$any(group.get('address.city'))"
+                label="Ort / Stadt"
+                placeholder="z.B. Wien"
+                [type]="inputTypes.Text">
+              </app-form-control>
+            </div>
+            <div class="col-md-4 col-sm-12">
+              <label class="form-label">Land</label>
+              <ng-select
+                [items]="countries()"
+                bindLabel="name"
+                bindValue="id"
+                [formControl]="$any(group.get('address.nationalityId'))"
+                placeholder="Land auswählen..."
+                notFoundText="Kein Land gefunden">
+              </ng-select>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    } @empty {
+      <div class="alert alert-secondary text-center my-2 py-3">
+        Keine Adressen eingetragen.
+      </div>
+    }
+  </div>
+
+  <div class="mt-3">
+    <span class="d-inline-block" [ngbTooltip]="manager.hasUnsavedItem ? 'Bitte speichern Sie die neue Adresse zuerst ab.' : ''" container="body">
+      <button 
+        type="button" 
+        class="btn btn-outline-primary btn-sm" 
+        [disabled]="manager.hasUnsavedItem"
+        (click)="addAddress()">
+        + Adresse hinzufügen
+      </button>
+    </span>
+  </div>
+</div>

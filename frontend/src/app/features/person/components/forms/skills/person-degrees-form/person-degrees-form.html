@@ -1,0 +1,209 @@
+<div [formGroup]="form" class="p-2">
+  <div formArrayName="degrees">
+    @for (group of manager.array.controls; track group; let i = $index) {
+      <div 
+        [formGroupName]="i" 
+        class="card mb-3 transition-all"
+        [ngClass]="{
+          'border-warning bg-light': manager.isUnsaved(i),
+          'border-light bg-light': !manager.isUnsaved(i)
+        }">
+        <div class="card-body">
+          
+          <!-- Card Header & Status Badge -->
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="d-flex align-items-center gap-2">
+              <h6 class="mb-0 fw-bold">Abschluss #{{ i + 1 }}</h6>
+              @if (manager.isUnsaved(i)) {
+                <span class="badge bg-warning text-dark">Ungespeichert</span>
+              }
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex gap-2">
+              <button 
+                type="button" 
+                class="btn btn-sm"
+                [ngClass]="manager.isSaved(i) ? 'btn-outline-primary' : 'btn-success'"
+                [disabled]="manager.isSaveDisabled(i)"
+                (click)="saveDegree(i)">
+                {{ manager.isSaved(i) ? 'Aktualisieren' : 'Speichern' }}
+              </button>
+
+              <span class="d-inline-block" [ngbTooltip]="manager.getDeleteTooltip(i)" container="body">
+                <button 
+                  type="button" 
+                  class="btn btn-sm btn-outline-danger" 
+                  [disabled]="!manager.canDelete(i)"
+                  (click)="deleteDegree(i)">
+                  ✕ Löschen
+                </button>
+              </span>
+            </div>
+          </div>
+
+          <!-- Formular-Felder -->
+          <div class="row g-2">
+
+            <!-- Section: Degree Details -->
+            <ng-container formGroupName="degree">
+              <div class="col-md-6 col-12">
+                <app-form-control
+                  [control]="$any(group.get('degree.name'))"
+                  label="Bezeichnung"
+                  placeholder="z.B. Bachelor of Science"
+                  [type]="inputTypes.Text">
+                </app-form-control>
+              </div>
+
+              <div class="col-md-3 col-sm-6">
+                <app-form-control
+                  [control]="$any(group.get('degree.level'))"
+                  label="Level / Niveaustufe"
+                  placeholder="z.B. BSc / MSc / Mag."
+                  [type]="inputTypes.Text">
+                </app-form-control>
+              </div>
+
+              <div class="col-md-3 col-sm-6">
+                <app-form-control
+                  [control]="$any(group.get('degree.weight'))"
+                  label="Gewichtung"
+                  [type]="inputTypes.Number">
+                </app-form-control>
+              </div>
+
+              <!-- Checkboxen für PreName / PostName -->
+              <div class="col-md-6 col-12 d-flex gap-4 align-items-center my-2">
+                <div class="form-check">
+                  <input 
+                    class="form-check-input" 
+                    type="checkbox" 
+                    [id]="'preName-' + i" 
+                    [formControl]="$any(group.get('degree.preName'))">
+                  <label class="form-check-label" [for]="'preName-' + i">
+                    Vorgestellter Titel (z.B. Dr., Mag.)
+                  </label>
+                </div>
+
+                <div class="form-check">
+                  <input 
+                    class="form-check-input" 
+                    type="checkbox" 
+                    [id]="'postName-' + i" 
+                    [formControl]="$any(group.get('degree.postName'))">
+                  <label class="form-check-label" [for]="'postName-' + i">
+                    Nachgestellter Titel (z.B. BSc, MSc)
+                  </label>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- Fortschritt in Prozent -->
+            <div class="col-md-6 col-12">
+              <app-form-control
+                [control]="$any(group.get('progressInPercent'))"
+                label="Fortschritt (%)"
+                placeholder="0 - 100"
+                [type]="inputTypes.Number">
+              </app-form-control>
+            </div>
+
+            <!-- Section: Zeitraum (degreeDuration) -->
+            <ng-container formGroupName="degreeDuration">
+              <div class="col-md-6 col-sm-6">
+                <app-form-control
+                  [control]="$any(group.get('degreeDuration.startDate'))"
+                  label="Startdatum"
+                  [type]="inputTypes.Date">
+                </app-form-control>
+              </div>
+
+              <div class="col-md-6 col-sm-6">
+                <app-form-control
+                  [control]="$any(group.get('degreeDuration.endDate'))"
+                  label="Enddatum (Optional)"
+                  [type]="inputTypes.Date">
+                </app-form-control>
+              </div>
+            </ng-container>
+
+            <!-- Section: Bildungseinrichtung (educationInstitution) -->
+            <ng-container formGroupName="educationInstitution">
+              <div class="col-12 mt-3">
+                <h6 class="fw-bold text-secondary mb-2">Bildungseinrichtung</h6>
+              </div>
+
+              <div class="col-12">
+                <app-form-control
+                  [control]="$any(group.get('educationInstitution.name'))"
+                  label="Name der Einrichtung"
+                  placeholder="z.B. Universität Wien, FH Technikum"
+                  [type]="inputTypes.Text">
+                </app-form-control>
+              </div>
+
+              <!-- Adresse der Bildungseinrichtung -->
+              <ng-container formGroupName="address">
+                <div class="col-md-8 col-8">
+                  <app-form-control
+                    [control]="$any(group.get('educationInstitution.address.street'))"
+                    label="Straße"
+                    placeholder="Musterstraße"
+                    [type]="inputTypes.Text">
+                  </app-form-control>
+                </div>
+
+                <div class="col-md-4 col-4">
+                  <app-form-control
+                    [control]="$any(group.get('educationInstitution.address.houseNumber'))"
+                    label="Hausnummer"
+                    placeholder="1"
+                    [type]="inputTypes.Text">
+                  </app-form-control>
+                </div>
+
+                <div class="col-md-4 col-4">
+                  <app-form-control
+                    [control]="$any(group.get('educationInstitution.address.zipCode'))"
+                    label="PLZ"
+                    placeholder="1010"
+                    [type]="inputTypes.Text">
+                  </app-form-control>
+                </div>
+
+                <div class="col-md-8 col-8">
+                  <app-form-control
+                    [control]="$any(group.get('educationInstitution.address.city'))"
+                    label="Stadt"
+                    placeholder="Wien"
+                    [type]="inputTypes.Text">
+                  </app-form-control>
+                </div>
+              </ng-container>
+            </ng-container>
+
+          </div>
+
+        </div>
+      </div>
+    } @empty {
+      <div class="alert alert-secondary text-center my-2 py-3">
+        Keine Abschlüsse eingetragen.
+      </div>
+    }
+  </div>
+
+  <!-- Hinzufügen-Button -->
+  <div class="mt-3">
+    <span class="d-inline-block" [ngbTooltip]="manager.hasUnsavedItem ? 'Bitte speichern Sie den neuen Abschluss zuerst ab.' : ''" container="body">
+      <button 
+        type="button" 
+        class="btn btn-outline-primary btn-sm" 
+        [disabled]="manager.hasUnsavedItem"
+        (click)="addDegree()">
+        + Abschluss hinzufügen
+      </button>
+    </span>
+  </div>
+</div>

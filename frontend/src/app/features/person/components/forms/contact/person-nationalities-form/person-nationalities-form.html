@@ -1,0 +1,100 @@
+<div [formGroup]="form" class="p-2">
+  <div formArrayName="nationalities">
+    @for (group of manager.array.controls; track group; let i = $index) {
+      <div 
+        [formGroupName]="i" 
+        class="card mb-3 transition-all position-relative"
+        [ngClass]="{
+          'border-warning bg-light': manager.isUnsaved(i),
+          'border-primary shadow-sm bg-white': !manager.isUnsaved(i) && group.get('mainCountry')?.value,
+          'border-light bg-light': !manager.isUnsaved(i) && !group.get('mainCountry')?.value
+        }">
+        <div class="card-body">
+          @if (group.get('mainCountry')?.value || manager.isUnsaved(i)) {
+            <div class="position-absolute top-0  p-2 d-flex gap-1">
+              @if (group.get('mainCountry')?.value) {
+                <span class="badge bg-primary">Hauptstaatsbürgerschaft</span>
+              }
+              @if (manager.isUnsaved(i)) {
+                <span class="badge bg-warning text-dark">Ungespeichert</span>
+              }
+            </div>
+          }
+          <div class="row g-3 align-items-center py-3">
+            <div class="col-md-4 col-12">
+              <div class="d-flex align-items-center gap-2">
+                <span class="d-inline-block" [ngbTooltip]="manager.getMainRadioTooltip(i)" container="body">
+                  <div class="form-check mb-0">
+                    <input 
+                      type="radio" 
+                      name="'mainCountryRadio_' + i" 
+                      class="form-check-input" 
+                      [id]="'mainCountry_' + i"
+                      [checked]="group.get('mainCountry')?.value"
+                      [disabled]="!manager.canSelectMain(i)"
+                      (change)="manager.setMain(i)" />
+                    <label class="form-check-label fw-semibold" [for]="'mainCountry_' + i">
+                      Hauptstaatsbürgerschaft
+                    </label>
+                  </div>
+                </span>
+              </div>
+            </div>
+
+            <!-- Land Dropdown -->
+            <div class="col-md-5 col-sm-8">
+              <label class="form-label mb-1">Land / Staatsbürgerschaft</label>
+              <ng-select
+                [items]="countries()"
+                bindLabel="name"
+                bindValue="id"
+                [formControl]="$any(group.get('id.countryId'))"
+                placeholder="Land auswählen..."
+                notFoundText="Kein Land gefunden">
+              </ng-select>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="col-md-3 col-12 text-end d-flex justify-content-end gap-2 align-items-center mt-md-4">
+              <button 
+                type="button" 
+                class="btn btn-sm"
+                [ngClass]="manager.isSaved(i) ? 'btn-outline-primary' : 'btn-success'"
+                [disabled]="manager.isSaveDisabled(i)"
+                (click)="saveNationality(i)">
+                {{ manager.isSaved(i) ? 'Aktualisieren' : 'Speichern' }}
+              </button>
+
+              <span class="d-inline-block" [ngbTooltip]="manager.getDeleteTooltip(i)" container="body">
+                <button 
+                  type="button" 
+                  class="btn btn-sm btn-outline-danger" 
+                  [disabled]="!manager.canDelete(i)"
+                  (click)="deleteNationality(i)">
+                  ✕ Löschen
+                </button>
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    } @empty {
+      <div class="alert alert-secondary text-center my-2 py-3">
+        Keine Staatsbürgerschaften eingetragen.
+      </div>
+    }
+  </div>
+
+  <div class="mt-3">
+    <span class="d-inline-block" [ngbTooltip]="manager.hasUnsavedItem ? 'Bitte speichern Sie die neue Staatsbürgerschaft zuerst ab.' : ''" container="body">
+      <button 
+        type="button" 
+        class="btn btn-outline-primary btn-sm" 
+        [disabled]="manager.hasUnsavedItem"
+        (click)="addNationality()">
+        + Staatsbürgerschaft hinzufügen
+      </button>
+    </span>
+  </div>
+</div>

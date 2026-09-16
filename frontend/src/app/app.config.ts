@@ -14,6 +14,10 @@ import { FleshMessageEffects } from './store/fleshMessage/fleshMessage.effects';
 import { refreshInterceptor } from './shared/interceptors/refresh.interceptor';
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
+import { personFeatureKey, personReducer } from './features/person/store/person.reducer';
+import { countriesFeatureKey, coutriesReducer } from './store/country/county.reducer';
+import { PersonEffects } from './features/person/store/person.effects';
+import { CountriesEffects } from './store/country/county.effects';
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -23,9 +27,11 @@ export const appConfig: ApplicationConfig = {
         provideHttpClient(withInterceptors([tokenInterceptor, refreshInterceptor])),
         provideStore(),
         provideState(authFeatureKey, authReducer),
+        provideState(personFeatureKey, personReducer),
         provideState(todoFeatureKey, todoReducer),
         provideState(fleshMessageFeatureKey, fleshMessageReducer),
-        provideEffects([AuthEffects, TodoEffects, FleshMessageEffects]),
+        provideState(countriesFeatureKey, coutriesReducer),
+        provideEffects([AuthEffects, TodoEffects, FleshMessageEffects, PersonEffects, CountriesEffects]),
         provideTranslateService({
             loader: provideTranslateHttpLoader({
                 prefix: '/assets/i18n/',

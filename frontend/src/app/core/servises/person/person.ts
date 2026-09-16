@@ -1,14 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
 import { CollectionModel, EntityModel } from '../../models/hateoas-models';
 import { ApiSuccessResponse } from  '../../models/api-success-response';
 import { BaseCrudService } from '../../servises/baseCrud/base-crud.service';
-
-// Ensure these paths match where you generated your DTO interfaces
-import { PersonData } from '../../../types/dto/person/person-data';
-import { PersonOverview } from '../../../types/dto/person/person-overview';
+import { PersonData, PersonDto, PersonOverview } from '../../../types/dto/person/person-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +13,7 @@ export class PersonService extends BaseCrudService<PersonData, number> {
 
   constructor() {
     // Maps exactly to @RequestMapping("/api/v1/persons") in your Spring Controller
-    super('api/v1/persons');
+    super('persons');
   }
 
   /**
@@ -26,6 +22,10 @@ export class PersonService extends BaseCrudService<PersonData, number> {
    */
   public getOverview(id: number): Observable<ApiSuccessResponse<PersonOverview>> {
     return this.http.get<ApiSuccessResponse<PersonOverview>>(`${this.resourceUrl}/${id}/overview`);
+  }
+
+  public getPersonDetails(id: number): Observable<ApiSuccessResponse<PersonDto>> {
+    return this.http.get<ApiSuccessResponse<PersonDto>>(`${this.resourceUrl}/${id}/details`);
   }
 
   /**

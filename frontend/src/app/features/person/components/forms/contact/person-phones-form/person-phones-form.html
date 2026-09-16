@@ -1,0 +1,127 @@
+<div [formGroup]="form" class="p-2">
+  <div formArrayName="phones">
+    @for (group of manager.array.controls; track group; let i = $index) {
+      <div 
+        [formGroupName]="i" 
+        class="card mb-3 transition-all position-relative"
+        [ngClass]="{
+          'border-warning bg-light': manager.isUnsaved(i),
+          'border-primary shadow-sm bg-white': !manager.isUnsaved(i) && group.get('mainPhoneNumber')?.value,
+          'border-light bg-light': !manager.isUnsaved(i) && !group.get('mainPhoneNumber')?.value
+        }">
+        <div class="card-body">
+          @if (group.get('mainPhoneNumber')?.value || manager.isUnsaved(i)) {
+            <div class="position-absolute top-0  p-2 d-flex gap-1">
+              @if (group.get('mainPhoneNumber')?.value) {
+                <span class="badge bg-primary">Hauptnummer</span>
+              }
+              @if (manager.isUnsaved(i)) {
+                <span class="badge bg-warning text-dark">Ungespeichert</span>
+              }
+            </div>
+          }
+          <div class="row g-3 align-items-center p-3">
+            
+            <!-- Radio & Badges -->
+            <div class="col-md-3 col-12">
+              <div class="d-flex align-items-center gap-2">
+                <span class="d-inline-block" [ngbTooltip]="manager.getMainRadioTooltip(i)" container="body">
+                  <div class="form-check mb-0">
+                    <input 
+                      type="radio" 
+                      name="'mainPhoneNumberRadio_' + i" 
+                      class="form-check-input" 
+                      [id]="'mainNumber_' + i"
+                      [checked]="group.get('mainPhoneNumber')?.value"
+                      [disabled]="!manager.canSelectMain(i)"
+                      (change)="manager.setMain(i)" />
+                    <label class="form-check-label fw-semibold" [for]="'mainNumber_' + i">
+                      Hauptnummer
+                    </label>
+                  </div>
+                </span>
+              </div>
+            </div>
+
+            <!-- Vorwahl ng-select -->
+            <div class="col-md-2 col-sm-4">
+              <label class="form-label mb-1">Vorwahl</label>
+              <ng-select
+                [items]="countryPhoneList"
+                bindLabel="phoneCode"
+                bindValue="phoneCode"
+                [searchFn]="phoneCodeSearch"
+                [formControl]="$any(group.get('phoneNumber.countryCode'))"
+                placeholder="Vorwahl..."
+                notFoundText="Kein Land gefunden">
+
+                <ng-template ng-option-tmp let-item="item">
+                  <span>{{ item.name }} <strong>({{ item.phoneCode }})</strong></span>
+                </ng-template>
+              
+                <ng-template ng-selected-tmp let-item="item">
+                  <span>{{ item.phoneCode }}</span>
+                </ng-template>
+              </ng-select>
+            </div>
+
+            <!-- Telefonnummer Input & Validierung -->
+            <div class="col-md-3 col-sm-8">
+              <app-form-control
+                [control]="$any(group.get('phoneNumber.phoneNumber'))"
+                label="Telefonnummer"
+                placeholder="6641234567"
+                [type]="inputTypes.Text">
+              </app-form-control>
+
+              @if (group.get('phoneNumber')?.hasError('invalidPhoneNumber') && group.get('phoneNumber.phoneNumber')?.touched) {
+                <div class="text-danger small mt-1">
+                  Die Kombination aus Vorwahl und Telefonnummer ist ungültig.
+                </div>
+              }
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="col-md-4 col-12 text-end d-flex justify-content-end gap-2 align-items-center mt-md-4">
+              <button 
+                type="button" 
+                class="btn btn-sm"
+                [ngClass]="manager.isSaved(i) ? 'btn-outline-primary' : 'btn-success'"
+                [disabled]="manager.isSaveDisabled(i)"
+                (click)="savePhone(i)">
+                {{ manager.isSaved(i) ? 'Aktualisieren' : 'Speichern' }}
+              </button>
+
+              <span class="d-inline-block" [ngbTooltip]="manager.getDeleteTooltip(i)" container="body">
+                <button 
+                  type="button" 
+                  class="btn btn-sm btn-outline-danger" 
+                  [disabled]="!manager.canDelete(i)"
+                  (click)="deletePhone(i)">
+                  ✕ Löschen
+                </button>
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    } @empty {
+      <div class="alert alert-secondary text-center my-2 py-3">
+        Keine Telefonnummern eingetragen.
+      </div>
+    }
+  </div>
+
+  <div class="mt-3">
+    <span class="d-inline-block" [ngbTooltip]="manager.hasUnsavedItem ? 'Bitte speichern Sie die neue Telefonnummer zuerst ab.' : ''" container="body">
+      <button 
+        type="button" 
+        class="btn btn-outline-primary btn-sm" 
+        [disabled]="manager.hasUnsavedItem"
+        (click)="addPhone()">
+        + Telefonnummer hinzufügen
+      </button>
+    </span>
+  </div>
+</div>

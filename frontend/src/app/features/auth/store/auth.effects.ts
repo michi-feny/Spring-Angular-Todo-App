@@ -80,7 +80,7 @@ export class AuthEffects {
             ofType(AuthActions.loginSuccess),
             tap((action) => {
                 localStorage.setItem('refreshTokenExp', action.response.refreshTokenExp.toString());
-                this.router.navigate(['/todos']);
+                this.router.navigate(['/persons']);
             })
         ),
         { dispatch: false }
