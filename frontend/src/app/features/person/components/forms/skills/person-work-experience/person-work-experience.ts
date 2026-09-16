@@ -117,21 +117,21 @@ export class PersonWorkExperience implements OnInit {
   private createWorkExperienceOnlyGroup(): FormGroup {
     return this.fb.group({
       id: [null],
-      startDate: ['', [Validators.required]],
+      startDate: [''],
       endDate: [''],
       jobTitle: ['', [Validators.required, Validators.maxLength(100)]],
       description: ['', [Validators.maxLength(1000)]],
-      militaryService: [false, [Validators.required]],
+      militaryService: [false],
       company: this.fb.group({
         id: [null],
-        name: ['', [Validators.required]],
-        legalForm: [''],
+        name: ['DUMMY'],
+        legalForm: ['DUMMY'],
         address: this.fb.group({
           id: [null],
-          street: ['', [Validators.required]],
-          houseNumber: ['', [Validators.required]],
-          zipCode: ['', [Validators.required]],
-          city: ['', [Validators.required]],
+          street: ['DUMMY'],
+          houseNumber: ['DUMMY'],
+          zipCode: ['DUMMY'],
+          city: ['DUMMY'],
           nationalityId: [1]
         })
       })
@@ -194,6 +194,7 @@ export class PersonWorkExperience implements OnInit {
   }
 
   submitMerge(): void {
+    console.log(this.mergeForm.invalid);
     if (this.mergeForm.invalid) {
       this.mergeForm.markAllAsTouched();
       return;
