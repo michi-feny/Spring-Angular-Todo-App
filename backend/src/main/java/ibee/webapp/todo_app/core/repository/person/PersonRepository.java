@@ -59,7 +59,13 @@ public interface PersonRepository
                 //SOFT SKILLS
 
                 "softSkills",
-                "softSkills.softSkill"
+                "softSkills.softSkill",
+
+                //WORK EXP
+                "workExps",
+                "workExps.workExperience",
+                "workExps.workExperience.company",
+                "workExps.workExperience.company.address"
 
     })
     Optional<Person> findWithDetailsById(Long id);

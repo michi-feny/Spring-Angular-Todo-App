@@ -14,6 +14,7 @@ import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.additionlHardSkil
 import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.degree.PersonDegree;
 import ibee.webapp.todo_app.core.entity.person.skill.hardSkill.professionQualification.PersonProfessionQualification;
 import ibee.webapp.todo_app.core.entity.person.skill.softSkill.PersonSoftSkill;
+import ibee.webapp.todo_app.core.entity.person.workExperience.PersonWorkExperience;
 import ibee.webapp.todo_app.core.repository.baseRepo.IdentifiableEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -117,5 +118,14 @@ public class Person implements IdentifiableEntity<Long>{
     )
     @Builder.Default
     private Set<PersonSoftSkill> softSkills = new HashSet<>();
+
+    @OneToMany(
+    mappedBy = "person",
+    fetch = FetchType.LAZY,
+    //cascade = CascadeType.ALL,
+    orphanRemoval = true
+    )
+    @Builder.Default
+    private Set<PersonWorkExperience> workExps = new HashSet<>();
 
 }

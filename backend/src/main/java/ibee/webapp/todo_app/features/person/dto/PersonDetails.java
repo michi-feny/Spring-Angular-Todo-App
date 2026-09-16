@@ -9,6 +9,7 @@ import ibee.webapp.todo_app.features.person.related.skill.dto.hard.PersonAdditio
 import ibee.webapp.todo_app.features.person.related.skill.dto.hard.PersonDegreeDto;
 import ibee.webapp.todo_app.features.person.related.skill.dto.hard.PersonProfessionQualificationDto;
 import ibee.webapp.todo_app.features.person.related.skill.dto.soft.PersonSoftSkillDto;
+import ibee.webapp.todo_app.features.person.related.workExp.dto.PersonWorkExperienceDto;
 
 public record PersonDetails(
         PersonData person,
@@ -19,7 +20,8 @@ public record PersonDetails(
         List<PersonDegreeDto> degrees,
         List<PersonProfessionQualificationDto> professions,
         List<PersonAdditionalHardSkillDto> additionalSkills,
-        List<PersonSoftSkillDto> softSkills
+        List<PersonSoftSkillDto> softSkills,
+        List<PersonWorkExperienceDto> workExps
 ) {
 }
 

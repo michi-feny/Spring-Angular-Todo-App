@@ -19,6 +19,7 @@ import ibee.webapp.todo_app.features.person.related.referenceIds.skill.soft.Pers
 * Those are loaded when their main accordion section 
 * is opened.
  */
+import ibee.webapp.todo_app.features.person.related.referenceIds.workExp.PersonWorkExperienceDtoId;
 
 public record PersonOverview(
 
@@ -38,7 +39,9 @@ public record PersonOverview(
 
         List<PersonAdditionalHardSkillDtoId> additionalSkills,
 
-        List<PersonSoftSkillDtoId> softSkills
+        List<PersonSoftSkillDtoId> softSkills,
+
+        List<PersonWorkExperienceDtoId> workExp
 
 ) {
 }

@@ -23,6 +23,7 @@ import ibee.webapp.todo_app.features.person.related.skill.service.PersonAddition
 import ibee.webapp.todo_app.features.person.related.skill.service.PersonDegreeDtoService;
 import ibee.webapp.todo_app.features.person.related.skill.service.PersonProfessionQualificationDtoService;
 import ibee.webapp.todo_app.features.person.related.skill.service.PersonSoftSkillDtoService;
+import ibee.webapp.todo_app.features.person.related.workExp.service.PersonWorkExperienceDtoServiceImpl;
 import ibee.webapp.todo_app.mapper.person.PersonDetailsMapper;
 import ibee.webapp.todo_app.mapper.person.PersonMapper;
 
@@ -46,6 +47,7 @@ extends AbstractMappedCrudDtoService
     private final PersonProfessionQualificationDtoService personProfessionQualificationDtoService;
     private final PersonAdditionalSkillDtoService personAdditionalSkillDtoService;
     private final PersonSoftSkillDtoService personSoftSkillDtoService;
+    private final PersonWorkExperienceDtoServiceImpl personWorkExperienceDtoServiceImpl;
 
     public PersonDtoService(
             PersonServiceImpl personEntityService,
@@ -58,7 +60,8 @@ extends AbstractMappedCrudDtoService
             PersonProfessionQualificationDtoService personProfessionQualificationDtoService,
             PersonAdditionalSkillDtoService personAdditionalSkillDtoService,
             PersonSoftSkillDtoService personSoftSkillDtoService,
-            PersonDetailsMapper personDetailsMapper) {
+            PersonDetailsMapper personDetailsMapper,
+            PersonWorkExperienceDtoServiceImpl personWorkExperienceDtoServiceImpl) {
         super(personEntityService, personMapper);
         this.personService = personEntityService;
         this.personMapper = personMapper;
@@ -71,6 +74,7 @@ extends AbstractMappedCrudDtoService
         this.personAdditionalSkillDtoService = personAdditionalSkillDtoService;
         this.personSoftSkillDtoService = personSoftSkillDtoService;
         this.personDetailsMapper = personDetailsMapper;
+        this.personWorkExperienceDtoServiceImpl=personWorkExperienceDtoServiceImpl;
     }
 
     // --- Overview Aggregation (Initialansicht mit Lazy-ID-Listen) ---
@@ -87,7 +91,9 @@ extends AbstractMappedCrudDtoService
                         personDegreeDtoService.findIdsByPersonId(personId),
                         personProfessionQualificationDtoService.findIdsByPersonId(personId),
                         personAdditionalSkillDtoService.findIdsByPersonId(personId),
-                        personSoftSkillDtoService.findIdsByPersonId(personId)
+                        personSoftSkillDtoService.findIdsByPersonId(personId),
+                        personWorkExperienceDtoServiceImpl.findIdsByPersonId(personId)
+                        
                 ));
     }
 
