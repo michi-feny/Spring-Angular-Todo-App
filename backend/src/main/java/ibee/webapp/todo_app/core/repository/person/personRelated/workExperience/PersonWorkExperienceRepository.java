@@ -43,13 +43,23 @@ public interface PersonWorkExperienceRepository
     })
     List<PersonWorkExperience> findWithDetailsByPersonId(Long personId);
 
-    // 3. OPTIONAL BUT RECOMMENDED: Fetch ONLY the root nodes for clean UI rendering
+    
+    
+    @Query("""
+        SELECT pwe 
+        FROM PersonWorkExperience pwe 
+        WHERE pwe.id.personId = :personId 
+          AND pwe.mergedIntoWorkExpId IS NULL
+    """)
     @EntityGraph(attributePaths = {
             "workExperience",
             "subExperiences",
             "subExperiences.workExperience"
     })
-    List<PersonWorkExperience> findRootsByPersonIdAndMergedIntoIsNull(Long personId);
+    List<PersonWorkExperience> findRootsByPersonIdAndMergedIntoIsNull(
+        @Param("personId") Long personId
+    );
+
 
     // Fetch only visible entries for a specific person (hiding merged sub-records)
     /**
