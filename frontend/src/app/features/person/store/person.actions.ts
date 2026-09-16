@@ -461,7 +461,7 @@ export const mergeWorkExperience = createAction(
 );
 export const mergeWorkExperienceSuccess = createAction(
   '[Person] Merge Work Experiences Success',
-  props<{ workExperiences: PersonWorkExperienceDto[] }>()
+  props<{ personId: number, workExperiences: PersonWorkExperienceDto[] }>()
 );
 
 export const mergeWorkExperienceFailure = createAction(

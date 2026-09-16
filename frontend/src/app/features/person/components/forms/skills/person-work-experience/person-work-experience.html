@@ -1,25 +1,64 @@
 <div [formGroup]="form" class="p-2">
-    <div formArrayName="workExperiences">
-      @for (group of manager.array.controls; track group; let i = $index) {
+
+  <!-- Top Action Bar -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <span class="text-muted small" *ngIf="selectedIndices.size > 0">
+        {{ selectedIndices.size }} Eintrag/Einträge zum Mergen ausgewählt
+      </span>
+    </div>
+
+    <span 
+      class="d-inline-block" 
+      [ngbTooltip]="!canMerge ? 'Wählen Sie mindestens 2 Einträge aus, um sie zusammenzuführen.' : ''" 
+      container="body">
+      <button 
+        type="button" 
+        class="btn btn-warning text-dark fw-bold btn-sm"
+        [disabled]="!canMerge"
+        (click)="openMergeModal()">
+        ⚡ Ausgewählte mergen ({{ selectedIndices.size }})
+      </button>
+    </span>
+  </div>
+
+  <div formArrayName="workExperiences">
+    @for (group of manager.array.controls; track group; let i = $index) {
+      
+      <!-- RENDERT NUR SICHTBARE DTOs ALS FORMULAR-KARTE -->
+      @if (group.get('visible')?.value) {
+        @let masterWorkExpId = group.get('workExperience.id')?.value;
+        @let subRecords = getMergedSubRecords(masterWorkExpId);
+
         <div 
           [formGroupName]="i" 
           class="card mb-3 transition-all"
           [ngClass]="{
             'border-warning bg-light': manager.isUnsaved(i),
-            'border-primary shadow-sm bg-white': !manager.isUnsaved(i),
-            'border-light bg-light': !manager.isUnsaved(i)
+            'border-primary shadow-sm bg-white': !manager.isUnsaved(i) && isSelected(i),
+            'border-light bg-light': !manager.isUnsaved(i) && !isSelected(i)
           }">
           <div class="card-body">
-            
             <!-- Card Header & Actions -->
             <div class="d-flex justify-content-between align-items-center mb-3">
-              <div class="d-flex align-items-center gap-2">
-                <h5 class="mb-0 fw-bold">Eintrag #{{ i + 1 }}</h5>
+              <div>
+                <!-- Merge Checkbox -->
+                <div class="form-check mb-0">
+                  <input 
+                    type="checkbox" 
+                    class="form-check-input"
+                    [id]="'merge-check-' + i"
+                    [checked]="isSelected(i)"
+                    [disabled]="manager.isNew(i)"
+                    (change)="toggleSelection(i, $event)">
+                  <label class="form-label ms-2 mb-0" [for]="'merge-check-' + i">Zusammenfügen auswählen</label>
+                </div>
+
                 @if (manager.isUnsaved(i)) {
-                  <span class="badge bg-warning text-dark">Ungespeichert</span>
+                  <span class="badge bg-warning text-dark ms-2">Ungespeichert</span>
                 }
               </div>
-  
+
               <div class="d-flex gap-2">
                 <button 
                   type="button" 
@@ -29,7 +68,7 @@
                   (click)="saveWorkExperience(i)">
                   {{ manager.isSaved(i) ? 'Aktualisieren' : 'Speichern' }}
                 </button>
-  
+
                 <span class="d-inline-block" [ngbTooltip]="manager.getDeleteTooltip(i)" container="body">
                   <button 
                     type="button" 
@@ -41,7 +80,7 @@
                 </span>
               </div>
             </div>
-  
+
             <!-- Root Meta-Fields -->
             <div class="row g-3 mb-3">
               <div class="col-md-3">
@@ -59,7 +98,7 @@
                 </app-form-control>
               </div>
             </div>
-  
+
             <!-- Position Details -->
             <div class="border-top pt-3">
               <h6 class="fw-semibold text-secondary mb-3">Position Details</h6>
@@ -104,7 +143,7 @@
                 </div>
               </div>
             </div>
-  
+
             <!-- Unternehmensdaten -->
             <div class="border-top pt-3 mt-3">
               <h6 class="fw-semibold text-secondary mb-3">Unternehmensdaten</h6>
@@ -127,7 +166,7 @@
                   </app-form-control>
                 </div>
               </div>
-  
+
               <!-- Adresse des Unternehmens -->
               <div class="border-top pt-3 mt-3">
                 <p class="small text-muted mb-2">Adresse des Unternehmens</p>
@@ -168,25 +207,118 @@
                 </div>
               </div>
             </div>
-  
+
+            <!-- HISTORIE DER URSPRUNGSEINTRÄGE -->
+            @if (subRecords.length > 0 && masterWorkExpId) {
+              <div class="border-top pt-3 mt-3">
+                <button 
+                  type="button" 
+                  class="btn btn-sm btn-outline-info d-flex align-items-center gap-2"
+                  (click)="toggleHistory(masterWorkExpId)">
+                  <span>🔗 Ursprungseinträge anzeigen ({{ subRecords.length }})</span>
+                  <small>{{ isHistoryExpanded(masterWorkExpId) ? '▲' : '▼' }}</small>
+                </button>
+
+                @if (isHistoryExpanded(masterWorkExpId)) {
+                  <div class="mt-2 p-3 bg-light rounded border border-info-subtle">
+                    <small class="text-muted d-block mb-2 fw-semibold">
+                      Dieser Eintrag wurde aus folgenden Arbeitserfahrungen zusammengeführt:
+                    </small>
+                    
+                    <div class="list-group list-group-flush">
+                      @for (subGroup of subRecords; track subGroup) {
+                        @let subVal = subGroup.value;
+                        <div class="list-group-item bg-white d-flex justify-content-between align-items-center py-2 px-3 mb-1 border rounded">
+                          <div>
+                            <strong>{{ subVal.workExperience?.jobTitle || 'Unbenannt' }}</strong>
+                            <span class="text-muted small ms-2" *ngIf="subVal.workExperience?.company?.name">
+                              bei {{ subVal.workExperience?.company?.name }}
+                            </span>
+                          </div>
+                          <span class="badge bg-secondary">Archiviert</span>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+
           </div>
         </div>
-      } @empty {
-        <div class="alert alert-secondary text-center my-2 py-3">
-          Keine Berufserfahrungen eingetragen.
-        </div>
       }
-    </div>
-  
-    <div class="mt-3">
-      <span class="d-inline-block" [ngbTooltip]="manager.hasUnsavedItem ? 'Bitte speichern Sie die neue Berufserfahrung zuerst ab.' : ''" container="body">
-        <button 
-          type="button" 
-          class="btn btn-outline-primary btn-sm" 
-          [disabled]="manager.hasUnsavedItem"
-          (click)="addWorkExperience()">
-          + Berufserfahrung hinzufügen
-        </button>
-      </span>
-    </div>
+    } @empty {
+      <div class="alert alert-secondary text-center my-2 py-3">
+        Keine Berufserfahrungen eingetragen.
+      </div>
+    }
   </div>
+
+  <div class="mt-3">
+    <span class="d-inline-block" [ngbTooltip]="manager.hasUnsavedItem ? 'Bitte speichern Sie die neue Berufserfahrung zuerst ab.' : ''" container="body">
+      <button 
+        type="button" 
+        class="btn btn-outline-primary btn-sm" 
+        [disabled]="manager.hasUnsavedItem"
+        (click)="addWorkExperience()">
+        + Berufserfahrung hinzufügen
+      </button>
+    </span>
+  </div>
+</div>
+
+<!-- ================= MERGE MODAL ================= -->
+<ngbd-modal
+  #mergeModal
+  [titleTemplate]="mergeTitle"
+  [bodyTemplate]="mergeBody"
+  [footerTemplate]="mergeFooter">
+</ngbd-modal>
+
+<ng-template #mergeTitle>
+  Berufserfahrungen zusammenführen
+</ng-template>
+
+<ng-template #mergeBody let-modal>
+  <p class="text-muted small">
+    Geben Sie die neuen Eigenschaften für die zusammengeführte Berufserfahrung an.
+  </p>
+
+  <form *ngIf="mergeForm" [formGroup]="mergeForm">
+    <div class="row g-3">
+      <div class="col-md-12">
+        <app-form-control
+          [control]="$any(mergeForm.get('jobTitle'))"
+          label="Neuer Berufstitel"
+          placeholder="z.B. Senior Software Entwickler"
+          [type]="inputTypes.Text">
+        </app-form-control>
+      </div>
+
+      <div class="col-12">
+        <app-form-control
+          [control]="$any(mergeForm.get('description'))"
+          label="Zusammengefasste Beschreibung"
+          placeholder="Beschreibung eingeben..."
+          [type]="inputTypes.Textarea">
+        </app-form-control>
+      </div>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #mergeFooter let-modal>
+  <button 
+    type="button" 
+    class="btn btn-outline-secondary" 
+    (click)="modal.dismiss('Cancel')">
+    Abbrechen
+  </button>
+  <button 
+    type="button" 
+    class="btn btn-warning text-dark fw-bold" 
+    [disabled]="mergeForm.invalid"
+    (click)="submitMerge()">
+    Gemergt Speichern
+  </button>
+</ng-template>

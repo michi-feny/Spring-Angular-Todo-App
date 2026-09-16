@@ -633,9 +633,84 @@ export const personReducer = createReducer(
     };
   }),
 
+    // --- Work Experiences ---
+    on(PersonActions.createWorkExperienceSuccess, (state, { data }) => {
+      const personId = data.id?.personId;
+      if (!personId || !state.detailsCache[personId]) return state;
+  
+      const currentPerson = state.detailsCache[personId];
+      return {
+        ...state,
+        detailsCache: {
+          ...state.detailsCache,
+          [personId]: {
+            ...currentPerson,
+            workExps: [...(currentPerson.workExps || []), data]
+          }
+        }
+      };
+    }),
+  
+    on(PersonActions.updateWorkExperienceSuccess, (state, { data }) => {
+      const personId = data.id?.personId;
+      if (!personId || !state.detailsCache[personId]) return state;
+  
+      const currentPerson = state.detailsCache[personId];
+      const updatedList = (currentPerson.workExps || []).map((item) =>
+        isSameId(item.id, data.id) ? data : item
+      );
+  
+      return {
+        ...state,
+        detailsCache: {
+          ...state.detailsCache,
+          [personId]: {
+            ...currentPerson,
+            workExps: updatedList
+          }
+        }
+      };
+    }),
+  
+    on(PersonActions.deleteWorkExperienceSuccess, (state, { id }) => {
+      if (!state.detailsCache[id.personId]) return state;
+  
+      const currentPerson = state.detailsCache[id.personId];
+      const filteredList = (currentPerson.workExps || []).filter(
+        (item) => !isSameId(item.id, id)
+      );
+  
+      return {
+        ...state,
+        detailsCache: {
+          ...state.detailsCache,
+          [id.personId]: {
+            ...currentPerson,
+            workExps: filteredList
+          }
+        }
+      };
+    }),
+  
+    on(PersonActions.mergeWorkExperienceSuccess, (state, { personId, workExperiences }) => {
+      if (!state.detailsCache[personId]) return state;
+    
+      return {
+        ...state,
+        detailsCache: {
+          ...state.detailsCache,
+          [personId]: {
+            ...state.detailsCache[personId],
+            workExps: workExperiences
+          }
+        }
+      };
+    }),
+
   // Ergänze die neuen Failure-Actions im zentralen Error-Handler:
   on(
     PersonActions.createPhoneNumberFailure, PersonActions.updatePhoneNumberFailure, PersonActions.deletePhoneNumberFailure,
+    PersonActions.createWorkExperienceFailure, PersonActions.updateWorkExperienceFailure, PersonActions.deleteWorkExperienceFailure,
     PersonActions.createEmailFailure, PersonActions.updateEmailFailure, PersonActions.deleteEmailFailure,
     PersonActions.createAddressFailure, PersonActions.updateAddressFailure, PersonActions.deleteAddressFailure,
     PersonActions.createNationalityFailure, PersonActions.updateNationalityFailure, PersonActions.deleteNationalityFailure,

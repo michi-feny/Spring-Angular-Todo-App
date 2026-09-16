@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { catchError, filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
+import { catchError, concatMap, filter, map, mergeMap, switchMap, take, withLatestFrom } from 'rxjs/operators';
 import * as PersonActions from './person.actions';
 import { Store } from '@ngrx/store';
 import { FlashMessageState, MessageType } from '../../../store/fleshMessage/fleshMessage.models';
@@ -78,12 +78,19 @@ export class PersonEffects {
   onToggleAccordion$ = createEffect(() =>
     this.actions$.pipe(
       ofType(PersonActions.togglePersonAccordion),
-      withLatestFrom(
-        this.store.select(selectPersonDetailsCache),
-        this.store.select(selectLoadingDetailIds)
+      concatMap((action) =>
+        this.store.select(selectPersonDetailsCache).pipe(
+          take(1),
+          withLatestFrom(this.store.select(selectLoadingDetailIds)),
+          map(([cache, loadingIds]) => ({
+            id: action.id,
+            isCached: !!cache[action.id],
+            isLoading: loadingIds.includes(action.id),
+          }))
+        )
       ),
-      filter(([{ id }, cache, loadingIds]) => !cache[id] && !loadingIds.includes(id)),
-      map(([{ id }]) => PersonActions.loadPersonDetails({ id }))
+      filter(({ isCached, isLoading }) => !isCached && !isLoading),
+      map(({ id }) => PersonActions.loadPersonDetails({ id }))
     )
   );
 
@@ -433,7 +440,7 @@ createWorkExperience$ = createEffect(() =>
     ofType(PersonActions.createWorkExperience),
     switchMap(({ data }) =>
       this.personWorkExperienceService.create(data).pipe(
-        map((response) => PersonActions.createWorkExperienceSuccess({ data: response.data.value || data })),
+        map((response) => PersonActions.createWorkExperienceSuccess({ data: response.data || data })),
         catchError((error) => of(PersonActions.createWorkExperienceFailure({ error })))
       )
     )
@@ -445,7 +452,7 @@ updateWorkExperience$ = createEffect(() =>
     ofType(PersonActions.updateWorkExperience),
     switchMap(({ data }) =>
       this.personWorkExperienceService.update(`${data.id?.personId}_${data.id?.workExperienceId}`, data).pipe(
-        map((response) => PersonActions.updateWorkExperienceSuccess({ data: response.data.value || data })),
+        map((response) => PersonActions.updateWorkExperienceSuccess({ data: response.data || data })),
         catchError((error) => of(PersonActions.updateWorkExperienceFailure({ error })))
       )
     )
@@ -469,7 +476,7 @@ mergeWorkExperience$ = createEffect(() =>
     ofType(PersonActions.mergeWorkExperience),
     switchMap(({ data }) =>
       this.personWorkExperienceService.merge(data).pipe(
-        map((response) => PersonActions.mergeWorkExperienceSuccess({ workExperiences: response.data.content ?? [] })),
+        map((response) => PersonActions.mergeWorkExperienceSuccess({personId: data.personId, workExperiences: response.data.content ?? [] })),
         catchError((error) => of(PersonActions.mergeWorkExperienceFailure({ error })))
       )
     )

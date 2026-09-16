@@ -29,15 +29,13 @@ public class MergePersonWorkExperiencesCommand {
     }
 
     public List<PersonWorkExperience> execute(Long personId, List<Long> workExpIdsToMerge, WorkExperience newMasterDetails) {
-        // 1. Pre-emptive Normalization
         List<PersonWorkExperience> visibleRecords = personWorkExperienceServiceImpl.findVisibleByPersonId(personId);
         if (sequenceHelper.needsNormalization(visibleRecords)) {
             personWorkExperienceServiceImpl.saveAll(sequenceHelper.normalize(visibleRecords));
         }
 
-        // 2. Validate Timeline & Sub-Records
         personWorkExperienceServiceImpl.validateChronologicalTimeline(newMasterDetails);
-        
+
         List<PersonWorkExperienceId> subIds = workExpIdsToMerge.stream()
                 .map(id -> new PersonWorkExperienceId(personId, id)).toList();
         
@@ -49,42 +47,50 @@ public class MergePersonWorkExperiencesCommand {
                     personWorkExperienceServiceImpl.validateChronologicalTimeline(record.getWorkExperience());
         }
 
-        List<Integer> orders = subRecords.stream().map(PersonWorkExperience::getDisplayOrder).sorted().toList();
-        int minOrder = orders.get(0);
-        int maxOrder = orders.get(orders.size() - 1);
+        List<Integer> sortedOrders = subRecords.stream()
+                .map(PersonWorkExperience::getDisplayOrder)
+                .sorted()
+                .toList();
 
-        // 3. Continuity Guard: Database count ensures no records are left stranded in between
-        long recordsInBetween = personWorkExperienceServiceImpl.countVisibleBetweenOrders(personId, minOrder, maxOrder);
-        if (recordsInBetween != workExpIdsToMerge.size()) {
-            throw new IllegalStateException("Merge failed: There are unselected work experiences trapped between the selected ones.");
+        for (int i = 0; i < sortedOrders.size() - 1; i++) {
+            int currentOrder = sortedOrders.get(i);
+            int nextOrder = sortedOrders.get(i + 1);
+
+            if (nextOrder != currentOrder + 1) {
+                throw new IllegalStateException("Merge failed: Selected work experiences are not contiguous. Display order was skipped between " + currentOrder + " and " + nextOrder + ".");
+            }
         }
 
-        // 4. Create Master Core Entity
-        var savedMasterWorkExp = newMasterDetails.getId() == null 
-                ? coreWorkExperienceService.create(newMasterDetails) 
+        int minOrder = sortedOrders.get(0);
+        var savedMasterWorkExp = newMasterDetails.getId() == null
+                ? coreWorkExperienceService.create(newMasterDetails)
                 : coreWorkExperienceService.findByIdWithoutException(newMasterDetails.getId()).orElseGet(() -> coreWorkExperienceService.create(newMasterDetails));
 
-        // 5. Hide Sub-Records (This naturally clears the slot at minOrder)
-        personWorkExperienceServiceImpl.hideAndLinkSubRecords(personId, workExpIdsToMerge, savedMasterWorkExp.getId());
 
-        // 6. Save Master PersonWorkExperience Link
         PersonWorkExperience masterRecord = PersonWorkExperience.builder()
                 .id(new PersonWorkExperienceId(personId, savedMasterWorkExp.getId()))
+                .person(subRecords.get(0).getPerson())
                 .workExperience(savedMasterWorkExp)
                 .visible(true)
                 .displayOrder(minOrder)
                 .build();
+
         personWorkExperienceServiceImpl.create(masterRecord);
 
-        // 7. Post-Merge Normalization (To close the gap left by hidden records)
-        List<PersonWorkExperience> finalRecords = 
-            personWorkExperienceServiceImpl.findVisibleByPersonId(personId);
-        if (sequenceHelper.needsNormalization(finalRecords)) {
-            return personWorkExperienceServiceImpl.
-                saveAll(sequenceHelper.normalize(finalRecords));
-            
-        }
-        return finalRecords;
+
+        personWorkExperienceServiceImpl.hideAndLinkSubRecords(personId, workExpIdsToMerge, savedMasterWorkExp.getId());
+
+        List<PersonWorkExperience> allRecords = personWorkExperienceServiceImpl.findByPersonId(personId);
+
+        List<PersonWorkExperience> activeRecords = allRecords.stream()
+                .filter(PersonWorkExperience::isVisible)
+                .toList();
+
+        if (sequenceHelper.needsNormalization(activeRecords)) {
+            personWorkExperienceServiceImpl.saveAll(sequenceHelper.normalize(activeRecords));
+        }   
+
+        return allRecords;
     }
 
 

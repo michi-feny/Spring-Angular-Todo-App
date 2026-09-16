@@ -1,6 +1,6 @@
 import { PersonAddressDto, PersonCountryDto, PersonEmailAddressDto, PersonPhoneNumberDto } from "./person-contact.dto";
 import { PersonAdditionalHardSkillDtoId, PersonAddressDtoId, PersonCountryDtoId, PersonDegreeDtoId, PersonEmailAddressDtoId, PersonPhoneNumberDtoId, PersonProfessionQualificationDtoId, PersonSoftSkillDtoId } from "./person-id.dto";
-import { PersonAdditionalHardSkillDto, PersonDegreeDto, PersonProfessionQualificationDto, PersonSoftSkillDto } from "./person-skill.dto";
+import { PersonAdditionalHardSkillDto, PersonDegreeDto, PersonProfessionQualificationDto, PersonSoftSkillDto, PersonWorkExperienceDto } from "./person-skill.dto";
 
 export interface PersonData {
   id?: number | null;
@@ -40,4 +40,5 @@ export interface PersonDto {
   professions: PersonProfessionQualificationDto[];
   additionalSkills: PersonAdditionalHardSkillDto[];
   softSkills: PersonSoftSkillDto[];
+  workExps: PersonWorkExperienceDto[];
 }

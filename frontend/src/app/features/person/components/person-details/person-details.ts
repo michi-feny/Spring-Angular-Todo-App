@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { PersonState } from '../../store/person.models';
-import { createAdditionalSkill, createAddress, createDegree, createEmail, createNationality, createPhoneNumber, createProfession, createSoftSkill, createWorkExperience, deleteAdditionalSkill, deleteAddress, deleteDegree, deleteEmail, deleteNationality, deletePhoneNumber, deleteProfession, deleteSoftSkill, deleteWorkExperience, updateAdditionalSkill, updateAddress, updateDegree, updateEmail, updateGeneralData, updateNationality, updatePhoneNumber, updateProfession, updateSoftSkill, updateWorkExperience } from '../../store/person.actions';
+import { createAdditionalSkill, createAddress, createDegree, createEmail, createNationality, createPhoneNumber, createProfession, createSoftSkill, createWorkExperience, deleteAdditionalSkill, deleteAddress, deleteDegree, deleteEmail, deleteNationality, deletePhoneNumber, deleteProfession, deleteSoftSkill, deleteWorkExperience, mergeWorkExperience, updateAdditionalSkill, updateAddress, updateDegree, updateEmail, updateGeneralData, updateNationality, updatePhoneNumber, updateProfession, updateSoftSkill, updateWorkExperience } from '../../store/person.actions';
 import { NgbdAccordionStatic } from '../../../../shared/components/bootstrap/accordion-static/accordion-static';
 import { PersonDegreesForm } from '../forms/skills/person-degrees-form/person-degrees-form';
 import { PersonGeneralForm } from '../forms/contact/person-general-form/person-general-form';
@@ -18,7 +18,7 @@ import { PersonAdditionalSkillsForm } from '../forms/skills/person-additional-sk
 import { PersonData, PersonDto } from '../../../../types/dto/person/person-dto';
 import { PersonAddressDto, PersonCountryDto, PersonEmailAddressDto, PersonPhoneNumberDto } from '../../../../types/dto/person/person-contact.dto';
 import { PersonAdditionalHardSkillDtoId, PersonAddressDtoId, PersonCountryDtoId, PersonDegreeDtoId, PersonEmailAddressDtoId, PersonPhoneNumberDtoId, PersonProfessionQualificationDtoId, PersonSoftSkillDtoId, PersonWorkExperienceDtoId } from '../../../../types/dto/person/person-id.dto';
-import { PersonAdditionalHardSkillDto, PersonDegreeDto, PersonProfessionQualificationDto, PersonSoftSkillDto, PersonWorkExperienceDto } from '../../../../types/dto/person/person-skill.dto';
+import { MergeWorkExperiencesRequestDto, PersonAdditionalHardSkillDto, PersonDegreeDto, PersonProfessionQualificationDto, PersonSoftSkillDto, PersonWorkExperienceDto } from '../../../../types/dto/person/person-skill.dto';
 import { PersonProfessionsForm } from '../forms/skills/person-professions-form/person-professions-form';
 
 export interface AccordionSection {
@@ -183,7 +183,7 @@ export class PersonDetails {
     this.store.dispatch(deleteWorkExperience({ id: id }));
   }
 
-  onMergeWorkexperience(): void {
-    
+  onMergeWorkExperience(request: MergeWorkExperiencesRequestDto): void {
+    this.store.dispatch(mergeWorkExperience({ data: request}));
   }
 }

@@ -15,7 +15,7 @@ export class PersonWorkExperienceService
   PersonWorkExperienceDto,
   PersonWorkExperienceDtoId,
   string, 
-  ServiceResult<EntityModel<PersonWorkExperienceDto>>
+  EntityModel<PersonWorkExperienceDto>
 > {
 
   constructor() {

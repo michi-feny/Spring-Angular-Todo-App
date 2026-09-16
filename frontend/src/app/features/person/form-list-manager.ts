@@ -19,7 +19,7 @@ export class FormListManagerService<T> {
     this.config = config;
   }
 
-  public syncFromList(items: T[], customMatchFn?: (group: FormGroup, item: T) => boolean): void {
+  public syncFromList(items: T[], customMatchFn?: (group: FormGroup, item: T, groupIndex?: number, itemIndex?: number) => boolean): void {
     if (!this.array || !this.config) return;
 
     if (this.config.mainControlPath) {
@@ -39,28 +39,28 @@ export class FormListManagerService<T> {
 
     const controls = this.array.controls as FormGroup[];
 
-    // Standard-Matcher über getIdFn
-    const defaultMatchFn = (group: FormGroup, item: T) => {
+    const defaultMatchFn = (group: FormGroup, item: T, groupIndex?: number, itemIndex?: number) => {
       const groupKey = this.config.getIdFn(group);
       const tempGroup = this.config.createGroupFn(item);
       const itemKey = this.config.getIdFn(tempGroup);
 
-      if (!this.hasValidId(groupKey)) {
-        return true;
+      if (this.hasValidId(groupKey) && this.hasValidId(itemKey)) {
+        return this.areIdsEqual(groupKey, itemKey);
       }
 
+      if (!this.hasValidId(groupKey) && groupIndex !== undefined && itemIndex !== undefined) {
+        return groupIndex === itemIndex;
+      }
 
-      return this.hasValidId(itemKey) && this.areIdsEqual(groupKey, itemKey);
+      return false;
     };
 
     const isMatch = customMatchFn || defaultMatchFn;
 
-    // 1. Store-Einträge abgleichen / hinzufügen
-    items.forEach(storeItem => {
-      const existingGroup = controls.find(group => isMatch(group, storeItem));
+    items.forEach((storeItem, itemIdx) => {
+      const existingGroup = controls.find((group, groupIdx) => isMatch(group, storeItem, groupIdx, itemIdx));
 
       if (existingGroup) {
-        // Falls die Zeile noch neu war (keine ID) ODER nicht vom User bearbeitet wurde
         const wasNew = !this.hasValidId(this.config.getIdFn(existingGroup));
     
         if (wasNew || !existingGroup.dirty) {
@@ -74,18 +74,16 @@ export class FormListManagerService<T> {
           this.markAsPristineDeep(existingGroup);
         }
       } else {
-        // Eintrag existiert noch nicht im Formular -> Neu anfügen
         const newGroup = this.config.createGroupFn(storeItem);
         this.array.push(newGroup);
         this.registerPristineTracking(newGroup);
       }
     });
 
-    // 2. Im Store gelöschte Einträge aus dem Formular entfernen (nur unberührte, gespeicherte)
     for (let i = controls.length - 1; i >= 0; i--) {
       const group = controls[i] as FormGroup;
       if (this.isSaved(i) && !group.dirty) {
-        const existsInStore = items.some(item => isMatch(group, item));
+        const existsInStore = items.some((item, itemIdx) => isMatch(group, item, i, itemIdx));
         if (!existsInStore) {
           this.array.removeAt(i);
         }
@@ -93,9 +91,6 @@ export class FormListManagerService<T> {
     }
   }
 
-  /**
-   * Registriert das Pristine-Tracking für eine FormGroup.
-   */
   public registerPristineTracking(group: FormGroup): void {
     const initialSnapshot = JSON.stringify(group.getRawValue());
     this.groupSnapshots.set(group, initialSnapshot);
@@ -105,10 +100,6 @@ export class FormListManagerService<T> {
     });
   }
 
-  /**
-   * Prüft, ob der aktuelle Wert dem initialen Snapshot entspricht und
-   * setzt die Gruppe bei Übereinstimmung wieder auf pristine zurück.
-   */
   public checkPristineState(group: FormGroup): void {
     const initialSnapshot = this.groupSnapshots.get(group);
     if (!initialSnapshot) return;
@@ -243,32 +234,27 @@ export class FormListManagerService<T> {
       if (!mainCtrl) return;
   
       if (isTarget) {
-        // 1. NEUER HAUPTEINTRAG: Wird auf true gesetzt & als ungespeichert markiert
         if (!mainCtrl.value) {
           mainCtrl.setValue(true);
           mainCtrl.markAsDirty();
           this.checkPristineState(group);
         }
       } else {
-        // 2. ALTER HAUPTEINTRAG: Wird abgewählt
         if (mainCtrl.value) {
           mainCtrl.setValue(false, { emitEvent: false });
-          mainCtrl.markAsPristine(); // Control explizit auf pristine zurücksetzen!
+          mainCtrl.markAsPristine();
   
-          // Prüfen, ob in der Form-Gruppe SONST noch Felder geändert wurden
           const snapshotJson = this.groupSnapshots.get(group);
           if (snapshotJson) {
             const snapshot = JSON.parse(snapshotJson);
             const currentVal = group.getRawValue();
   
-            // Vergleiche alle Felder AUSSER dem mainControlPath mit dem Snapshot
             const hasOtherChanges = Object.keys(currentVal).some(key => {
               if (key === this.config.mainControlPath) return false;
               return JSON.stringify(currentVal[key]) !== JSON.stringify(snapshot[key]);
             });
   
             if (!hasOtherChanges) {
-              // Keine anderen Felder geändert -> Zeile bleibt / wird wieder sauber
               this.markAsPristineDeep(group);
             } else {
               this.checkPristineState(group);
@@ -321,7 +307,6 @@ export class FormListManagerService<T> {
     return false;
   }
 }
-
 
 /*
 

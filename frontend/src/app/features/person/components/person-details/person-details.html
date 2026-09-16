@@ -99,9 +99,10 @@
     @if (section.id === 'workExperience') {
       <app-person-work-experience
         [personId]="person.person.id!"
-        [workExperiences]="[]"
+        [workExperiences]="person.workExps || []"
         (save)="onSaveWorkExperience($event)"
         (delete)="onDeleteWorkExperience($event)"
+        (merge)="onMergeWorkExperience($event)"
       />
     }
 
