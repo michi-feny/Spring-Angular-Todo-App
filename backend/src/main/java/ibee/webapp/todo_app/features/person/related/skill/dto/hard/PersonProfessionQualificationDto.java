@@ -17,9 +17,6 @@ public record PersonProfessionQualificationDto(
     @Valid 
     PersonProfessionQualificationDtoId id,
 
-    @NotBlank
-    String name,
-
     @NotNull
     @Valid
     EducationInstitutionDto educationInstitution,

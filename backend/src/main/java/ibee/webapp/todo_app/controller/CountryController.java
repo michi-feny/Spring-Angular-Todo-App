@@ -34,15 +34,14 @@ public class CountryController {
 
     @GetMapping
     public ResponseEntity<ApiSuccessResponse<List<CountryDto>>> getAll(
-            // Safely extracts the language from the Accept-Language header, defaulting if absent
-            @RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, defaultValue = "en") Locale locale) {
-        
-        // Pass the language/locale down to the service to fetch the localized list
-        List<CountryDto> countries = countryMapper.toDtoList(countryService.findAll());//chack that correct naming is still working
-        
+            @RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, defaultValue = "en") String acceptLanguage) {
+        String languageTag = acceptLanguage.split(",")[0].trim();
+        Locale locale = Locale.forLanguageTag(languageTag);
+
+        List<CountryDto> countries = countryMapper.toDtoList(countryService.findAll());
+
         String message = translationService.translate("crud.loadedAll", "entity.country");
-        
-        // No HATEOAS assembler needed for a simple dropdown lookup list
+
         return buildResponse(countries, message);
     }
 }

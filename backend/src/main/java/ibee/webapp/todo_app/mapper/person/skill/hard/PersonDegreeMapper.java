@@ -33,6 +33,8 @@ public interface PersonDegreeMapper
     @Mapping(target = "id", source = "id")
     @Mapping(target = "degree", source = "degree")
     @Mapping(target = "educationInstitution", source = "educationInstitution")
+    @Mapping(target = "degreeDuration.startDate", source = "startDate")
+    @Mapping(target = "degreeDuration.endDate", source = "endDate")
     PersonDegreeDto toDto(PersonDegree entity);
 
     @Override
@@ -40,6 +42,8 @@ public interface PersonDegreeMapper
     @Mapping(target = "person.id", source = "id.personId")
     @Mapping(target = "degree", source = "degree")
     @Mapping(target = "educationInstitution", source = "educationInstitution")
+    @Mapping(target = "startDate", source = "degreeDuration.startDate")
+    @Mapping(target = "endDate", source = "degreeDuration.endDate")
     PersonDegree toEntity(PersonDegreeDto dto);
 
     // --- 3. DTO UPDATE (UI -> DB) ---
@@ -48,6 +52,8 @@ public interface PersonDegreeMapper
     @Mapping(target = "person", ignore = true)
     @Mapping(target = "degree", source = "degree")
     @Mapping(target = "educationInstitution", source = "educationInstitution")
+    @Mapping(target = "startDate", source = "degreeDuration.startDate")
+    @Mapping(target = "endDate", source = "degreeDuration.endDate")
     void updateEntityFromDto(PersonDegreeDto dto, @MappingTarget PersonDegree entity);
 
     // --- 4. INTERNAL UPDATE ---

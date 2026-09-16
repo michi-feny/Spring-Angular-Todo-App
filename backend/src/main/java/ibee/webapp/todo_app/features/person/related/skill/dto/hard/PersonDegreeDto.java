@@ -23,19 +23,6 @@ public record PersonDegreeDto(
     @NotNull
     EducationInstitutionDto educationInstitution,
 
-    /*
-        start date of this degree
-    */
-    // @NotNull
-    // @PastOrPresent
-    // LocalDate startDate,
-
-    // /*
-    //     end Date of this degree
-    // */
-    // @PastOrPresent
-    // LocalDate endDate,
-
     @Valid 
     LocalDateDurationDto degreeDuration,
 
