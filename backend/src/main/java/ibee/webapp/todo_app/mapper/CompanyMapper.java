@@ -49,5 +49,19 @@ public interface CompanyMapper
     void updateEntityFromEntity(
         Company sourceUpdates, 
         @MappingTarget Company dbEntity
-);
+        );
+
+        /**
+     * Ensures that when a company is updated, its address reference is 
+     * cleanly replaced by the newly resolved instance rather than mutated in-place.
+     */
+    @org.mapstruct.AfterMapping
+    default void replaceAddressReference(
+        Company sourceUpdates, 
+        @MappingTarget Company dbEntity
+    ) {
+        if (sourceUpdates.getAddress() != null) {
+            dbEntity.setAddress(sourceUpdates.getAddress());
+        }
+    }
 }

@@ -150,7 +150,8 @@ public class PersonAddressServiceImpl
                 addressService,
                 this::updateWithMainAddressCleanup,  // <-- Custom Action
                 this::createWithMainAddressCleanup,  // <-- Custom Action                            
-                repository::findById,                     
+                repository::findById,     
+                //TODO: find by id maybe hibernate loads some lasy shit that way                
                 entityMapper::updateEntityFromEntity,     
                 repository::deleteById   
         );

@@ -83,16 +83,38 @@ public class PersonWorkExperienceServiceImpl
         validateCompositeId(currentId, "Current PersonWorkExperienceId");
 
         // 1. STATE CAPTURE: Remember the old Company ID
-        // PersonWorkExperience currentEntity = findWithDetailsById(currentId)
-        //     .orElseThrow(() -> new EntityNotFoundException("PersonWorkExperience not found"));
+        PersonWorkExperience currentEntity = findWithDetailsByIdWithoutException(currentId)
+            .orElseThrow(() -> new EntityNotFoundException("PersonWorkExperience not found"));
 
+        Long oldCompanyId = (currentEntity.getWorkExperience() != null && currentEntity.getWorkExperience().getCompany() != null) 
+            ? currentEntity.getWorkExperience().getCompany().getId() : null;
 
         // Delegate heavy lifting to Command
-        PersonWorkExperience preparedEntity = 
+        // 3. BASE UPDATE: Save using base generic service logic
+        PersonWorkExperience updatedEntityWithPossibleIncorrectOrderNumber = 
             updateCommand.execute(incomingUpdates, currentId);
 
+        // 4. STATE COMPARISON: Get the new Company ID
+        Long newCompanyId = 
+            (updatedEntityWithPossibleIncorrectOrderNumber.getWorkExperience() != null 
+            && updatedEntityWithPossibleIncorrectOrderNumber
+                .getWorkExperience().getCompany() != null) 
+            ? updatedEntityWithPossibleIncorrectOrderNumber
+                .getWorkExperience().getCompany().getId() 
+            : null;
+
+        // 5. CASCADING SWAP & ORPHAN CLEANUP
+        if (oldCompanyId != null && !oldCompanyId.equals(newCompanyId)) {
+            
+            // Fix the typo across all of THIS user's other work experiences
+            repository.bulkUpdateCompanyIdForPerson(currentId.getPersonId(), oldCompanyId, newCompanyId);
+            
+            // Delegate the cleanup to the child service! (Zero layer violations)
+            workExperienceServiceImpl.cleanupOrphanedCompany(oldCompanyId);
+        }
+        
         // Save using base generic service logic, followed by final sanity check
-        PersonWorkExperience updatedEntity = super.update(preparedEntity, currentId);
+        PersonWorkExperience updatedEntity = super.update(updatedEntityWithPossibleIncorrectOrderNumber, currentId);
         triggerPostActionNormalization(currentId.getPersonId());
 
         return updatedEntity;

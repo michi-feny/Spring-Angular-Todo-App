@@ -76,8 +76,6 @@ public class PersonCountryServiceImpl
         return resolveChildAndPersistNewLink(
                 entity,
                 countryService,
-                PersonCountry::getId,
-                repository::findById,
                 (resolvedEntity) -> {
                     resolvedEntity.getId().setCountryId(resolvedEntity.getCountry().getId());
                     return createWithMainCountryCleanup(resolvedEntity);

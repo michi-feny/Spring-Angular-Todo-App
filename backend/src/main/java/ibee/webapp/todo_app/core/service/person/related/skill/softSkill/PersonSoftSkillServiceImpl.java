@@ -48,7 +48,10 @@ public class PersonSoftSkillServiceImpl
         assertData.entityNotNull(entity);
         validateCompositeId(entity.getId(), "PersonSoftSkillId");
 
-        return resolveChildAndPersistNewLink(entity, softSkillService, (resolved) -> {
+        return resolveChildAndPersistNewLink(
+            entity, 
+            softSkillService, 
+            (resolved) -> {
             resolved.getId().setSoftSkillId(resolved.getSoftSkill().getId());
             return super.create(resolved);
         });
@@ -58,9 +61,17 @@ public class PersonSoftSkillServiceImpl
     public PersonSoftSkill update(PersonSoftSkill incomingUpdates, PersonSoftSkillId currentId) {
         Assert.notNull(incomingUpdates, "Update payload cannot be null");
         return resolveChildAndPersistUpdate(
-                incomingUpdates, currentId, softSkillService,
-                super::update, super::create, repository::findById,                     
-                entityMapper::updateEntityFromEntity, repository::deleteById                    
+                incomingUpdates, 
+                currentId, 
+                softSkillService,
+                super::update, 
+                super::create, 
+                repository::findById,      
+                //TODO: find by id could result in ugly hibernate default joinging: 
+                // better with its own findDetailsWithoutExceptionById .. 
+                // done with ENtityGraph              
+                entityMapper::updateEntityFromEntity, 
+                repository::deleteById                    
         );
     }
 

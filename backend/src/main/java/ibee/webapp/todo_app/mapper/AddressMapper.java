@@ -60,9 +60,11 @@ public interface AddressMapper
             : null)
             """
     )
+    @Mapping(target = "id", ignore = true)
     void updateEntityFromDto(AddressDto dto, @MappingTarget Address entity);
 
     @Override
     @Mapping(target = "country", ignore = true)
+    @Mapping(target = "id", ignore = true)
     void updateEntityFromEntity(Address sourceUpdates, @MappingTarget Address dbEntity);
 }

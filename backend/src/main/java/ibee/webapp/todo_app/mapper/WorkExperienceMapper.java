@@ -51,7 +51,7 @@ public interface WorkExperienceMapper extends BaseMapper<WorkExperienceDto, Work
         NullValuePropertyMappingStrategy.IGNORE
     )
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "company", ignore = true)
+    @Mapping(target = "company", source = "company")
     void updateEntityFromEntity(
         WorkExperience sourceUpdates, 
         @MappingTarget WorkExperience dbEntity

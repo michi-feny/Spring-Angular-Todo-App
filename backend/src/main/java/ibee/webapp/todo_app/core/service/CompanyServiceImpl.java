@@ -64,20 +64,21 @@ public class CompanyServiceImpl extends MyCrudBaseEntityFacedeServiceImpl<Compan
         assertCompanyCanBeProcessed(incomingUpdates);
         Assert.notNull(id, "Company ID cannot be null");
 
-        // 1. Resolve Address
-        var resolvedAddress = addressService.lookupToFetchExistingAddressOrCreateNewAddress(incomingUpdates.getAddress());
-        incomingUpdates.setAddress(resolvedAddress);
+        return lookupToFetchExistingCompanyOrCreateNewCompany(incomingUpdates);
+        // // 1. Resolve Address
+        // var resolvedAddress = addressService.lookupToFetchExistingAddressOrCreateNewAddress(incomingUpdates.getAddress());
+        // incomingUpdates.setAddress(resolvedAddress);
 
-        // 2. GRACEFUL DEDUPLICATION
-        // If a duplicate already exists under another ID, return it silently.
-        // The old ID (zombie) can be cleaned up later by a periodic database job!
-        Optional<Company> duplicateCheck = findByEntityBusinessKeys(incomingUpdates);
-        if (duplicateCheck.isPresent() && !duplicateCheck.get().getId().equals(id)) {
-            return duplicateCheck.get(); 
-        }
+        // // 2. GRACEFUL DEDUPLICATION
+        // // If a duplicate already exists under another ID, return it silently.
+        // // The old ID (zombie) can be cleaned up later by a periodic database job!
+        // Optional<Company> duplicateCheck = findByEntityBusinessKeys(incomingUpdates);
+        // if (duplicateCheck.isPresent() && !duplicateCheck.get().getId().equals(id)) {
+        //     return duplicateCheck.get(); 
+        // }
 
-        // 3. Actually update the row if it's safe
-        return super.update(incomingUpdates, id);
+        // // 3. Actually update the row if it's safe
+        // return super.update(incomingUpdates, id);
     }
 
     // private Address lookupToFetchExistingAddressOrCreteNewAddress(Address address) {
@@ -133,7 +134,9 @@ public class CompanyServiceImpl extends MyCrudBaseEntityFacedeServiceImpl<Compan
             if (existingCompanyFromItsId.get().hasEqualValuesAs(company)) {
                 return existingCompanyFromItsId.get(); 
             } else {
-                return forkAndReuseOrCreateCompany(company, existingCompanyFromItsValues);
+                return forkAndReuseOrCreateCompany(
+                    company, 
+                    existingCompanyFromItsValues);
             }
         } else {
             return existingCompanyFromItsValues.orElseGet(() -> super.create(company));
@@ -166,16 +169,34 @@ public class CompanyServiceImpl extends MyCrudBaseEntityFacedeServiceImpl<Compan
         return Optional.ofNullable(id).flatMap(companyRepository::findWithDetailsById);
     }
 
-    private Company forkAndReuseOrCreateCompany(Company company, Optional<Company> existingFromValues) {
-        company.setId(null); 
-        return existingFromValues.orElseGet(() -> super.create(company));
+    private Company forkAndReuseOrCreateCompany(
+        Company incomingCompany, 
+        Optional<Company> existingFromValues
+    ) {
+
+      if (existingFromValues.isPresent()) {
+            return existingFromValues.get();
+        }
+
+        // 2. Otherwise, instantiate a brand-new, unmanaged Company object for the fork.
+        // Never mutate a managed entity loaded from the DB!
+        Company newCompany = new Company();
+        newCompany.setName(incomingCompany.getName());
+        newCompany.setLegalForm(incomingCompany.getLegalForm());
+        newCompany.setAddress(incomingCompany.getAddress());
+
+        return super.create(newCompany);
     }
 
     private Optional<Company> findByEntityBusinessKeys(Company company) {
         
-        return companyRepository.findByNameAndLegalFormAndAddress_CountryId(
+        return companyRepository.findByStrictBusinessKeys(
                 company.getName(), 
                 company.getLegalForm(), 
+                company.getAddress().getStreet(),
+                company.getAddress().getHouseNumber(),
+                company.getAddress().getZipCode(),
+                company.getAddress().getCity(),
                 company.getAddress().getCountry().getId()
         );
     }

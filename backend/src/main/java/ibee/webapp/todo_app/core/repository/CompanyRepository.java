@@ -45,5 +45,25 @@ public interface CompanyRepository
     @Query("DELETE FROM Company c WHERE c.id = :companyId AND NOT EXISTS (SELECT 1 FROM WorkExperience w WHERE w.company.id = :companyId)")
     int deleteIfOrphaned(@Param("companyId") Long companyId);
 
+    @Query("""
+        SELECT c FROM Company c 
+        JOIN c.address a 
+        WHERE c.name = :name 
+          AND c.legalForm = :legalForm 
+          AND a.street = :street 
+          AND a.houseNumber = :houseNumber 
+          AND a.zipCode = :zipCode 
+          AND a.city = :city 
+          AND a.country.id = :countryId
+    """)
+    Optional<Company> findByStrictBusinessKeys(
+        @Param("name") String name,
+        @Param("legalForm") String legalForm,
+        @Param("street") String street,
+        @Param("houseNumber") String houseNumber,
+        @Param("zipCode") String zipCode,
+        @Param("city") String city,
+        @Param("countryId") Long countryId
+    );
     
 }

@@ -12,7 +12,11 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "companies")
+@Table(
+    name = "companies",
+    uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"name", "legal_form", "address_id"})
+})
 public class Company {
 
     @GeneratedValue(strategy = GenerationType.AUTO)
