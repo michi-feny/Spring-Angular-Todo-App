@@ -22,6 +22,11 @@ public class PersonCountryModelAssembler
         this.referenceMapper = referenceMapper;
     }
 
+    @Override 
+    protected boolean hasListEndpoint() {
+        return false; 
+    }
+
     @Override
     protected PersonCountryDtoId extractId(PersonCountryDto dto) {
         // Uses the record accessor 'dto.id()' and maps the DTO ID to the Entity ID

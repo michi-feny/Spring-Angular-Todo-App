@@ -77,12 +77,19 @@ public class PersonWorkExperienceServiceImpl
         Assert.notNull(incomingUpdates, "Update payload cannot be null");
         Assert.notNull(currentId, "Current PersonWorkExperienceId cannot be null");
 
-        PersonWorkExperienceId targetId = incomingUpdates.getId() != null ? incomingUpdates.getId() : currentId;
+        PersonWorkExperienceId targetId = 
+            incomingUpdates.getId() != null ? incomingUpdates.getId() : currentId;
         validateCompositeId(targetId, "PersonWorkExperienceId");
         validateCompositeId(currentId, "Current PersonWorkExperienceId");
 
+        // 1. STATE CAPTURE: Remember the old Company ID
+        // PersonWorkExperience currentEntity = findWithDetailsById(currentId)
+        //     .orElseThrow(() -> new EntityNotFoundException("PersonWorkExperience not found"));
+
+
         // Delegate heavy lifting to Command
-        PersonWorkExperience preparedEntity = updateCommand.execute(incomingUpdates, currentId);
+        PersonWorkExperience preparedEntity = 
+            updateCommand.execute(incomingUpdates, currentId);
 
         // Save using base generic service logic, followed by final sanity check
         PersonWorkExperience updatedEntity = super.update(preparedEntity, currentId);

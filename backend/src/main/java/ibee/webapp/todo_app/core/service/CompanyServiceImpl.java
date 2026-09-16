@@ -152,8 +152,18 @@ public class CompanyServiceImpl extends MyCrudBaseEntityFacedeServiceImpl<Compan
         }
     }
 
+    /**
+     * Attempts to delete a company (e.g., an old typo). 
+     * If other users are still using it, the database safely aborts the deletion.
+     */
+    public void deleteIfOrphaned(Long companyId) {
+        if (companyId != null) {
+            companyRepository.deleteIfOrphaned(companyId);
+        }
+    }
+
     private Optional<Company> findCompanyByIdWithoutException(Long id) {
-        return Optional.ofNullable(id).flatMap(companyRepository::findWithAssociationsById);
+        return Optional.ofNullable(id).flatMap(companyRepository::findWithDetailsById);
     }
 
     private Company forkAndReuseOrCreateCompany(Company company, Optional<Company> existingFromValues) {

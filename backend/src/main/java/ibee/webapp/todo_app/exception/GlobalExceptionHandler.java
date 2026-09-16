@@ -3,11 +3,15 @@ package ibee.webapp.todo_app.exception;
 import ibee.webapp.todo_app.core.exception.BaseException;
 import ibee.webapp.todo_app.core.exception.ResourceNotFoundException;
 import ibee.webapp.todo_app.infrastructure.i18n.TranslationService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -142,5 +146,50 @@ public class GlobalExceptionHandler {
         problemDetail.setProperty("timestamp", Instant.now());
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(problemDetail);
+    }
+
+    /**
+     * 5. Handles HTTP Method Not Supported (e.g., sending a GET request to a POST endpoint).
+     * Provides a clear message to UI developers about what methods are actually allowed.
+     */
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ProblemDetail> handleMethodNotSupportedException(
+        HttpRequestMethodNotSupportedException ex
+    ) {
+        
+        // Use 405 Method Not Allowed
+        HttpStatus status = HttpStatus.METHOD_NOT_ALLOWED;
+        
+        // Build a highly descriptive message for the frontend developer
+        String detailMessage = String.format(
+            "The HTTP %s method is not supported for this URL. Supported methods are: %s", 
+            ex.getMethod(), 
+            ex.getSupportedHttpMethods()
+        );
+
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(status, detailMessage);
+        problemDetail.setTitle("Method Not Allowed");
+        problemDetail.setType(URI.create("https://api.ihreapp.de/errors/method-not-allowed"));
+        problemDetail.setProperty("timestamp", Instant.now());
+        
+        // Optional: You can also use your translationService here if you want it localized!
+        // problemDetail.setDetail(translationService.translate("error.methodNotAllowed", ...));
+
+
+        return ResponseEntity.status(status).body(problemDetail);
+    }
+
+    // 2. Handles SPRING'S routing errors (URL missing / trailing slash)
+    @ExceptionHandler(org.springframework.web.servlet.resource.NoResourceFoundException.class)
+    public ResponseEntity<ProblemDetail> handleNoResourceFoundException(org.springframework.web.servlet.resource.NoResourceFoundException ex) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
+                status, 
+                "The requested URL path was not found on this server. Please check for typos or trailing slashes."
+        );
+        problemDetail.setTitle("Endpoint Not Found");
+        // ... 
+        return ResponseEntity.status(status).body(problemDetail);
     }
 }

@@ -24,6 +24,11 @@ public class PersonAddressModelAssembler
         this.referenceMapper = referenceMapper;
     }
 
+    @Override 
+    protected boolean hasListEndpoint() {
+        return false; 
+    }
+
     @Override
     protected PersonAddressDtoId extractId(PersonAddressDto dto) {
         // Record accessor syntax (e.g., dto.id() instead of dto.getId())

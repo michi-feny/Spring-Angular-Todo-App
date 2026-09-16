@@ -101,7 +101,7 @@ public class PersonWorkExperienceController
      * GET /api/v1/person-work-experiences/19/tree
      * Cleanly fetches mapped DTOs without touching the Entity layer.
      */
-    @GetMapping("/{personId:\\d+}/full-fetched-tree-route-details")
+    @GetMapping("/person/{personId:\\d+}/full-fetched-tree-route-details")
     public ResponseEntity<ApiSuccessResponse<CollectionModel<EntityModel<PersonWorkExperienceDto>>>> getWorkExperienceTree(
             @PathVariable("personId") Long personId) {
         

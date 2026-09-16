@@ -4,6 +4,7 @@ import ibee.webapp.todo_app.core.entity.Company;
 import ibee.webapp.todo_app.core.entity.WorkExperience;
 import ibee.webapp.todo_app.core.repository.person.WorkExperienceRepository;
 import ibee.webapp.todo_app.core.service.baseService.persist.MyCrudBaseEntityFacedeServiceImpl;
+import ibee.webapp.todo_app.features.person.related.workExp.dto.WorkExperienceDto;
 import ibee.webapp.todo_app.mapper.WorkExperienceMapper;
 
 import java.util.Optional;
@@ -34,7 +35,7 @@ public class WorkExperienceServiceImpl extends MyCrudBaseEntityFacedeServiceImpl
         Assert.notNull(entity, "WorkExperience entity cannot be null");
 
         Optional<WorkExperience> existingById = Optional.ofNullable(entity.getId())
-                .flatMap(repository::findById);
+                .flatMap(this::findWithDetailsById);
         if (existingById.isPresent()) {
             return existingById.get();
         }
@@ -75,6 +76,11 @@ public class WorkExperienceServiceImpl extends MyCrudBaseEntityFacedeServiceImpl
         }
     }
 
+    
+    public Optional<WorkExperience> findWithDetailsById(Long id){
+        return findByIdWithoutException(id);
+    }
+
     /**
      * Flattens the lookup-or-create resolution logic into clean guard clauses, 
      * completely removing nested if-else structures.
@@ -87,6 +93,17 @@ public class WorkExperienceServiceImpl extends MyCrudBaseEntityFacedeServiceImpl
         // Delegates entirely to CompanyServiceImpl, which handles ID lookup, 
         // address resolution, and Name + Country deduplication automatically.
         return companyService.create(company);
+    }
+
+    /**
+     * Exposes a safe cleanup hook for the Orchestration layer to call,
+     * without leaking the CompanyService dependency upwards.
+     */
+    public void cleanupOrphanedCompany(Long companyId) {
+        Assert.notNull(companyId,"the id of the Company is not allowed to be null");
+        
+        companyService.deleteIfOrphaned(companyId);
+        
     }
 
     

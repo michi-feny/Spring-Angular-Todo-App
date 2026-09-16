@@ -123,4 +123,24 @@ public interface PersonWorkExperienceRepository
     """)
     long countVisibleBetweenOrders(@Param("personId") Long personId, @Param("minOrder") int minOrder, @Param("maxOrder") int maxOrder);
 
+
+    /**
+     * CASCADING SWAP: Fixes a company typo across all WorkExperiences owned by this specific person.
+     */
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("""
+        UPDATE WorkExperience we 
+        SET we.company.id = :newCompanyId 
+        WHERE we.company.id = :oldCompanyId 
+          AND we.id IN (
+              SELECT pwe.id.workExperienceId 
+              FROM PersonWorkExperience pwe 
+              WHERE pwe.id.personId = :personId
+          )
+    """)
+    int bulkUpdateCompanyIdForPerson(
+        @Param("personId") Long personId, 
+        @Param("oldCompanyId") Long oldCompanyId, 
+        @Param("newCompanyId") Long newCompanyId
+    );
 }

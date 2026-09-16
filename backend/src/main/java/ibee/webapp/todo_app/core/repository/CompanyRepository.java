@@ -4,9 +4,11 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import ibee.webapp.todo_app.core.entity.Company;
 import ibee.webapp.todo_app.core.entity.Country;
+import ibee.webapp.todo_app.core.entity.WorkExperience;
 import ibee.webapp.todo_app.core.repository.baseRepo.MyFacadeBaseCrudRepository;
 
 public interface CompanyRepository 
@@ -25,7 +27,7 @@ public interface CompanyRepository
     // 2. SAFE FETCH: Tells Hibernate to fetch the nested Address and Country in the exact same SQL query.
     // This entirely prevents the dreaded LazyInitializationException!
     @EntityGraph(attributePaths = {"address", "address.country"})
-    Optional<Company> findWithAssociationsById(Long id);
+    Optional<Company> findWithDetailsById(Long id);
 
     /**
      * GARBAGE COLLECTION: Deletes any company that is not linked to a WorkExperience.
@@ -34,4 +36,14 @@ public interface CompanyRepository
     @Modifying
     @Query("DELETE FROM Company c WHERE NOT EXISTS (SELECT 1 FROM WorkExperience w WHERE w.company = c)")
     int deleteOrphanedCompanies();
+
+    /**
+     * TARGETED GARBAGE COLLECTION: Deletes a specific company ONLY if it is not linked 
+     * to any WorkExperience. Database will safely ignore the delete if the company is still in use!
+     */
+    @Modifying
+    @Query("DELETE FROM Company c WHERE c.id = :companyId AND NOT EXISTS (SELECT 1 FROM WorkExperience w WHERE w.company.id = :companyId)")
+    int deleteIfOrphaned(@Param("companyId") Long companyId);
+
+    
 }
