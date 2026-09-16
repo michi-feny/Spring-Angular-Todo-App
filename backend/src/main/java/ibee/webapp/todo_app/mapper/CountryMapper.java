@@ -12,7 +12,9 @@ import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
 
 @Mapper(
         config = MapStructConfig.class, 
-        uses = { CountryTranslationMapper.class })
+        componentModel = "spring",
+        uses = { 
+            CountryTranslationMapper.class })
 public interface CountryMapper 
         extends BaseMapper<CountryDto, Country> {
 

@@ -25,8 +25,7 @@ public class PersonWorkExperienceId implements Serializable {
     @Column(name = "person_id")
     private Long personId;
 
-    @NotNull
-    @Positive
+    
     @Column(name = "work_experience_id")
     private Long workExperienceId;
 }

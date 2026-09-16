@@ -35,46 +35,33 @@ public class Person implements IdentifiableEntity<Long>{
     //@ValidId
     private Long id;
 
-    @Column(
-        name = "social_record_number",
-        nullable = true, length = 10)
+    @Column(name = "social_record_number", nullable = true, length = 10)
     private Integer socialRecordNumber;
     
-    @Column(name = "first_name",
-            nullable = false)
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Column(name = "last_name",
-            nullable = false)
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
     //@Temporal(TemporalType.DATE)
-    @Column(
-        name = "birth_date",
-        nullable = false)
+    @Column(name = "birth_date", nullable = false)
     private LocalDate birthDate;
 
-    @OneToMany(
-        mappedBy = "person",
-        fetch = FetchType.LAZY,
+    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY, orphanRemoval = true
         //cascade = CascadeType.ALL,
-        orphanRemoval = true
     )
-    /*@JoinColumn(
-        name = "nationality_id",
-        nullable = false
-    )*/
-   @Builder.Default
-    private List<PersonCountry> nationalitys = new ArrayList<>();
+    @Builder.Default
+    private Set<PersonCountry> nationalitys = new HashSet<>();
 
     @OneToMany(
             mappedBy = "person",
             fetch = FetchType.LAZY,
-            //cascade = CascadeType.ALL,
+            cascade = CascadeType.PERSIST,
             orphanRemoval = true
     )
     @Builder.Default
-    private List<PersonAddress> addresses = new ArrayList<>();
+    private Set<PersonAddress> addresses = new HashSet<>();
 
     @OneToMany(
         mappedBy = "person",
@@ -82,16 +69,16 @@ public class Person implements IdentifiableEntity<Long>{
         //cascade = CascadeType.ALL,
         orphanRemoval = true)
     @Builder.Default
-    private List<PersonPhoneNumber> phones = new ArrayList<>();
+    private Set<PersonPhoneNumber> phones = new HashSet<>();
 
     @OneToMany(
         mappedBy = "person",
         fetch = FetchType.LAZY,
-        //cascade = CascadeType.ALL,
+        //cascade = CascadeType.PERSIST,
         orphanRemoval = true
     )
     @Builder.Default
-    private List<PersonEmailAddress> emails = new ArrayList<>();
+    private Set<PersonEmailAddress> emails = new HashSet<>();
 
     
      @OneToMany(
@@ -101,7 +88,7 @@ public class Person implements IdentifiableEntity<Long>{
         orphanRemoval = true
     )
     @Builder.Default
-    private List<PersonDegree> degrees = new ArrayList<>();
+    private Set<PersonDegree> degrees = new HashSet<>();
 
      @OneToMany(
         mappedBy = "person",
@@ -110,7 +97,7 @@ public class Person implements IdentifiableEntity<Long>{
         orphanRemoval = true
     )
     @Builder.Default
-    private List<PersonProfessionQualification> professions = new ArrayList<>();
+    private Set<PersonProfessionQualification> professions = new HashSet<>();
 
 
     @OneToMany(
@@ -120,7 +107,7 @@ public class Person implements IdentifiableEntity<Long>{
         orphanRemoval = true
     )
     @Builder.Default
-    private List<PersonAdditionalHardSkill> additionalSkills = new ArrayList<>();
+    private Set<PersonAdditionalHardSkill> additionalSkills = new HashSet<>();
 
     @OneToMany(
     mappedBy = "person",

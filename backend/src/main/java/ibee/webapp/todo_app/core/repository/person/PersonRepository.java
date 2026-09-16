@@ -16,8 +16,7 @@ public interface PersonRepository
 
     @EntityGraph(attributePaths = {
 
-            //CONTACT DETAILS
-
+  
                 //NATIONALITY
                 "nationalitys",
                 "nationalitys.country",

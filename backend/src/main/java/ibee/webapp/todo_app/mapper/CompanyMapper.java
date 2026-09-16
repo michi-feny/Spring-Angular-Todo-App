@@ -29,17 +29,25 @@ public interface CompanyMapper
     @Override
     @Mapping(target = "id", source = "id")
     @Mapping(target = "name", source = "name")
-    @Mapping(target = "address", ignore = true) // Handled exclusively via service-layer address lookup/creation
+    @Mapping(target = "address", source = "address") // Handled exclusively via service-layer address lookup/creation
     Company toEntity(CompanyDto dto);
 
     @Override
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "address", ignore = true)
-    void updateEntityFromDto(CompanyDto dto, @MappingTarget Company entity);
+    @Mapping(target = "address", source = "address")
+    void updateEntityFromDto(
+        CompanyDto dto, 
+        @MappingTarget Company entity
+);
 
     @Override
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @BeanMapping(
+        nullValuePropertyMappingStrategy = 
+        NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "address", ignore = true)
-    void updateEntityFromEntity(Company sourceUpdates, @MappingTarget Company dbEntity);
+    void updateEntityFromEntity(
+        Company sourceUpdates, 
+        @MappingTarget Company dbEntity
+);
 }

@@ -21,13 +21,11 @@ public class PersonProfessionQualificationId
     @Column(name = "person_id")
     private Long personId;
 
-    @Positive
-    @NotNull
+    
     @Column(name = "profession_qualification_id")
     private Long professionQualificationId;
 
-    @Positive
-    @NotNull
+    
     @Column(name = "education_institution_id")
     private Long educationInstitutionId;
 }

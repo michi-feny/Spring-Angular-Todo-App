@@ -1,5 +1,6 @@
 package ibee.webapp.todo_app.core.repository.person.personRelated.contact.phone;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -25,6 +26,10 @@ public interface PersonPhoneNumberRepositroy
     Optional<PersonPhoneNumber> findWithOnlyPhoneNumberDetailsById(
         PersonPhoneNumberId id
     );
+    // Only fetch the phone number! 
+    // Hibernate can read the country.id directly from the foreign key without joining the Country table.
+    @EntityGraph(attributePaths = {"phoneNumber"})
+    List<PersonPhoneNumber> findByPersonId(Long personId);
 
     @EntityGraph(attributePaths = {
         "phoneNumber",
@@ -48,8 +53,6 @@ public interface PersonPhoneNumberRepositroy
      * @param phoneId  The ID of the phone number that is becoming the NEW main number (so it is excluded from the reset).
      */
     @Modifying
-    @Query("UPDATE PersonPhoneNumber p SET p.mainPhoneNumber = false WHERE p.id.personId = :personId AND p.id.phoneId != :phoneId")
+    @Query("UPDATE PersonPhoneNumber p SET p.mainPhoneNumber = false WHERE p.id.personId = :personId AND p.id.phoneNumberId != :phoneId")
     void resetOtherMainPhoneNumbers(@Param("personId") Long personId, @Param("phoneId") Long phoneId);
-
-    
 }

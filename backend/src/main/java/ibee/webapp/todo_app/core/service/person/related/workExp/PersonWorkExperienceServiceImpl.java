@@ -77,12 +77,19 @@ public class PersonWorkExperienceServiceImpl
         Assert.notNull(incomingUpdates, "Update payload cannot be null");
         Assert.notNull(currentId, "Current PersonWorkExperienceId cannot be null");
 
-        PersonWorkExperienceId targetId = incomingUpdates.getId() != null ? incomingUpdates.getId() : currentId;
+        PersonWorkExperienceId targetId = 
+            incomingUpdates.getId() != null ? incomingUpdates.getId() : currentId;
         validateCompositeId(targetId, "PersonWorkExperienceId");
         validateCompositeId(currentId, "Current PersonWorkExperienceId");
 
+        // 1. STATE CAPTURE: Remember the old Company ID
+        // PersonWorkExperience currentEntity = findWithDetailsById(currentId)
+        //     .orElseThrow(() -> new EntityNotFoundException("PersonWorkExperience not found"));
+
+
         // Delegate heavy lifting to Command
-        PersonWorkExperience preparedEntity = updateCommand.execute(incomingUpdates, currentId);
+        PersonWorkExperience preparedEntity = 
+            updateCommand.execute(incomingUpdates, currentId);
 
         // Save using base generic service logic, followed by final sanity check
         PersonWorkExperience updatedEntity = super.update(preparedEntity, currentId);
@@ -152,6 +159,17 @@ public class PersonWorkExperienceServiceImpl
     @Transactional(readOnly = true)
     public List<PersonWorkExperience> findVisibleByPersonId(Long personId) {
         return repository.findVisibleByPersonId(personId);
+    }
+
+    /* ==============================================================================
+     * TREE FETCHING FOR THE UI (DTO Controller)
+     * ==============================================================================
+     * Fetches only the root/master nodes (where mergedInto IS NULL) while eagerly 
+     * loading the hidden/merged sub-experiences into the subExperiences list.
+     */
+    @Transactional(readOnly = true)
+    public List<PersonWorkExperience> findRootExperiencesTree(Long personId) {
+        return repository.findRootsByPersonIdAndMergedIntoIsNull(personId);
     }
 
     @Transactional

@@ -1,0 +1,101 @@
+<ngbd-modal 
+    #todoEditModal 
+    [titleTemplate]="titleTpl"
+    [bodyTemplate]="bodyTpl"
+    [footerTemplate]="footerTpl">
+</ngbd-modal>
+
+<ng-template #titleTpl>
+    <span class="text-primary">Todo {{ todoToUpdate() !== null ? 'Bearbeiten' : 'Erstellen' }}</span>
+</ng-template>
+
+<ng-template #bodyTpl>
+    <app-todo-form #todoFormRef [todo]="todoToUpdate()"></app-todo-form>
+</ng-template>
+
+<ng-template #footerTpl let-modal>
+    <button class="btn btn-secondary" (click)="modal.dismiss('Abbrechen')">Abbrechen</button>
+    <button class="btn btn-primary" (click)="todoToUpdate() !== null ? handleUpdateTodo() : handleCreateTodo()">
+        {{ todoToUpdate() !== null ? 'Bearbeiten' : 'Erstellen' }}
+    </button>
+</ng-template>
+
+
+<h1 class="my-3 text-primary">Todo List</h1>
+
+<div class="d-flex justify-content-between mb-3">
+    <button class="btn btn-success" (click)="openCreateModal()">Neu</button>
+    <select 
+        name="sort" 
+        class="btn btn-sm btn-primary"
+        [ngModel]="currentSort$ | async" 
+        (ngModelChange)="onSortChange($event)">
+        <option value="title,asc">Titel aufsteigend</option>
+        <option value="title,desc">Titel absteigend</option>
+        <option value="isDone,desc">Erlefigt</option>
+        <option value="isDone,asc">Offen</option>
+        <option value="id,desc">Neueste</option>
+        <option value="id,asc">Älterste</option>
+    </select>
+</div>
+
+<div *ngIf="isLoading$ | async">
+    Todos werden geladen...
+</div>
+
+<ngbd-accordion-static 
+    [items]="(todos$ | async) || []"       
+    [headerTemplate]="todoHeaderTemplate" 
+    [bodyTemplate]="todoBodyTemplate"     >
+</ngbd-accordion-static>
+
+<ng-container *ngIf="!(isLoading$ | async) && (todos$ | async)?.length === 0">
+    Keine offenen Todos gefunden. Füge ein neues hinzu
+</ng-container>
+
+<ng-template #todoHeaderTemplate let-todo>
+    <div class="d-flex justify-content-between w-100 me-3">
+        <strong>{{ todo.title }}</strong>
+        <div>
+            <button 
+                type="button" 
+                class="btn btn-sm me-3"
+                [ngClass]="{'btn-success': !todo.isDone, 'btn-warning': todo.isDone}"
+                (click)="toggleDone(todo, $event)"
+                title="{{ todo.isDone ? 'Als unerledigt markieren' : 'Als erledigt markieren' }}"
+            >
+                {{ todo.isDone ? 'Als unerledigt markieren' : 'Als erledigt markieren' }}
+                <fa-icon [icon]="todo.isDone ? faRedo() : faCheck()"></fa-icon>
+            </button>
+
+            <button class="btn btn-sm btn-primary me-3" (click)="openUpdateModal(todo, $event);">
+                <fa-icon [icon]="faEdit()" />
+            </button>
+            <button class="btn btn-sm btn-danger" (click)="handleDelete(todo.id, $event);">
+                <fa-icon [icon]="faTrash()" />
+            </button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #todoBodyTemplate let-todo>
+    <p>Beschreibung: {{ todo.description }}</p>
+</ng-template>
+
+<ng-container *ngIf="totalTodos$ | async as total; else totalIsZero">
+    <ng-container *ngIf="pageSize$ | async as pageSize">
+        <ngb-pagination *ngIf="total > pageSize"
+            class="d-flex justify-content-center mt-5"
+            [collectionSize]="total"
+            [page]="((currentPage$ | async) ?? 0) + 1" 
+            (pageChange)="onPageChange($event)"
+            [pageSize]="pageSize"
+            [maxSize]="pageSize"
+            [rotate]="true"
+            [ellipses]="false"
+            [boundaryLinks]="true"
+        />
+    </ng-container>
+</ng-container>
+
+<ng-template #totalIsZero></ng-template>

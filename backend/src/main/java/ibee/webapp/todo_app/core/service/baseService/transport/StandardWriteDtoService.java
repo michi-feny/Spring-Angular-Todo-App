@@ -2,8 +2,8 @@ package ibee.webapp.todo_app.core.service.baseService.transport;
 
 import org.springframework.validation.annotation.Validated;
 
-import ibee.webapp.todo_app.security.validation.idHandle.create.OnCreate;
-import ibee.webapp.todo_app.security.validation.idHandle.update.OnUpdate;
+import ibee.webapp.todo_app.validation.idHandle.create.OnCreate;
+import ibee.webapp.todo_app.validation.idHandle.update.OnUpdate;
 
 // 3. Standard Write (No invariants, returns standard DTO)
 @Validated

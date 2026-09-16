@@ -9,15 +9,13 @@ import ibee.webapp.todo_app.controller.support.ApiSuccessResponse;
 import ibee.webapp.todo_app.controller.support.Link;
 import ibee.webapp.todo_app.core.entity.person.contactData.address.PersonAddressId;
 import ibee.webapp.todo_app.core.result.ServiceResult;
-import ibee.webapp.todo_app.core.service.baseService.transport.PersonRelatedQueryDtoService;
-import ibee.webapp.todo_app.core.service.baseService.transport.businessRuleMainFlag.BusinessWriteDtoService;
 import ibee.webapp.todo_app.features.person.related.contact.controller.assembler.PersonAddressModelAssembler;
 import ibee.webapp.todo_app.features.person.related.contact.dto.PersonAddressDto;
 import ibee.webapp.todo_app.features.person.related.contact.service.PersonAddressDtoService;
 import ibee.webapp.todo_app.features.person.related.referenceIds.contact.PersonAddressDtoId;
 import ibee.webapp.todo_app.infrastructure.i18n.TranslationService;
-import ibee.webapp.todo_app.security.validation.idHandle.create.OnCreate;
-import ibee.webapp.todo_app.security.validation.idHandle.update.OnUpdate;
+import ibee.webapp.todo_app.validation.idHandle.create.OnCreate;
+import ibee.webapp.todo_app.validation.idHandle.update.OnUpdate;
 
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
@@ -69,6 +67,7 @@ Fetches an extended, detailed view of a specific address entity model.
 */
 @RestController
 @RequestMapping("/api/v1/person-addresses")
+@Validated
 public class PersonAddressController 
     extends AbstractSpringPersonRelatedHateoasController
         <PersonAddressDto, PersonAddressId, PersonAddressDtoId> {

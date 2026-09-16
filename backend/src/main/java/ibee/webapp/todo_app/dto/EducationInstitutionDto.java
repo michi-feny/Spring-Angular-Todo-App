@@ -1,12 +1,15 @@
 package ibee.webapp.todo_app.dto;
 
-import ibee.webapp.todo_app.security.validation.idHandle.create.OnCreate;
-import ibee.webapp.todo_app.security.validation.idHandle.create.ValidCreateId;
-import ibee.webapp.todo_app.security.validation.idHandle.update.OnUpdate;
-import ibee.webapp.todo_app.security.validation.idHandle.update.ValidUpdateId;
+import ibee.webapp.todo_app.validation.idHandle.create.OnCreate;
+import ibee.webapp.todo_app.validation.idHandle.create.ValidCreateId;
+import ibee.webapp.todo_app.validation.idHandle.update.OnUpdate;
+import ibee.webapp.todo_app.validation.idHandle.update.ValidUpdateId;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.groups.ConvertGroup;
+import jakarta.validation.groups.Default;
 
 
 public record EducationInstitutionDto(
@@ -23,6 +26,9 @@ public record EducationInstitutionDto(
     String name,
 
     @NotNull
+    @Valid 
+    @ConvertGroup(from = OnCreate.class, to = Default.class)
+    @ConvertGroup(from = OnUpdate.class, to = Default.class)
     AddressDto address
 
     

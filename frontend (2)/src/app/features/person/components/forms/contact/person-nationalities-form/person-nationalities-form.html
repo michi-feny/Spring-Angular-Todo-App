@@ -1,0 +1,71 @@
+<div [formGroup]="form" class="p-2">
+  <div formArrayName="nationalities">
+    @for (group of nationalitiesArray.controls; track $index; let i = $index) {
+      <div [formGroupName]="i" class="card mb-3 border-light bg-light">
+        <div class="card-body">
+          <div class="row g-3 align-items-center">
+            
+            <!-- Hauptland Flag (Radio-Style Checkbox) -->
+            <div class="col-md-3 col-12 pb-2">
+              <div class="form-check">
+                <input 
+                  type="radio" 
+                  name="mainCountryRadio" 
+                  class="form-check-input" 
+                  [id]="'mainCountry_' + i"
+                  [checked]="group.get('mainCountry')?.value"
+                  (change)="setMainCountry(i)" />
+                <label class="form-check-label fw-bold small" [for]="'mainCountry_' + i">
+                  Hauptland
+                </label>
+              </div>
+            </div>
+
+            <!-- Land als Select-Feld (id.countryId) -->
+            <div class="col-md-6 col-sm-8">
+              <label class="form-label small fw-bold">Land / Staatsbürgerschaft</label>
+              <select class="form-select" [formControl]="getControl(group, 'id.countryId')">
+                <option [ngValue]="null" disabled>Bitte Land wählen...</option>
+                <!-- Beispielhafte Optionen – ersetze diese dynamisch durch deine echte Länderliste -->
+                <option [value]="1">Österreich</option>
+                <option [value]="2">Deutschland</option>
+                <option [value]="3">Schweiz</option>
+              </select>
+            </div>
+
+            <!-- Buttons pro Karte: Speichern/Aktualisieren & Löschen -->
+            <div class="col-md-3 col-12 text-end">
+              <button 
+                type="button" 
+                class="btn btn-sm me-2"
+                [ngClass]="group.get('id.countryId')?.value ? 'btn-outline-primary' : 'btn-success'"
+                [disabled]="group.invalid"
+                (click)="saveSingleNationality(i)">
+                {{ group.get('id.countryId')?.value ? 'Aktualisieren' : 'Speichern' }}
+              </button>
+
+              <button 
+                type="button" 
+                class="btn btn-sm btn-outline-danger" 
+                (click)="deleteNationality(i)"
+                title="Eintrag entfernen">
+                Löschen
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    } @empty {
+      <div class="alert alert-secondary text-center my-2 py-3">
+        Keine Staatsbürgerschaften eingetragen.
+      </div>
+    }
+  </div>
+
+  <div class="mt-3">
+    <button type="button" class="btn btn-outline-primary btn-sm" (click)="addNationality()">
+      + Staatsbürgerschaft hinzufügen
+    </button>
+  </div>
+</div>

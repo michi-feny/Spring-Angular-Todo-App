@@ -1,0 +1,107 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="p-2">
+    <div formArrayName="professions">
+      @for (group of professionsArray.controls; track $index; let i = $index) {
+        <div [formGroupName]="i" class="card mb-3 border-light bg-light">
+          <div class="card-body">
+            
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h6 class="card-title mb-0">Qualifikation #{{ i + 1 }}</h6>
+              <button 
+                type="button" 
+                class="btn btn-outline-danger btn-sm" 
+                (click)="removeProfession(i)"
+                title="Qualifikation entfernen">
+                ✕ Entfernen
+              </button>
+            </div>
+  
+            <div class="row g-2">
+              <!-- Profession Qualification Group -->
+              <ng-container formGroupName="professionQualification">
+                <div class="col-md-6 col-12">
+                  <app-form-control
+                    [control]="getControl(group, 'professionQualification.name')"
+                    label="Qualifikationsbezeichnung"
+                    placeholder="z.B. Software Architekt"
+                    [type]="inputTypes.Text">
+                  </app-form-control>
+                </div>
+  
+                <div class="col-md-3 col-sm-6">
+                  <app-form-control
+                    [control]="getControl(group, 'professionQualification.level')"
+                    label="Level"
+                    placeholder="z.B. Senior / Level 1"
+                    [type]="inputTypes.Text">
+                  </app-form-control>
+                </div>
+  
+                <div class="col-md-3 col-sm-6">
+                  <app-form-control
+                    [control]="getControl(group, 'professionQualification.weight')"
+                    label="Gewichtung"
+                    [type]="inputTypes.Number">
+                  </app-form-control>
+                </div>
+              </ng-container>
+  
+              <!-- Education Institution Group -->
+              <ng-container formGroupName="educationInstitution">
+                <div class="col-md-6 col-12">
+                  <app-form-control
+                    [control]="getControl(group, 'educationInstitution.name')"
+                    label="Bildungseinrichtung / Aussteller"
+                    placeholder="z.B. iSAQB / WKO"
+                    [type]="inputTypes.Text">
+                  </app-form-control>
+                </div>
+              </ng-container>
+  
+              <!-- Certificate Number -->
+              <div class="col-md-6 col-12">
+                <app-form-control
+                  [control]="getControl(group, 'certificateNumber')"
+                  label="Zertifikatsnummer"
+                  placeholder="z.B. CERT-2024-1234"
+                  [type]="inputTypes.Text">
+                </app-form-control>
+              </div>
+  
+              <!-- Start Date -->
+              <div class="col-md-6 col-sm-6">
+                <app-form-control
+                  [control]="getControl(group, 'startDate')"
+                  label="Beginn"
+                  [type]="inputTypes.Date">
+                </app-form-control>
+              </div>
+  
+              <!-- End Date -->
+              <div class="col-md-6 col-sm-6">
+                <app-form-control
+                  [control]="getControl(group, 'endDate')"
+                  label="Ende (Optional)"
+                  [type]="inputTypes.Date">
+                </app-form-control>
+              </div>
+            </div>
+  
+          </div>
+        </div>
+      } @empty {
+        <div class="alert alert-secondary text-center my-2 py-3">
+          Keine Berufsqualifikationen eingetragen.
+        </div>
+      }
+    </div>
+  
+    <div class="d-flex justify-content-between align-items-center mt-3">
+      <button type="button" class="btn btn-outline-primary btn-sm" (click)="addProfession()">
+        + Berufsqualifikation hinzufügen
+      </button>
+  
+      <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
+        Berufsqualifikationen speichern
+      </button>
+    </div>
+  </form>

@@ -24,8 +24,8 @@ public class PersonAddressId implements Serializable {
         )
     private Long personId;
 
-    @NotNull
-    @Positive
+    //@NotNull
+    //@Positive
     @Column(name = "address_id")
     private Long addressId;
 }

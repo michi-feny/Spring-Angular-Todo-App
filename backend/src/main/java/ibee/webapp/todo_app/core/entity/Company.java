@@ -1,4 +1,6 @@
 package ibee.webapp.todo_app.core.entity;
+import java.util.Objects;
+
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -39,6 +41,15 @@ public class Company {
         )
     )
     private Address address;
+
+    public boolean hasEqualValuesAs(Company incoming) {
+        if (incoming == null) return false;
+        return Objects.equals(this.name, incoming.getName()) &&
+               Objects.equals(this.legalForm, incoming.getLegalForm()) &&
+               (this.address != null && incoming.getAddress() != null ? 
+                    Objects.equals(this.address.getId(), incoming.getAddress().getId()) : 
+                    Objects.equals(this.address, incoming.getAddress()));
+    }
 
    
 

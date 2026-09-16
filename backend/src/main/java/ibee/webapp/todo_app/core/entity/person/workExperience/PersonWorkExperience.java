@@ -99,7 +99,10 @@ public class PersonWorkExperience
     @Column(
         name = "is_visible", 
         nullable = false, 
-        columnDefinition = """
+        columnDefinition = "boolean default true"
+    )
+        /*0
+                """
                 boolean default true COMMENT:
                 if the work Exp should be displayed,
                 if it is false:
@@ -107,7 +110,7 @@ public class PersonWorkExperience
                 so the Date get updated, to the starting Merge exp 
                 and its end Date, but the textes(like titel and description,
                 change)
-                """)
+                """)*/
     @Builder.Default
     private boolean visible = true;
 

@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ibee.webapp.todo_app.core.entity.SoftSkill;
 import ibee.webapp.todo_app.core.repository.SoftSkillRepository;
 import ibee.webapp.todo_app.core.service.baseService.persist.MyCrudBaseEntityFacedeServiceImpl;
-import ibee.webapp.todo_app.mapper.SoftSkillMapper;
+import ibee.webapp.todo_app.mapper.skills.soft.SoftSkillMapper;
 
 @Service
 @Transactional

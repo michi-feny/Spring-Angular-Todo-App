@@ -72,6 +72,11 @@ public class PersonPhoneNumberModelAssembler
         return dto.id();
     }
 
+    @Override 
+    protected boolean hasListEndpoint() {
+        return false; 
+    }
+
     @Override
     public EntityModel<PersonPhoneNumberDto> toModel(PersonPhoneNumberDto dto) {
         return super.toModel(dto);

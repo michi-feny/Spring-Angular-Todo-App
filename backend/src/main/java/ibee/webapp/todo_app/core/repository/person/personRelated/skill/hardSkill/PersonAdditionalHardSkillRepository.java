@@ -1,5 +1,6 @@
 package ibee.webapp.todo_app.core.repository.person.personRelated.skill.hardSkill;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -14,10 +15,20 @@ public interface PersonAdditionalHardSkillRepository
     extends PersonRelatedRepository
         <PersonAdditionalHardSkill, PersonAdditionalHardSkillId>{
 
+    @Override 
     @EntityGraph(attributePaths = {
         "additionalHardSkill"
     })
     Optional<PersonAdditionalHardSkill> findWithDetailsById(
         PersonAdditionalHardSkillId id
+    );
+
+    @Override 
+    @EntityGraph(attributePaths = {
+        "additionalHardSkill"
+    })
+
+    List<PersonAdditionalHardSkill> findWithDetailsByPersonId(
+        Long id
     );
 }

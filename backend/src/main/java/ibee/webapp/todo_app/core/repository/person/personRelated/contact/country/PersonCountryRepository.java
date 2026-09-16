@@ -1,6 +1,7 @@
 package ibee.webapp.todo_app.core.repository.person.personRelated.contact.country;
 
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -25,6 +26,9 @@ public interface PersonCountryRepository
     Optional<PersonCountry> findWithDetailsById(
         PersonCountryId id
     );
+
+    @EntityGraph(attributePaths = {"country"})
+    List<PersonCountry> findByPersonId(Long personId);
 
     @Query("SELECT p FROM PersonCountry p WHERE p.id.personId = :personId AND p.mainCountry = true")
     Optional<PersonCountry> findByPersonIdAndMainCountryTrue(@Param("personId") Long personId);

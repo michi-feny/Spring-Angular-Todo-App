@@ -17,7 +17,7 @@ import ibee.webapp.todo_app.core.exception.ResourceNotFoundException;
 import ibee.webapp.todo_app.core.repository.baseRepo.MyFacadeBaseCrudRepository;
 import ibee.webapp.todo_app.core.result.ServiceResult;
 import ibee.webapp.todo_app.mapper.baseMaper.EntityUpdateMapper;
-import ibee.webapp.todo_app.security.validation.EntityValidationService;
+import ibee.webapp.todo_app.validation.EntityValidationService;
 
 import static ibee.webapp.todo_app.core.service.util.builder.helpers.EntityReflectionUtils.*;
 

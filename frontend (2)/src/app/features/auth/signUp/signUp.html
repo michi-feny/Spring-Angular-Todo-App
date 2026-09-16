@@ -1,0 +1,48 @@
+<div class="row mt-5">
+    <form 
+        class="col-3 border border-primary mx-auto rounded p-3"
+        [formGroup]="signUpForm" (ngSubmit)="handleSignUp()"
+        [appServerSideValidation]="selectAuthError"
+    >
+        <h1 class="text-primary h2 text-center">{{ 'SIGNUP.HEADING' | translate }}</h1>
+
+        <app-form-control
+            [control]="signUpForm | control:'name'"
+            label="{{ 'FORM.NAME' | translate }}"
+            [type]="InputTypesEnum.Text"
+        />
+
+        <app-form-control
+            [control]="signUpForm | control:'email'"
+            label="{{ 'FORM.EMAIL' | translate }}"
+            [type]="InputTypesEnum.Email"
+        />
+
+        <app-form-control
+            [control]="signUpForm | control:'password'"
+            label="{{ 'FORM.PASSWORD' | translate }}"
+            [type]="InputTypesEnum.Password"
+        />
+
+        <app-form-control
+            [control]="signUpForm | control:'confirmPassword'"
+            label="{{ 'FORM.PASSWORD_CONFIRM' | translate }}"
+            [type]="InputTypesEnum.Password"
+        />
+
+        <app-form-control
+            [control]="signUpForm | control:'role'"
+            label="{{ 'FORM.ROLE' | translate }}"
+            [type]="InputTypesEnum.Select"
+            [options]="roleOptions"
+        />
+
+        <div class="mb-3">
+            <a routerLink="/auth/login">{{ 'SIGNUP.LINK_EXISTING_ACCOUNT' | translate }}?</a>
+        </div>
+
+        <button class="btn btn-primary mx-auto" [disabled]="(isLoading$ | async)">
+            {{ 'SIGNUP.SUBMIT_BUTTON' | translate }}
+        </button>
+    </form>
+</div>

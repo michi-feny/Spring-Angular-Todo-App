@@ -1,3 +1,44 @@
+### Java & Compiled Binaries ###
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar
+*.tar.gz
+*.rar
+
+# Note: We block all .jar files above so libraries aren't pushed. 
+# If you want teammates to be able to use the Maven Wrapper (./mvnw) 
+# without installing Maven themselves, uncomment the line below:
+# !.mvn/wrapper/maven-wrapper.jar
+
+### Application Logs ###
+*.log
+logs/
+*/logs/
+
+### OS Generated Files ###
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+$RECYCLE.BIN/
+
+### Testing & Code Coverage ###
+*.exec
+jacoco.exec
+coverage/
+.sonar/
+
+### Temporary & Output Folders ###
+out/
+tmp/
+temp/
+
 HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar

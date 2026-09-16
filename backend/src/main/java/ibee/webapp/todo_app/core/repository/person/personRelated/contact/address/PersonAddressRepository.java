@@ -1,5 +1,6 @@
 package ibee.webapp.todo_app.core.repository.person.personRelated.contact.address;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -25,6 +26,9 @@ public interface PersonAddressRepository
         PersonAddressId id
     );
 
+    @EntityGraph(attributePaths = {"address", "address.country"}) 
+    List<PersonAddress> findByPersonId(Long personId);
+
     @Modifying
     @Query("""
         UPDATE PersonAddress pa 
@@ -40,4 +44,6 @@ public interface PersonAddressRepository
     boolean existsByPerson_IdAndMainAddressTrue(Long personId);
 
     Optional<PersonAddress> findByPersonIdAndMainAddressTrue(Long personId);
+
+    
 }

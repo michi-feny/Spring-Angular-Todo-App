@@ -26,30 +26,47 @@ public interface PersonWorkExperienceMapper
     @Mapping(target = "id", source = "id")
     @Mapping(target = "workExperience", source = "workExperience")
     @Mapping(target = "displayOrder", source = "displayOrder")
-    @Mapping(target = "visible", source = "visible", defaultValue = "true")
-    @Mapping(target = "mergedIntoWorkExpId", source = "mergedIntoWorkExpId")
+    @Mapping(
+        target = "visible", 
+        source = "visible", 
+        defaultValue = "true")
+    @Mapping(
+        target = "mergedIntoWorkExpId", 
+        source = "mergedIntoWorkExpId")
     PersonWorkExperienceDto toDto(PersonWorkExperience entity);
 
     @Override
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "person", ignore = true)
-   // @Mapping(target = "workExperience", ignore = true) // Handled via service-layer lookup/creation
+    //@Mapping(target = "person", ignore = true)
+    @Mapping(target = "person.id", source = "id.personId")
+   @Mapping(target = "workExperience", source = "workExperience") // Handled via service-layer lookup/creation
     @Mapping(target = "displayOrder", source = "displayOrder")
-    @Mapping(target = "visible", source = "visible", defaultValue = "true")
+    @Mapping(
+        target = "visible", 
+        source = "visible", defaultValue = "true")
+    @Mapping(target = "mergedInto", ignore = true)
    // @Mapping(target = "mergedIntoWorkExpId", source = "mergedIntoWorkExpId")
-    PersonWorkExperience toEntity(PersonWorkExperienceDto dto);
+   @Mapping(target = "subExperiences", ignore = true) 
+   PersonWorkExperience toEntity(PersonWorkExperienceDto dto);
 
     @Override
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "person", ignore = true)
-    @Mapping(target = "workExperience", ignore = true)
+    @Mapping(target = "person.id", source = "id.personId")
+    @Mapping(target = "workExperience", source = "workExperience")
     @Mapping(target = "mergedInto", ignore = true)
     @Mapping(target = "subExperiences", ignore = true)
-    @Mapping(target = "visible", source = "visible", defaultValue = "true")
-    void updateEntityFromDto(PersonWorkExperienceDto dto, @MappingTarget PersonWorkExperience entity);
+    @Mapping(
+        target = "visible", 
+        source = "visible", defaultValue = "true")
+    void updateEntityFromDto(
+        PersonWorkExperienceDto dto, 
+        @MappingTarget PersonWorkExperience entity
+    );
 
     @Override
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @BeanMapping(
+        nullValuePropertyMappingStrategy = 
+        NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "person", ignore = true)
     @Mapping(target = "workExperience", ignore = true)

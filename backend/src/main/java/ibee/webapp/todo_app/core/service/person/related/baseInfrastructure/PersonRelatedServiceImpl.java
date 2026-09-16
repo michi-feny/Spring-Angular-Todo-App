@@ -48,22 +48,34 @@ public abstract class PersonRelatedServiceImpl<
     @Transactional(readOnly = true)
     public List<ENTITY> findByPersonId(Long personId) {
 
-        List<ID> ids =
-                personRelatedRepository.findIdsByPersonId(personId);
+        
+        return personRelatedRepository.
+            findWithDetailsByPersonId(personId);
+      }
 
-        if (ids.isEmpty()) {
-            return List.of();
-        }
-
-        return personRelatedRepository.findAllById(ids);
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<ENTITY> findByIdWithoutException(ID id) {
+        assertData.idNotNull(id);
+        // Bridges standard findById lookups to use the eager-fetching details query
+        return findWithDetailsByIdWithoutException(id);
     }
-
-    
 
     // 1. The pure DB fetch (Returns Optional)
     @Transactional(readOnly = true)
     public Optional<ENTITY> findWithDetailsByIdWithoutException(ID id) {
-        return personRelatedRepository.findWithDetailsById(id);
+        assertData.idNotNull(id);
+        var entity = personRelatedRepository.findWithDetailsById(id);
+        boolean exists = false;
+        if(entity.isPresent()){
+            exists = true;
+            actionEvent.logInfoFoundForFindById(id);
+        }else{
+            actionEvent.logInfoNotFoundforFindById(id);
+        }
+            
+        //actionEvent.logInfoExists(entity, exists);
+        return entity;
     }
 
     // 2. The business method (Unwraps or throws using YOUR custom builder!)

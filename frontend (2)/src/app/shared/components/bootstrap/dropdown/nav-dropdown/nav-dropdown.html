@@ -1,0 +1,21 @@
+<li class="nav-item" ngbDropdown display="dynamic" placement="bottom-end">
+    <a class="nav-link" tabindex="0" ngbDropdownToggle id="navbarDropdown3" role="button"> {{ name | translate }} </a>
+    <div ngbDropdownMenu aria-labelledby="navbarDropdown3" class="dropdown-menu">
+        @for(option of options; track option) {
+            @if (option.href) {
+                <a 
+                    ngbDropdownItem 
+                    [routerLink]="option.href" 
+                    (click)="$event.preventDefault()">
+                    {{ option.name | translate }}
+                </a>
+            } @else if (option.action) {
+                <button 
+                    ngbDropdownItem 
+                    (click)="option.action(); $event.preventDefault()"> 
+                    {{ option.name | translate }}
+                </button>
+            }
+        }
+    </div>
+</li>

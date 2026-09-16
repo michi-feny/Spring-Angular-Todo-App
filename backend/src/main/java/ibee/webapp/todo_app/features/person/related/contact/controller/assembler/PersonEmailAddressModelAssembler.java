@@ -24,6 +24,11 @@ public class PersonEmailAddressModelAssembler
         this.referenceMapper = referenceMapper;
     }
 
+    @Override 
+    protected boolean hasListEndpoint() {
+        return false; 
+    }
+
     @Override
     protected PersonEmailAddressDtoId extractId(PersonEmailAddressDto dto) {
         // Uses the record accessor 'dto.id()' and maps the DTO ID to the Entity ID

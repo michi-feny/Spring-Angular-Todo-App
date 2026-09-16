@@ -4,13 +4,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import ibee.webapp.todo_app.core.repository.baseRepo.IdentifiableEntity;
 import ibee.webapp.todo_app.core.service.baseService.persist.MyCrudBaseEntityFacadeService;
 import ibee.webapp.todo_app.core.service.person.related.baseInfrastructure.CrudDtoService;
 import ibee.webapp.todo_app.mapper.baseMaper.BaseMapper;
 
 
-
+@Transactional
 public abstract class AbstractMappedCrudDtoService
     <DTO, ENTITY extends IdentifiableEntity<ID>, ID, IDDTO>
         implements CrudDtoService<DTO, IDDTO> {
@@ -85,6 +87,7 @@ public abstract class AbstractMappedCrudDtoService
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<DTO> findAllById(Iterable<IDDTO> idDtos) {
         List<ID> ids = toDbIdList(idDtos);
         return mapper.toDtoList(entityService.findAllById(ids));

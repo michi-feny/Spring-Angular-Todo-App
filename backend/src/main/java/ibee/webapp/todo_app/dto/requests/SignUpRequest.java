@@ -1,8 +1,8 @@
 package ibee.webapp.todo_app.dto.requests;
 
-import ibee.webapp.todo_app.security.validation.Choice;
-import ibee.webapp.todo_app.security.validation.EqualTo;
-import ibee.webapp.todo_app.security.validation.Password;
+import ibee.webapp.todo_app.validation.Choice;
+import ibee.webapp.todo_app.validation.EqualTo;
+import ibee.webapp.todo_app.validation.Password;
 import jakarta.validation.constraints.*;
 
 @EqualTo(
