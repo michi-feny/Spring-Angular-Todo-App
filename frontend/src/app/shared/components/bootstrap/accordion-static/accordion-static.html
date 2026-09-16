@@ -1,8 +1,8 @@
-<div ngbAccordion [closeOthers]="true">
+<div ngbAccordion [closeOthers]="true" (shown)="shown.emit($event)" (hidden)="hidden.emit($event)">
     @for (item of items; track item.id) {
-        <div ngbAccordionItem [attr.data-id]="item.id">
+        <div [ngbAccordionItem]="item.id.toString()">
             <h2 ngbAccordionHeader>
-                <button ngbAccordionButton class="accordion-button">
+                <button ngbAccordionButton class="accordion-button" (click)="onItemClick(item.id)">
                     <ng-container 
                         *ngIf="headerTemplate" 
                         [ngTemplateOutlet]="headerTemplate"

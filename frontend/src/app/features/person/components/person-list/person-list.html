@@ -14,7 +14,8 @@
           <ngbd-accordion-static
             [items]="persons"
             [headerTemplate]="headerTpl"
-            [bodyTemplate]="bodyTpl">
+            [bodyTemplate]="bodyTpl"
+            (shown)="onToggleAccordion($event)">
           </ngbd-accordion-static>
         } @else {
           <p class="text-muted">Keine Personen gefunden.</p>
@@ -26,8 +27,7 @@
   <!-- HEADER TEMPLATE (PersonData Übersicht) -->
   <ng-template #headerTpl let-item>
     <div 
-      class="d-flex justify-content-between align-items-center w-100 pe-3"
-      (click)="onToggleAccordion(item.id)">
+      class="d-flex justify-content-between align-items-center w-100 pe-3">
       <div>
         <strong>{{ item.firstName }} {{ item.lastName }}</strong>
         <span class="text-muted ms-3">
@@ -35,7 +35,7 @@
         </span>
       </div>
   
-      <!-- Spinner NUR für dieses spezifische Element beim Nachladen -->
+      <!-- Spinner für dieses Element -->
       @if (isLoadingDetails(loadingDetailIds$ | async, item.id)) {
         <div class="spinner-border spinner-border-sm text-primary" role="status">
           <span class="visually-hidden">Laden...</span>
@@ -43,7 +43,6 @@
       }
     </div>
   </ng-template>
-  
   <!-- BODY TEMPLATE (PersonOverview mit gecachten PersonDto Details) -->
   <ng-template #bodyTpl let-item>
     @if (detailsCache$ | async; as detailsCache) {

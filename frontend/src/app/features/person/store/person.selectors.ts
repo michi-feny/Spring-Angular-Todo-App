@@ -54,3 +54,12 @@ export const selectIsPersonExpanded = (id: number) =>
     selectExpandedPersonIds,
     (expandedIds) => expandedIds.includes(id)
   );
+
+  export const selectAccordionPersons = createSelector(
+    selectPersonList,
+    (persons) =>
+      persons.map((person) => ({
+        ...person,
+        id: person.id!,
+      }))
+  );

@@ -25,14 +25,8 @@ export class PersonList implements OnInit {
   private route = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
 
-  readonly searchResults$ = this.store.select(PersonSelectors.selectPersonList).pipe(
-    map((persons) =>
-      persons.map((person) => ({
-        ...person,
-        id: person.id!,
-      })) as unknown as NgbAccordionItem[]
-    )
-  );
+  readonly searchResults$ = this.store.select(PersonSelectors.selectAccordionPersons);
+
   readonly isListLoading$ = this.store.select(PersonSelectors.selectIsListLoading);
   readonly detailsCache$ = this.store.select(PersonSelectors.selectPersonDetailsCache);
   readonly loadingDetailIds$ = this.store.select(PersonSelectors.selectLoadingDetailIds);
@@ -49,12 +43,14 @@ export class PersonList implements OnInit {
       });
   }
 
-  onToggleAccordion(id: number): void {
-    if (id) {
-      this.store.dispatch(PersonActions.togglePersonAccordion({ id }));
+  onToggleAccordion(eventId: unknown): void {
+
+    const numericId = typeof eventId === 'number' ? eventId : Number(eventId);
+  
+    if (!isNaN(numericId) && numericId > 0) {
+      this.store.dispatch(PersonActions.togglePersonAccordion({ id: numericId }));
     }
   }
-
   isLoadingDetails(loadingIds: number[] | null, id: number): boolean {
     return !!loadingIds?.includes(id);
   }
